@@ -572,33 +572,35 @@ def run_TPS(df, out_dir=None):
         df[i] = df[i].map(recoder).astype(float64)   
 
     #Calculate total score as the sum of Item 1-16.
-    df['TPS_D'] = df[['TPSBASEQ[TPS1]',
-                      'TPSBASEQ[TPS2]',
-                      'TPSBASEQ[TPS3]',
-                      'TPSBASEQ[TPS4]',
-                      'TPSBASEQ[TPS5]',
-                      'TPSBASEQ[TPS6]',
-                      'TPSBASEQ[TPS7]',
-                      'TPSBASEQ[TPS8]',
-                      'TPSBASEQ[TPS9]',
-                      'TPSBASEQ[TPS10]',
-                      'TPSBASEQ[TPS11]',
-                      'TPSBASEQ[TPS12]',
-                      'TPSBASEQ[TPS13]',
-                      'TPSBASEQ[TPS14]',
-                      'TPSBASEQ[TPS15]',
-                      'TPSBASEQ[TPS16]']].sum(axis=1)
+    cols = ['TPSBASEQ[TPS1]',
+            'TPSBASEQ[TPS2]',
+            'TPSBASEQ[TPS3]',
+            'TPSBASEQ[TPS4]',
+            'TPSBASEQ[TPS5]',
+            'TPSBASEQ[TPS6]',
+            'TPSBASEQ[TPS7]',
+            'TPSBASEQ[TPS8]',
+            'TPSBASEQ[TPS9]',
+            'TPSBASEQ[TPS10]',
+            'TPSBASEQ[TPS11]',
+            'TPSBASEQ[TPS12]',
+            'TPSBASEQ[TPS13]',
+            'TPSBASEQ[TPS14]',
+            'TPSBASEQ[TPS15]',
+            'TPSBASEQ[TPS16]']
+    
+    df['TPS_D_sum'] = df[cols].sum(axis=1)
                       
-    print df['TPS_D'].describe()   
+    print df['TPS_D_sum'].describe()
+    sns.distplot(df['TPS_D_sum'].dropna(), kde = True)                  
 
-    df_tps = pd.DataFrame(df['TPS_D'])
-    df_tps = df_tps.dropna()           
-                      
-    #create histo
-    #plt.hist(df["TPS_D"], range=[15,50], bins = 30)
-    sns.distplot(df_tps, kde = True)                  
-    plt.xlabel("TPS_D", fontsize = 14)
-
+    if out_dir:
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['TPS_D_sum']          
+        df[cols_export].to_csv('%s/TPS.csv' % out_dir, index=False)
+        
 
 
 ##############################################################################
@@ -906,6 +908,59 @@ def run_ASR(data, out_dir=None):
     sns.lmplot(x='ASR_summary_syndromeProfiles_externalizing_sum', y='ASR_summary_syndromeProfiles_internalizing_sum', data=data)
 
 
+    if out_dir:
+
+    cols = ['ASRIABASEQ[ASRIA]','ASRIBBASEQ[ASRIB]','ASRICBASEQ[ASRIC]','ASRIDBASEQ[ASRID]','ASRII1','ASRII1[comment]','ASRII2','ASRII3BASEQ[ASRIIA]',
+            'ASRII3BASEQ[ASRIIBr]','ASRII3BASEQ[ASRIIC]','ASRII3BASEQ[ASRIID]','ASRII3BASEQ[ASRIIEr]','ASRII3BASEQ[ASRIIFr]','ASRII3BASEQ[ASRIIG]',
+            'ASRII3BASEQ[ASRIIHr]','ASRIIIABASEQ[ASRIIIA]','ASRIIIBBASEQ[ASRIIIB]','ASRIIICBASEQ[ASRIIIC]','ASRIIIDBASEQ[ASRIIID]','ASRIIIEaBASEQ[ASRIIIE]',
+            'ASRIIIEbBASEQ[ASRIIIE1]','ASRIIIEbBASEQ[ASRIIIE2]','ASRIIIEbBASEQ[ASRIIIE3]','ASRIIIEbBASEQ[ASRIIIE4]','ASRIIIFBASEQ[ASRIIIF]','ASRIVaBASEQ[ASRIV]',
+            'ASRIVbBASEQ[ASRIVA]','ASRIVbBASEQ[ASRIVBr]','ASRIVbBASEQ[ASRIVC]','ASRIVbBASEQ[ASRIVDr]','ASRIVbBASEQ[ASRIVE]','ASRIVbBASEQ[ASRIVFr]',
+            'ASRIVbBASEQ[ASRIVGr]', 'ASRIVbBASEQ[ASRIVHr]','ASRIVbBASEQ[ASRIVIr]','ASRVa','ASRVa[comment]','ASRVbBASEQ[ASRV1]','ASRVbBASEQ[ASRV1comment]',
+            'ASRVbBASEQ[ASRV3]','ASRVbBASEQ[ASRV3comment]','ASRVbBASEQ[ASRV4]','ASRVbBASEQ[ASRV4comment]','ASRVcBASEQ[ASRVA]','ASRVcBASEQ[ASRVB]',
+            'ASRVcBASEQ[ASRVCr]','ASRVcBASEQ[ASRVD]','ASRVcBASEQ[ASRVEr]','ASRVI','ASRVI[comment]','ASRVII','ASRVII[comment]','ASRVIII','ASRQ1BASEQ[ASRQ1]',
+            'ASRQ1BASEQ[ASRQ2]','ASRQ1BASEQ[ASRQ3]','ASRQ1BASEQ[ASRQ4]','ASRQ1BASEQ[ASRQ5]','ASRQ1BASEQ[ASRQ6]','ASRQ6Freitext','ASRQ7BASEQ[ASRQ7]','ASRQ7BASEQ[ASRQ8]',
+            'ASRQ7BASEQ[ASRQ9]','ASRQ9Freitext','ASRQ10BASEQ[ASRQ10]','ASRQ10BASEQ[ASRQ11]','ASRQ10BASEQ[ASRQ12]','ASRQ10BASEQ[ASRQ13]','ASRQ10BASEQ[ASRQ14]',
+            'ASRQ10BASEQ[ASRQ15]','ASRQ10BASEQ[ASRQ16]','ASRQ10BASEQ[ASRQ17]','ASRQ10BASEQ[ASRQ18]','ASRQ10BASEQ[ASRQ19]','ASRQ10BASEQ[ASRQ20]','ASRQ21BASEQ[ASRQ21]',
+            'ASRQ21BASEQ[ASRQ22]','ASRQ21BASEQ[ASRQ23]','ASRQ21BASEQ[ASRQ24]','ASRQ21BASEQ[ASRQ25]','ASRQ21BASEQ[ASRQ26]','ASRQ21BASEQ[ASRQ27]','ASRQ21BASEQ[ASRQ28]',
+            'ASRQ21BASEQ[ASRQ29]','ASRQ29Freitext','ASRQ30BASEQ[ASRQ30]','ASRQ30BASEQ[ASRQ31]','ASRQ30BASEQ[ASRQ32]','ASRQ30BASEQ[ASRQ33]','ASRQ30BASEQ[ASRQ34]',
+            'ASRQ30BASEQ[ASRQ35]','ASRQ30BASEQ[ASRQ36]','ASRQ30BASEQ[ASRQ37]','ASRQ30BASEQ[ASRQ38]','ASRQ30BASEQ[ASRQ39]','ASRQ30BASEQ[ASRQ40]','ASRQ40Freitext',
+            'ASRQ41BASEQ[ASRQ41]','ASRQ41BASEQ[ASRQ42]','ASRQ41BASEQ[ASRQ43]','ASRQ41BASEQ[ASRQ44]','ASRQ41BASEQ[ASRQ45]','ASRQ41BASEQ[ASRQ46]','ASRQ41BASEQ[ASRQ47]',
+            'ASRQ41BASEQ[ASRQ48]','ASRQ41BASEQ[ASRQ49]','ASRQ41BASEQ[ASRQ50]','ASRQ46Freitext','ASRQ51BASEQ[ASRQ51]','ASRQ51BASEQ[ASRQ52]','ASRQ51BASEQ[ASRQ53]',
+            'ASRQ51BASEQ[ASRQ54]','ASRQ51BASEQ[ASRQ55]','ASRQ56BASEQ[ASRVIII561]','ASRQ56BASEQ[ASRVIII562]','ASRQ56BASEQ[ASRVIII563]','ASRQ56BASEQ[ASRVIII564]',
+            'ASRQ56BASEQ[ASRVIII565]','ASRQ56BASEQ[ASRVIII566]','ASRQ56BASEQ[ASRVIII567]','ASRQ56Freitext','ASRQ57BASEQ[ASRQ57]','ASRQ57BASEQ[ASRQ58]',
+            'ASRQ57BASEQ[ASRQ59]', 'ASRQ57BASEQ[ASRQ60]','ASRQ58Freitext','ASRQ61BASEQ[ASRQ61]','ASRQ61BASEQ[ASRQ62]','ASRQ61BASEQ[ASRQ63]','ASRQ61BASEQ[ASRQ64]',
+            'ASRQ61BASEQ[ASRQ65]','ASRQ61BASEQ[ASRQ66]','ASRQ61BASEQ[ASRQ67]','ASRQ61BASEQ[ASRQ68]','ASRQ61BASEQ[ASRQ69]','ASRQ61BASEQ[ASRQ70]','ASRQ66','ASRQ70',
+            'ASRQ71BASEQ[ASRQ71]','ASRQ71BASEQ[ASRQ72]','ASRQ71BASEQ[ASRQ73]','ASRQ71BASEQ[ASRQ74]','ASRQ71BASEQ[ASRQ75]','ASRQ71BASEQ[ASRQ76]','ASRQ71BASEQ[ASRQ77]',
+            'ASRQ71BASEQ[ASRQ78]','ASRQ71BASEQ[ASRQ79]','ASRQ71BASEQ[ASRQ80]','ASRQ77Freitext','ASQQ79Freitext','ASRQ81BASEQ[ASRQ81]','ASRQ81BASEQ[ASRQ82]','ASRQ81BASEQ[ASRQ83]',
+            'ASRQ81BASEQ[ASRQ84]','ASRQ81BASEQ[ASRQ85]','ASRQ81BASEQ[ASRQ86]','ASRQ81BASEQ[ASRQ87]','ASRQ81BASEQ[ASRQ88]','ASRQ81BASEQ[ASRQ89]','ASRQ81BASEQ[ASRQ90]',
+            'ASRQ84Freitext','ASRQ85Freitext','ASRQ91BASEQ[ASRQ91]','ASRQ91BASEQ[ASRQ92]','ASRQ91BASEQ[ASRQ93]','ASRQ91BASEQ[ASRQ94]','ASRQ91BASEQ[ASRQ95]',
+            'ASRQ91BASEQ[ASRQ96]','ASRQ91BASEQ[ASRQ97]','ASRQ91BASEQ[ASRQ98]','ASRQ91BASEQ[ASRQ99]','ASRQ91BASEQ[ASRQ100]','ASR92Freitext','ASR100Freitext',
+            'ASRQ101BASEQ[ASRQ101]','ASRQ101BASEQ[ASRQ102]','ASRQ101BASEQ[ASRQ103]','ASRQ101BASEQ[ASRQ104]','ASRQ101BASEQ[ASRQ105]','ASRQ101BASEQ[ASRQ106]',
+            'ASRQ101BASEQ[ASRQ107]','ASRQ101BASEQ[ASRQ108]','ASRQ101BASEQ[ASRQ109]','ASRQ101BASEQ[ASRQ110]','ASRQ111BASEQ[ASRQ111]','ASRQ111BASEQ[ASRQ112]',
+            'ASRQ111BASEQ[ASRQ113]','ASRQ111BASEQ[ASRQ114]','ASRQ111BASEQ[ASRQ115]','ASRQ111BASEQ[ASRQ116]','ASRQ111BASEQ[ASRQ117]','ASRQ111BASEQ[ASRQ118]',
+            'ASRQ111BASEQ[ASRQ119]','ASRQ111BASEQ[ASRQ120]','ASRQ121BASEQ[ASRQ121]','ASRQ121BASEQ[ASRQ122]','ASRQ121BASEQ[ASRQ123]','ASRQ124','ASRQ125','ASRQ126']
+
+            age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+            df['age'] = age.dt.days / 365
+            df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+            cols_export = ['ID', 'GSH', 'age'] + cols + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
+                                                        'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
+                                                        'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
+                                                        'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
+                                                        'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
+                                                        'ASR_summary_syndromeProfiles_anxiousdepressed_sum', 
+                                                        'ASR_summary_syndromeProfiles_withdrawn_sum', 
+                                                        'ASR_summary_syndromeProfiles_somaticComplaints_sum',
+                                                        'ASR_summary_syndromeProfiles_thoughtProblems_sum', 
+                                                        'ASR_summary_syndromeProfiles_attentionProblems_sum', 
+                                                        'ASR_summary_syndromeProfiles_aggressiveBehavior_sum', 
+                                                        'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
+                                                        'ASR_summary_syndromeProfiles_intrusive_sum', 
+                                                        'ASR_summary_syndromeProfiles_internalizing_sum', 
+                                                        'ASR_summary_syndromeProfiles_externalizing_sum']          
+            df[cols_export].to_csv('%s/ASR.csv' % out_dir, index=False)
+
+
 
 ##############################################################################
 ########################## Self-Esteem Scale ################################# 
@@ -927,24 +982,26 @@ def run_SelfEst(df, out_dir=None):
         df[i] = df[i].map(recoder).astype(float64) 
     
     #scale aggregation
-    df['Mean_SelfEst'] = np.round(df[['SEBASEQ[SE1]',
-                                      'SEBASEQ[SE2]',
-                                      'SEBASEQ[SE3]',
-                                      'SEBASEQ[SE4]',
-                                      'SEBASEQ[SE5r]', 
-                                      'SEBASEQ[SE6r]',
-                                      'SEBASEQ[SE7r]',
-                                      'SEBASEQ[SE8r]']].mean(axis=1),3) 
+    cols = ['SEBASEQ[SE1]',
+            'SEBASEQ[SE2]',
+            'SEBASEQ[SE3]',
+            'SEBASEQ[SE4]',
+            'SEBASEQ[SE5r]', 
+            'SEBASEQ[SE6r]',
+            'SEBASEQ[SE7r]',
+            'SEBASEQ[SE8r]']
+    
+    df['Mean_SelfEst'] = np.round(df[cols].mean(axis=1),3) 
                                       
     print df['Mean_SelfEst'].describe()
-    
-    df_selfest = pd.DataFrame(df['Mean_SelfEst'])
-    df_selfest = df_selfest.dropna()                                   
-                                      
-    #create histo
-    #plt.hist(df["Mean_SelfEst"], range=[0,6], bins = 30)
-    sns.distplot(df_selfest, kde = True)                                  
-    plt.xlabel("Mean_SelfEst", fontsize = 14)
+    sns.distplot(df['Mean_SelfEst'].dropna(), kde = True)                                  
+
+    if out_dir:
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['Mean_SelfEst']          
+        df[cols_export].to_csv('%s/SelfEst.csv' % out_dir, index=False)
 
 
 
@@ -956,19 +1013,22 @@ def run_ESS(data, out_dir=None):
 
     print 'Questionnaire measures general level of sleepiness as the sum of 8 Items\n'
     
-    data['ESS_summary_sum'] = data[['ESSBASEQ[ESS1]',
-                                    'ESSBASEQ[ESS2]',
-                                    'ESSBASEQ[ESS3]',
-                                    'ESSBASEQ[ESS4]',
-                                    'ESSBASEQ[ESS5]',
-                                    'ESSBASEQ[ESS6]',
-                                    'ESSBASEQ[ESS7]',
-                                    'ESSBASEQ[ESS8]']].sum(axis=1)
+    cols = ['ESSBASEQ[ESS1]', 'ESSBASEQ[ESS2]', 'ESSBASEQ[ESS3]', 'ESSBASEQ[ESS4]',
+            'ESSBASEQ[ESS5]', 'ESSBASEQ[ESS6]', 'ESSBASEQ[ESS7]', 'ESSBASEQ[ESS8]']    
+    
+    data['ESS_summary_sum'] = data[cols].sum(axis=1)
     
                                 
     print data['ESS_summary_sum'].describe()
     sns.countplot(data['ESS_summary_sum'].dropna(), order=range(int(data['ESS_summary_sum'].min()),int(data['ESS_summary_sum'].max())))
     plt.show()
+    
+    if out_dir:
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['ESS_summary_sum']          
+        df[cols_export].to_csv('%s/ESS.csv' % out_dir, index=False)
     
 
 
@@ -1042,6 +1102,13 @@ def run_BDI(data, out_dir=None):
     sns.countplot(data['BDI_summary_sum'].dropna(), order=range(int(data['BDI_summary_sum'].min()),int(data['BDI_summary_sum'].max())))
     plt.show()
     
+    if out_dir:
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols_BDI + ['BDI_summary_sum']          
+        df[cols_export].to_csv('%s/BDI.csv' % out_dir, index=False)
+    
 
 
 ##############################################################################
@@ -1087,7 +1154,17 @@ def run_HADS(data, out_dir=None):
     print data['HADS_summary_HADS-D_sum'].describe()
     sns.countplot(data['HADS_summary_HADS-D_sum'].dropna(), order=range(int(data['HADS_summary_HADS-D_sum'].min()),int(data['HADS_summary_HADS-D_sum'].max())))
     plt.show()
-   
+    
+    if out_dir:
+        cols = ['HADS1BASEQ[HADS1]','HADS2BASEQ[HADS2]','HADS3BASEQ[HADS3]','HADS4BASEQ[HADS4]','HADS5BASEQ[HADS5]',
+                'HADS6BASEQ[HADS6]','HADS7BASEQ[HADS7]','HADS8BASEQ[HADS8]','HADS9BASEQ[HADS9]','HADS10BASEQ[HADS10]',
+                'HADS11BASEQ[HADS11]','HADS12BASEQ[HADS12]','HADS13BASEQ[HADS13]','HADS14BASEQ[HADS14]']
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']          
+        df[cols_export].to_csv('%s/HADS.csv' % out_dir, index=False)
+
 
 
 ##############################################################################
@@ -1118,45 +1195,28 @@ def run_BPS(df, out_dir=None):
         df[i] = df[i].map(recoder).astype(float64)   
 
     #Calculate total score as the sum of Item 1-28.
-    df['BPS'] = df[['BPSaBASEQ[BPS1]',
-                    'BPSaBASEQ[BPS2]',
-                    'BPSaBASEQ[BPS3]',
-                    'BPSaBASEQ[BPS4]',
-                    'BPSaBASEQ[BPS5]',
-                    'BPSaBASEQ[BPS6]',
-                    'BPSaBASEQ[BPS7]',
-                    'BPSaBASEQ[BPS8]',                
-                    'BPSaBASEQ[BPS9]',
-                    'BPSaBASEQ[BPS10]',
-                    'BPSbBASEQ[BPS11]',
-                    'BPSbBASEQ[BPS12]',
-                    'BPSbBASEQ[BPS13]',
-                    'BPSbBASEQ[BPS14]',
-                    'BPSbBASEQ[BPS15]',
-                    'BPSbBASEQ[BPS16]',
-                    'BPSbBASEQ[BPS17]',
-                    'BPSbBASEQ[BPS18]',
-                    'BPSbBASEQ[BPS19]',
-                    'BPSbBASEQ[BPS20]',
-                    'BPSbBASEQ[BPS21]',
-                    'BPScBASEQ[BPS22]',
-                    'BPScBASEQ[BPS23]',
-                    'BPScBASEQ[BPS24]',
-                    'BPScBASEQ[BPS25]',
-                    'BPScBASEQ[BPS26]',
-                    'BPScBASEQ[BPS27]',
-                    'BPScBASEQ[BPS28]']].sum(axis=1)
+    cols = ['BPSaBASEQ[BPS1]','BPSaBASEQ[BPS2]','BPSaBASEQ[BPS3]',
+            'BPSaBASEQ[BPS4]','BPSaBASEQ[BPS5]','BPSaBASEQ[BPS6]',
+            'BPSaBASEQ[BPS7]','BPSaBASEQ[BPS8]','BPSaBASEQ[BPS9]',
+            'BPSaBASEQ[BPS10]','BPSbBASEQ[BPS11]','BPSbBASEQ[BPS12]',
+            'BPSbBASEQ[BPS13]','BPSbBASEQ[BPS14]','BPSbBASEQ[BPS15]',
+            'BPSbBASEQ[BPS16]','BPSbBASEQ[BPS17]','BPSbBASEQ[BPS18]',
+            'BPSbBASEQ[BPS19]','BPSbBASEQ[BPS20]','BPSbBASEQ[BPS21]',
+            'BPScBASEQ[BPS22]','BPScBASEQ[BPS23]','BPScBASEQ[BPS24]',
+            'BPScBASEQ[BPS25]','BPScBASEQ[BPS26]','BPScBASEQ[BPS27]',
+            'BPScBASEQ[BPS28]']
+    
+    df['BPS_sum'] = df[cols].sum(axis=1)
                     
-    print df['BPS'].describe() 
-
-    df_bps = pd.DataFrame(df['BPS'])
-    df_bps = df_bps.dropna()           
-                    
-                    
-   #create histo
-   #plt.hist(df["BPS"], range=[25,150], bins = 15)
-    sns.distplot(df_bps, kde = True)                
-    plt.xlabel("BPS", fontsize = 14)
+    print df['BPS_sum'].describe() 
+    sns.distplot(df['BPS_sum'].dropna(), kde = True)                
+    
+    if out_dir:
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['BPS_sum']          
+        df[cols_export].to_csv('%s/BPS.csv' % out_dir, index=False)
 
 
 
@@ -1184,38 +1244,25 @@ def run_DAC(df, out_dir=None):
         df[i] = df[i].map(recoder).astype(float64)   
 
     #Calculate total score as the sum of Item 1-20.
-    df['DAC'] = df[['DACaBASEQ[DAC1]',
-                    'DACaBASEQ[DAC2]',
-                    'DACaBASEQ[DAC3]',
-                    'DACaBASEQ[DAC4]',
-                    'DACaBASEQ[DAC5]',
-                    'DACaBASEQ[DAC6]',
-                    'DACaBASEQ[DAC7]',
-                    'DACbBASEQ[DAC8]',
-                    'DACbBASEQ[DAC9]',
-                    'DACbBASEQ[DAC10]',
-                    'DACbBASEQ[DAC11]',
-                    'DACbBASEQ[DAC12]',
-                    'DACbBASEQ[DAC13]',
-                    'DACbBASEQ[DAC14]',
-                    'DACbBASEQ[DAC15]',
-                    'DACcBASEQ[DAC16]',
-                    'DACcBASEQ[DAC17]',
-                    'DACcBASEQ[DAC18]',
-                    'DACcBASEQ[DAC19]',
-                    'DACcBASEQ[DAC20]']].sum(axis=1)
-                    
-                    
-    print df['DAC'].describe()   
-
-    df_dac = pd.DataFrame(df['DAC'])
-    df_dac = df_dac.dropna()              
-
-    #create histo
-    #plt.hist(df["DAC"], range=[20,100], bins = 15)
-    sns.distplot(df_dac, kde = True)
-    plt.xlabel("DAC", fontsize = 14)
-
+    cols = ['DACaBASEQ[DAC1]','DACaBASEQ[DAC2]','DACaBASEQ[DAC3]',
+            'DACaBASEQ[DAC4]','DACaBASEQ[DAC5]','DACaBASEQ[DAC6]',
+            'DACaBASEQ[DAC7]','DACbBASEQ[DAC8]','DACbBASEQ[DAC9]',
+            'DACbBASEQ[DAC10]','DACbBASEQ[DAC11]','DACbBASEQ[DAC12]',
+            'DACbBASEQ[DAC13]','DACbBASEQ[DAC14]','DACbBASEQ[DAC15]',
+            'DACcBASEQ[DAC16]','DACcBASEQ[DAC17]','DACcBASEQ[DAC18]',
+            'DACcBASEQ[DAC19]','DACcBASEQ[DAC20]']     
+    
+    df['DAC_sum'] = df[cols].sum(axis=1)
+    print df['DAC_sum'].describe()   
+    sns.distplot(df['DAC_sum'].dropna(), kde = True)
+    
+    if out_dir:
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['DAC_sum']          
+        df[cols_export].to_csv('%s/DAC.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
