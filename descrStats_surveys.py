@@ -910,55 +910,55 @@ def run_ASR(data, out_dir=None):
 
     if out_dir:
 
-    cols = ['ASRIABASEQ[ASRIA]','ASRIBBASEQ[ASRIB]','ASRICBASEQ[ASRIC]','ASRIDBASEQ[ASRID]','ASRII1','ASRII1[comment]','ASRII2','ASRII3BASEQ[ASRIIA]',
-            'ASRII3BASEQ[ASRIIBr]','ASRII3BASEQ[ASRIIC]','ASRII3BASEQ[ASRIID]','ASRII3BASEQ[ASRIIEr]','ASRII3BASEQ[ASRIIFr]','ASRII3BASEQ[ASRIIG]',
-            'ASRII3BASEQ[ASRIIHr]','ASRIIIABASEQ[ASRIIIA]','ASRIIIBBASEQ[ASRIIIB]','ASRIIICBASEQ[ASRIIIC]','ASRIIIDBASEQ[ASRIIID]','ASRIIIEaBASEQ[ASRIIIE]',
-            'ASRIIIEbBASEQ[ASRIIIE1]','ASRIIIEbBASEQ[ASRIIIE2]','ASRIIIEbBASEQ[ASRIIIE3]','ASRIIIEbBASEQ[ASRIIIE4]','ASRIIIFBASEQ[ASRIIIF]','ASRIVaBASEQ[ASRIV]',
-            'ASRIVbBASEQ[ASRIVA]','ASRIVbBASEQ[ASRIVBr]','ASRIVbBASEQ[ASRIVC]','ASRIVbBASEQ[ASRIVDr]','ASRIVbBASEQ[ASRIVE]','ASRIVbBASEQ[ASRIVFr]',
-            'ASRIVbBASEQ[ASRIVGr]', 'ASRIVbBASEQ[ASRIVHr]','ASRIVbBASEQ[ASRIVIr]','ASRVa','ASRVa[comment]','ASRVbBASEQ[ASRV1]','ASRVbBASEQ[ASRV1comment]',
-            'ASRVbBASEQ[ASRV3]','ASRVbBASEQ[ASRV3comment]','ASRVbBASEQ[ASRV4]','ASRVbBASEQ[ASRV4comment]','ASRVcBASEQ[ASRVA]','ASRVcBASEQ[ASRVB]',
-            'ASRVcBASEQ[ASRVCr]','ASRVcBASEQ[ASRVD]','ASRVcBASEQ[ASRVEr]','ASRVI','ASRVI[comment]','ASRVII','ASRVII[comment]','ASRVIII','ASRQ1BASEQ[ASRQ1]',
-            'ASRQ1BASEQ[ASRQ2]','ASRQ1BASEQ[ASRQ3]','ASRQ1BASEQ[ASRQ4]','ASRQ1BASEQ[ASRQ5]','ASRQ1BASEQ[ASRQ6]','ASRQ6Freitext','ASRQ7BASEQ[ASRQ7]','ASRQ7BASEQ[ASRQ8]',
-            'ASRQ7BASEQ[ASRQ9]','ASRQ9Freitext','ASRQ10BASEQ[ASRQ10]','ASRQ10BASEQ[ASRQ11]','ASRQ10BASEQ[ASRQ12]','ASRQ10BASEQ[ASRQ13]','ASRQ10BASEQ[ASRQ14]',
-            'ASRQ10BASEQ[ASRQ15]','ASRQ10BASEQ[ASRQ16]','ASRQ10BASEQ[ASRQ17]','ASRQ10BASEQ[ASRQ18]','ASRQ10BASEQ[ASRQ19]','ASRQ10BASEQ[ASRQ20]','ASRQ21BASEQ[ASRQ21]',
-            'ASRQ21BASEQ[ASRQ22]','ASRQ21BASEQ[ASRQ23]','ASRQ21BASEQ[ASRQ24]','ASRQ21BASEQ[ASRQ25]','ASRQ21BASEQ[ASRQ26]','ASRQ21BASEQ[ASRQ27]','ASRQ21BASEQ[ASRQ28]',
-            'ASRQ21BASEQ[ASRQ29]','ASRQ29Freitext','ASRQ30BASEQ[ASRQ30]','ASRQ30BASEQ[ASRQ31]','ASRQ30BASEQ[ASRQ32]','ASRQ30BASEQ[ASRQ33]','ASRQ30BASEQ[ASRQ34]',
-            'ASRQ30BASEQ[ASRQ35]','ASRQ30BASEQ[ASRQ36]','ASRQ30BASEQ[ASRQ37]','ASRQ30BASEQ[ASRQ38]','ASRQ30BASEQ[ASRQ39]','ASRQ30BASEQ[ASRQ40]','ASRQ40Freitext',
-            'ASRQ41BASEQ[ASRQ41]','ASRQ41BASEQ[ASRQ42]','ASRQ41BASEQ[ASRQ43]','ASRQ41BASEQ[ASRQ44]','ASRQ41BASEQ[ASRQ45]','ASRQ41BASEQ[ASRQ46]','ASRQ41BASEQ[ASRQ47]',
-            'ASRQ41BASEQ[ASRQ48]','ASRQ41BASEQ[ASRQ49]','ASRQ41BASEQ[ASRQ50]','ASRQ46Freitext','ASRQ51BASEQ[ASRQ51]','ASRQ51BASEQ[ASRQ52]','ASRQ51BASEQ[ASRQ53]',
-            'ASRQ51BASEQ[ASRQ54]','ASRQ51BASEQ[ASRQ55]','ASRQ56BASEQ[ASRVIII561]','ASRQ56BASEQ[ASRVIII562]','ASRQ56BASEQ[ASRVIII563]','ASRQ56BASEQ[ASRVIII564]',
-            'ASRQ56BASEQ[ASRVIII565]','ASRQ56BASEQ[ASRVIII566]','ASRQ56BASEQ[ASRVIII567]','ASRQ56Freitext','ASRQ57BASEQ[ASRQ57]','ASRQ57BASEQ[ASRQ58]',
-            'ASRQ57BASEQ[ASRQ59]', 'ASRQ57BASEQ[ASRQ60]','ASRQ58Freitext','ASRQ61BASEQ[ASRQ61]','ASRQ61BASEQ[ASRQ62]','ASRQ61BASEQ[ASRQ63]','ASRQ61BASEQ[ASRQ64]',
-            'ASRQ61BASEQ[ASRQ65]','ASRQ61BASEQ[ASRQ66]','ASRQ61BASEQ[ASRQ67]','ASRQ61BASEQ[ASRQ68]','ASRQ61BASEQ[ASRQ69]','ASRQ61BASEQ[ASRQ70]','ASRQ66','ASRQ70',
-            'ASRQ71BASEQ[ASRQ71]','ASRQ71BASEQ[ASRQ72]','ASRQ71BASEQ[ASRQ73]','ASRQ71BASEQ[ASRQ74]','ASRQ71BASEQ[ASRQ75]','ASRQ71BASEQ[ASRQ76]','ASRQ71BASEQ[ASRQ77]',
-            'ASRQ71BASEQ[ASRQ78]','ASRQ71BASEQ[ASRQ79]','ASRQ71BASEQ[ASRQ80]','ASRQ77Freitext','ASQQ79Freitext','ASRQ81BASEQ[ASRQ81]','ASRQ81BASEQ[ASRQ82]','ASRQ81BASEQ[ASRQ83]',
-            'ASRQ81BASEQ[ASRQ84]','ASRQ81BASEQ[ASRQ85]','ASRQ81BASEQ[ASRQ86]','ASRQ81BASEQ[ASRQ87]','ASRQ81BASEQ[ASRQ88]','ASRQ81BASEQ[ASRQ89]','ASRQ81BASEQ[ASRQ90]',
-            'ASRQ84Freitext','ASRQ85Freitext','ASRQ91BASEQ[ASRQ91]','ASRQ91BASEQ[ASRQ92]','ASRQ91BASEQ[ASRQ93]','ASRQ91BASEQ[ASRQ94]','ASRQ91BASEQ[ASRQ95]',
-            'ASRQ91BASEQ[ASRQ96]','ASRQ91BASEQ[ASRQ97]','ASRQ91BASEQ[ASRQ98]','ASRQ91BASEQ[ASRQ99]','ASRQ91BASEQ[ASRQ100]','ASR92Freitext','ASR100Freitext',
-            'ASRQ101BASEQ[ASRQ101]','ASRQ101BASEQ[ASRQ102]','ASRQ101BASEQ[ASRQ103]','ASRQ101BASEQ[ASRQ104]','ASRQ101BASEQ[ASRQ105]','ASRQ101BASEQ[ASRQ106]',
-            'ASRQ101BASEQ[ASRQ107]','ASRQ101BASEQ[ASRQ108]','ASRQ101BASEQ[ASRQ109]','ASRQ101BASEQ[ASRQ110]','ASRQ111BASEQ[ASRQ111]','ASRQ111BASEQ[ASRQ112]',
-            'ASRQ111BASEQ[ASRQ113]','ASRQ111BASEQ[ASRQ114]','ASRQ111BASEQ[ASRQ115]','ASRQ111BASEQ[ASRQ116]','ASRQ111BASEQ[ASRQ117]','ASRQ111BASEQ[ASRQ118]',
-            'ASRQ111BASEQ[ASRQ119]','ASRQ111BASEQ[ASRQ120]','ASRQ121BASEQ[ASRQ121]','ASRQ121BASEQ[ASRQ122]','ASRQ121BASEQ[ASRQ123]','ASRQ124','ASRQ125','ASRQ126']
+        cols = ['ASRIABASEQ[ASRIA]','ASRIBBASEQ[ASRIB]','ASRICBASEQ[ASRIC]','ASRIDBASEQ[ASRID]','ASRII1','ASRII1[comment]','ASRII2','ASRII3BASEQ[ASRIIA]',
+                'ASRII3BASEQ[ASRIIBr]','ASRII3BASEQ[ASRIIC]','ASRII3BASEQ[ASRIID]','ASRII3BASEQ[ASRIIEr]','ASRII3BASEQ[ASRIIFr]','ASRII3BASEQ[ASRIIG]',
+                'ASRII3BASEQ[ASRIIHr]','ASRIIIABASEQ[ASRIIIA]','ASRIIIBBASEQ[ASRIIIB]','ASRIIICBASEQ[ASRIIIC]','ASRIIIDBASEQ[ASRIIID]','ASRIIIEaBASEQ[ASRIIIE]',
+                'ASRIIIEbBASEQ[ASRIIIE1]','ASRIIIEbBASEQ[ASRIIIE2]','ASRIIIEbBASEQ[ASRIIIE3]','ASRIIIEbBASEQ[ASRIIIE4]','ASRIIIFBASEQ[ASRIIIF]','ASRIVaBASEQ[ASRIV]',
+                'ASRIVbBASEQ[ASRIVA]','ASRIVbBASEQ[ASRIVBr]','ASRIVbBASEQ[ASRIVC]','ASRIVbBASEQ[ASRIVDr]','ASRIVbBASEQ[ASRIVE]','ASRIVbBASEQ[ASRIVFr]',
+                'ASRIVbBASEQ[ASRIVGr]', 'ASRIVbBASEQ[ASRIVHr]','ASRIVbBASEQ[ASRIVIr]','ASRVa','ASRVa[comment]','ASRVbBASEQ[ASRV1]','ASRVbBASEQ[ASRV1comment]',
+                'ASRVbBASEQ[ASRV3]','ASRVbBASEQ[ASRV3comment]','ASRVbBASEQ[ASRV4]','ASRVbBASEQ[ASRV4comment]','ASRVcBASEQ[ASRVA]','ASRVcBASEQ[ASRVB]',
+                'ASRVcBASEQ[ASRVCr]','ASRVcBASEQ[ASRVD]','ASRVcBASEQ[ASRVEr]','ASRVI','ASRVI[comment]','ASRVII','ASRVII[comment]','ASRVIII','ASRQ1BASEQ[ASRQ1]',
+                'ASRQ1BASEQ[ASRQ2]','ASRQ1BASEQ[ASRQ3]','ASRQ1BASEQ[ASRQ4]','ASRQ1BASEQ[ASRQ5]','ASRQ1BASEQ[ASRQ6]','ASRQ6Freitext','ASRQ7BASEQ[ASRQ7]','ASRQ7BASEQ[ASRQ8]',
+                'ASRQ7BASEQ[ASRQ9]','ASRQ9Freitext','ASRQ10BASEQ[ASRQ10]','ASRQ10BASEQ[ASRQ11]','ASRQ10BASEQ[ASRQ12]','ASRQ10BASEQ[ASRQ13]','ASRQ10BASEQ[ASRQ14]',
+                'ASRQ10BASEQ[ASRQ15]','ASRQ10BASEQ[ASRQ16]','ASRQ10BASEQ[ASRQ17]','ASRQ10BASEQ[ASRQ18]','ASRQ10BASEQ[ASRQ19]','ASRQ10BASEQ[ASRQ20]','ASRQ21BASEQ[ASRQ21]',
+                'ASRQ21BASEQ[ASRQ22]','ASRQ21BASEQ[ASRQ23]','ASRQ21BASEQ[ASRQ24]','ASRQ21BASEQ[ASRQ25]','ASRQ21BASEQ[ASRQ26]','ASRQ21BASEQ[ASRQ27]','ASRQ21BASEQ[ASRQ28]',
+                'ASRQ21BASEQ[ASRQ29]','ASRQ29Freitext','ASRQ30BASEQ[ASRQ30]','ASRQ30BASEQ[ASRQ31]','ASRQ30BASEQ[ASRQ32]','ASRQ30BASEQ[ASRQ33]','ASRQ30BASEQ[ASRQ34]',
+                'ASRQ30BASEQ[ASRQ35]','ASRQ30BASEQ[ASRQ36]','ASRQ30BASEQ[ASRQ37]','ASRQ30BASEQ[ASRQ38]','ASRQ30BASEQ[ASRQ39]','ASRQ30BASEQ[ASRQ40]','ASRQ40Freitext',
+                'ASRQ41BASEQ[ASRQ41]','ASRQ41BASEQ[ASRQ42]','ASRQ41BASEQ[ASRQ43]','ASRQ41BASEQ[ASRQ44]','ASRQ41BASEQ[ASRQ45]','ASRQ41BASEQ[ASRQ46]','ASRQ41BASEQ[ASRQ47]',
+                'ASRQ41BASEQ[ASRQ48]','ASRQ41BASEQ[ASRQ49]','ASRQ41BASEQ[ASRQ50]','ASRQ46Freitext','ASRQ51BASEQ[ASRQ51]','ASRQ51BASEQ[ASRQ52]','ASRQ51BASEQ[ASRQ53]',
+                'ASRQ51BASEQ[ASRQ54]','ASRQ51BASEQ[ASRQ55]','ASRQ56BASEQ[ASRVIII561]','ASRQ56BASEQ[ASRVIII562]','ASRQ56BASEQ[ASRVIII563]','ASRQ56BASEQ[ASRVIII564]',
+                'ASRQ56BASEQ[ASRVIII565]','ASRQ56BASEQ[ASRVIII566]','ASRQ56BASEQ[ASRVIII567]','ASRQ56Freitext','ASRQ57BASEQ[ASRQ57]','ASRQ57BASEQ[ASRQ58]',
+                'ASRQ57BASEQ[ASRQ59]', 'ASRQ57BASEQ[ASRQ60]','ASRQ58Freitext','ASRQ61BASEQ[ASRQ61]','ASRQ61BASEQ[ASRQ62]','ASRQ61BASEQ[ASRQ63]','ASRQ61BASEQ[ASRQ64]',
+                'ASRQ61BASEQ[ASRQ65]','ASRQ61BASEQ[ASRQ66]','ASRQ61BASEQ[ASRQ67]','ASRQ61BASEQ[ASRQ68]','ASRQ61BASEQ[ASRQ69]','ASRQ61BASEQ[ASRQ70]','ASRQ66','ASRQ70',
+                'ASRQ71BASEQ[ASRQ71]','ASRQ71BASEQ[ASRQ72]','ASRQ71BASEQ[ASRQ73]','ASRQ71BASEQ[ASRQ74]','ASRQ71BASEQ[ASRQ75]','ASRQ71BASEQ[ASRQ76]','ASRQ71BASEQ[ASRQ77]',
+                'ASRQ71BASEQ[ASRQ78]','ASRQ71BASEQ[ASRQ79]','ASRQ71BASEQ[ASRQ80]','ASRQ77Freitext','ASQQ79Freitext','ASRQ81BASEQ[ASRQ81]','ASRQ81BASEQ[ASRQ82]','ASRQ81BASEQ[ASRQ83]',
+                'ASRQ81BASEQ[ASRQ84]','ASRQ81BASEQ[ASRQ85]','ASRQ81BASEQ[ASRQ86]','ASRQ81BASEQ[ASRQ87]','ASRQ81BASEQ[ASRQ88]','ASRQ81BASEQ[ASRQ89]','ASRQ81BASEQ[ASRQ90]',
+                'ASRQ84Freitext','ASRQ85Freitext','ASRQ91BASEQ[ASRQ91]','ASRQ91BASEQ[ASRQ92]','ASRQ91BASEQ[ASRQ93]','ASRQ91BASEQ[ASRQ94]','ASRQ91BASEQ[ASRQ95]',
+                'ASRQ91BASEQ[ASRQ96]','ASRQ91BASEQ[ASRQ97]','ASRQ91BASEQ[ASRQ98]','ASRQ91BASEQ[ASRQ99]','ASRQ91BASEQ[ASRQ100]','ASR92Freitext','ASR100Freitext',
+                'ASRQ101BASEQ[ASRQ101]','ASRQ101BASEQ[ASRQ102]','ASRQ101BASEQ[ASRQ103]','ASRQ101BASEQ[ASRQ104]','ASRQ101BASEQ[ASRQ105]','ASRQ101BASEQ[ASRQ106]',
+                'ASRQ101BASEQ[ASRQ107]','ASRQ101BASEQ[ASRQ108]','ASRQ101BASEQ[ASRQ109]','ASRQ101BASEQ[ASRQ110]','ASRQ111BASEQ[ASRQ111]','ASRQ111BASEQ[ASRQ112]',
+                'ASRQ111BASEQ[ASRQ113]','ASRQ111BASEQ[ASRQ114]','ASRQ111BASEQ[ASRQ115]','ASRQ111BASEQ[ASRQ116]','ASRQ111BASEQ[ASRQ117]','ASRQ111BASEQ[ASRQ118]',
+                'ASRQ111BASEQ[ASRQ119]','ASRQ111BASEQ[ASRQ120]','ASRQ121BASEQ[ASRQ121]','ASRQ121BASEQ[ASRQ122]','ASRQ121BASEQ[ASRQ123]','ASRQ124','ASRQ125','ASRQ126']
 
-            age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-            df['age'] = age.dt.days / 365
-            df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-            cols_export = ['ID', 'GSH', 'age'] + cols + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
-                                                        'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
-                                                        'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
-                                                        'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
-                                                        'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
-                                                        'ASR_summary_syndromeProfiles_anxiousdepressed_sum', 
-                                                        'ASR_summary_syndromeProfiles_withdrawn_sum', 
-                                                        'ASR_summary_syndromeProfiles_somaticComplaints_sum',
-                                                        'ASR_summary_syndromeProfiles_thoughtProblems_sum', 
-                                                        'ASR_summary_syndromeProfiles_attentionProblems_sum', 
-                                                        'ASR_summary_syndromeProfiles_aggressiveBehavior_sum', 
-                                                        'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
-                                                        'ASR_summary_syndromeProfiles_intrusive_sum', 
-                                                        'ASR_summary_syndromeProfiles_internalizing_sum', 
-                                                        'ASR_summary_syndromeProfiles_externalizing_sum']          
-            df[cols_export].to_csv('%s/ASR.csv' % out_dir, index=False)
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
+                                                    'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
+                                                    'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
+                                                    'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
+                                                    'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
+                                                    'ASR_summary_syndromeProfiles_anxiousdepressed_sum', 
+                                                    'ASR_summary_syndromeProfiles_withdrawn_sum', 
+                                                    'ASR_summary_syndromeProfiles_somaticComplaints_sum',
+                                                    'ASR_summary_syndromeProfiles_thoughtProblems_sum', 
+                                                    'ASR_summary_syndromeProfiles_attentionProblems_sum', 
+                                                    'ASR_summary_syndromeProfiles_aggressiveBehavior_sum', 
+                                                    'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
+                                                    'ASR_summary_syndromeProfiles_intrusive_sum', 
+                                                    'ASR_summary_syndromeProfiles_internalizing_sum', 
+                                                    'ASR_summary_syndromeProfiles_externalizing_sum']          
+        df[cols_export].to_csv('%s/ASR.csv' % out_dir, index=False)
 
 
 
