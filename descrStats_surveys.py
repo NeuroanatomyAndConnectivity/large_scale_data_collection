@@ -1006,6 +1006,156 @@ def run_SelfEst(df, out_dir=None):
 
 
 ##############################################################################
+####### Involuntary Musical Imagery Scale (Earworm Scale) ####################
+##############################################################################
+
+def run_IMIS(df, out_dir=None):
+
+    ### Additional questions about the frequency of episodes, the length of the music loop in one's head ( Sec Length) 
+    ### and the length of INMI episode (Epi Length)
+
+    print 'Involuntary Musical Imagery Scale (IMIS) \n\n'
+    print 'An Involuntary Musical Imagery (INMI) episode is the \n experience of a repetition of a short music loop in one s head, \n unbidden to the mind and without conscious control\n INMI are also called Earworms. \n'
+
+    print 'Frequency of INMI episodes'
+    print df["EWSaBASEQ[AQ_1]"].describe()
+    print '\n'
+
+
+    print 'All subsequent reported scores are for participants who reported experiencing INMI'
+    print ' (answer to the frequency question different from "never" = 1) \n\n' 
+    
+    print 'Section length (length of music loop experienced as INMI)'
+    print df["EWSdBASEQ[AQ2]"].describe()
+    print '\n'
+
+    print 'Episode length'
+    print df["EWSeBASEQ[AQ3]"].describe()
+    print '\n'
+
+   
+    plt.figure
+    plt.subplot(131)   
+    sns.countplot(df["EWSaBASEQ[AQ_1]"].dropna(), order=range(int(df["EWSaBASEQ[AQ_1]"].min()),int(df["EWSaBASEQ[AQ_1]"].max())))   
+    plt.xlabel("Freq", fontsize = 14)                        
+    
+
+    plt.subplot(132)
+    sns.countplot(df["EWSdBASEQ[AQ2]"].dropna(), order=range(int(df["EWSdBASEQ[AQ2]"].min()),int(df["EWSdBASEQ[AQ2]"].max())))
+    plt.xlabel("Sec length", fontsize = 14)    
+
+    plt.subplot(133)
+    sns.countplot(df["EWSeBASEQ[AQ3]"].dropna(), order=range(int(df["EWSeBASEQ[AQ3]"].min()),int(df["EWSeBASEQ[AQ3]"].max())))
+    plt.xlabel("Epi Length", fontsize = 14)
+    plt.show()
+
+    #Calculate factors
+    df['IMIS_NegVal_sum'] = df[['EWSbBASEQ[NV1]','EWSbBASEQ[NV2]','EWSbBASEQ[NV3]','EWSbBASEQ[NV4]','EWSbBASEQ[NV5]','EWSbBASEQ[NV6]','EWSbBASEQ[NV7]']].sum(axis=1)
+    df['IMIS_Help_sum'] = df[['EWScBASEQ[H1]','EWScBASEQ[H2]']].sum(axis=1)
+    df['IMIS_Movement_sum'] = df[['EWScBASEQ[M1]','EWScBASEQ[M2]','EWScBASEQ[M3]']].sum(axis=1)
+    df['IMIS_PersRef_sum'] = df[['EWScBASEQ[PR1]','EWScBASEQ[PR2]','EWScBASEQ[PR3]']].sum(axis=1)
+
+    print 'Negative Valence'
+    print df["IMIS_NegVal_sum"].describe()
+    print '\n\n'
+
+    print 'Help'
+    print df["IMIS_Help_sum"].describe()
+    print '\n'
+
+    print 'Movement'
+    print df["IMIS_Movement_sum"].describe()
+    print '\n'
+
+    print 'Personal Reflections'
+    print df["IMIS_PersRef_sum"].describe()
+    print '\n'
+
+
+    plt.figure
+    plt.subplot(121)   
+    sns.distplot(df["IMIS_NegVal_sum"].dropna(), kde = True)
+    plt.xlabel("Negative Valence", fontsize = 14)                        
+    
+    plt.subplot(122)
+    sns.distplot(df["IMIS_Help_sum"].dropna(), kde = True)
+    plt.xlabel("Help", fontsize = 14)    
+    plt.show()
+
+    plt.figure
+    plt.subplot(121)
+    sns.distplot(df["IMIS_Movement_sum"].dropna(), kde = True)
+    plt.xlabel("Movement ", fontsize = 14)
+        
+    plt.subplot(122)
+    sns.distplot(df["IMIS_PersRef_sum"].dropna(), kde = True)
+    plt.xlabel("Pers Refl ", fontsize = 14)
+    plt.show()
+
+
+    if out_dir:
+        cols = ['EWSaBASEQ[AQ_1]','EWSbBASEQ[NV1]','EWSbBASEQ[NV2]','EWSbBASEQ[NV3]','EWSbBASEQ[NV4]','EWSbBASEQ[NV5]',
+                'EWSbBASEQ[NV6]','EWSbBASEQ[NV7]','EWScBASEQ[M1]','EWScBASEQ[M2]','EWScBASEQ[M3]','EWScBASEQ[PR1]',
+                'EWScBASEQ[PR2]','EWScBASEQ[PR3]','EWScBASEQ[H1]','EWScBASEQ[H2]','EWSdBASEQ[AQ2]','EWSeBASEQ[AQ3]']
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]       
+        df[cols_export].to_csv('%s/IMIS.csv' % out_dir, index=False)
+    
+
+
+##############################################################################
+####### Goldsmiths Musical Sophistication Index (Gold-MSI) ###################
+##############################################################################
+  
+def run_GoldMSI(df, out_dir=None):
+    #items to be recoded
+    items_recoded = ['MUSaBASEQ[MUS_21]',
+                     'MUSdBASEQ[MUS_14]',
+                     'MUSdBASEQ[MUS_27]'] 
+    recoder = {1: 8, 2: 7, 3: 6, 4: 5, 5:4, 6:3, 7:2, 8:1}
+     
+    for i in items_recoded:
+        df[i] = df[i].map(recoder).astype(float64) 
+
+    df['GoldMSI_Active_sum'] = df[['MUSaBASEQ[MUS_21]','MUSaBASEQ[MUS_1]','MUSaBASEQ[MUS_15]','MUSaBASEQ[MUS_24]','MUSaBASEQ[MUS_28]','MUSaBASEQ[MUS_3]','MUSaBASEQ[MUS_8]','MUSbBASEQ[MUS_34]','MUScBASEQ[MUS_38]']].sum(axis=1)
+
+    df['GoldMSI_Training_sum'] = df[['MUSdBASEQ[MUS_14]','MUSdBASEQ[MUS_27]','MUSeBASEQ[MUS_32]','MUSfBASEQ[MUS_33]','MUSgBASEQ[MUS_35]','MUShBASEQ[MUS_36]','MUSiBASEQ[MUS_37]']].sum(axis=1)
+    
+    print 'Goldsmiths Musical Sophistication Index (Gold-MSI) \n\n'
+    
+    print "Active Engagement in Musical Activities:\n"
+    print df['GoldMSI_Active_sum'].describe()
+    print "\n"
+
+    print "Musical Training:\n"
+    print df['GoldMSI_Training_sum'].describe()
+    print "\n"
+
+    plt.figure
+    plt.subplot(121)
+    sns.distplot(df["GoldMSI_Active_sum"].dropna(), kde = True)
+    plt.xlabel("Active Engagement ", fontsize = 14)
+        
+    plt.subplot(122)
+    sns.distplot(df["GoldMSI_Training_sum"].dropna(), kde = True)
+    plt.xlabel("Training ", fontsize = 14)
+    plt.show()
+    
+    if out_dir:
+        cols = ['MUSaBASEQ[MUS_1]','MUSaBASEQ[MUS_3]','MUSaBASEQ[MUS_8]','MUSaBASEQ[MUS_15]','MUSaBASEQ[MUS_21]','MUSaBASEQ[MUS_24]',
+                'MUSaBASEQ[MUS_28]','MUSbBASEQ[MUS_34]','MUScBASEQ[MUS_38]','MUSdBASEQ[MUS_14]','MUSdBASEQ[MUS_27]','MUSeBASEQ[MUS_32]',
+                'MUSfBASEQ[MUS_33]','MUSgBASEQ[MUS_35]','MUShBASEQ[MUS_36]','MUSiBASEQ[MUS_37]']
+        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
+        df['age'] = age.dt.days / 365
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'GSH', 'age'] + cols + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']       
+        df[cols_export].to_csv('%s/GoldMSI.csv' % out_dir, index=False)
+
+
+
+##############################################################################
 ####################### Epsworth Sleepiness Scale ############################
 ##############################################################################
 
