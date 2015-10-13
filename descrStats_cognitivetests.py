@@ -16,7 +16,12 @@ import matplotlib.pyplot as plt
 ################################# TMT ########################################
 ##############################################################################
 
-def run_TMT(df):
+def run_TMT(df, out_dir = None):
+    
+     cols = ['TMT_A_numbers_seconds',
+            'TMT_A_numbers_errors',
+            'TMT_B_numbersletters_seconds',
+            'TMT_B_numbersletters_errors']
      
      #TMT A numbers: seconds
      print 'TMT_A: numbers: seconds'
@@ -28,7 +33,6 @@ def run_TMT(df):
      TMT_A_numb_sec = list(TMT_A_numb_sec.dropna())
      sns.distplot(TMT_A_numb_sec, kde = True, label = 'TMT_A')
      plt.xlabel('TMT_A_sec', fontsize = 14)
-
      
      #TMT A numbers: errors   
      print '\n' 'TMT_A: numbers: errors'
@@ -43,8 +47,6 @@ def run_TMT(df):
          if err > 0:
              count = count + 1
      print 'at least one error: N = %s' %count    
-     
-     
      
      #TMT_B_numbers_letters:seconds
      print '\n', 'TMT_B: Numbers-Letters: seconds'   
@@ -70,6 +72,12 @@ def run_TMT(df):
          if err > 0:
              count = count + 1
      print 'at least one error: N = %s' %count       
+          
+     
+     if out_dir:
+         df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
+         cols_export = ['ID', 'gender', 'age'] + cols
+         df[cols_export].to_csv('%s/TMT.csv' % out_dir, index=False)       
      
      
 
@@ -77,7 +85,9 @@ def run_TMT(df):
 ########################## Wortschatztest ####################################
 ############################################################################## 
 
-def run_WST(df):
+def run_WST(df, out_dir = None):
+    
+    cols = ['WST_RW',]
     
     print 'Measure of verbal intelligence: Task: find real words; Max = 42'
     print '\n', 'WST raw scores'
@@ -88,13 +98,20 @@ def run_WST(df):
     WST_RW = list(WST_RW.dropna())
     sns.distplot(WST_RW, kde = True)
     
+    if out_dir:
+        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'gender', 'age'] + cols
+        df[cols_export].to_csv('%s/WST.csv' % out_dir, index=False)    
+    
     
 
 ##############################################################################     
 ##################### Leistungsprüfsystem Subtest 3 ########################## 
 ############################################################################## 
     
-def run_LPS(df):
+def run_LPS(df, out_dir = None):
+    
+    cols = ['LPS_RW']
     
     print 'Measure of reasoning: Task: find correct symbol; Max = 40'
     print '\n', 'LPS raw scores'
@@ -105,13 +122,37 @@ def run_LPS(df):
     LPS_RW = list(LPS_RW.dropna())
     sns.distplot(LPS_RW, kde = True)
     
+    if out_dir:
+        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'gender', 'age'] + cols
+        df[cols_export].to_csv('%s/LPS.csv' % out_dir, index=False) 
+    
 
 
 ##############################################################################     
 ################ Regensburger Wortflüssigkeitstest ########################### 
 ############################################################################## 
 
-def run_RWT(df):
+def run_RWT(df, out_dir = None):
+    
+    cols = ['S_Wörter_1.min',
+            'Rep_S_Wörter_1.min',
+            'RB_S_Wörter_1.min',
+            'S_Wörter_2._min',
+            'Rep_S_Wörter_2.min',
+            'RB_S_Wörter_2.min',
+            'Wörter_Summe_min',
+            'Wörter_Summe_R',
+            'Wörter_Summe_RB',
+            'Tiere_1._min',
+            'Rep_Tiere_1.min',
+            'RB_Tiere_1.min',
+            'Tiere_2._min',
+            'Rep_Tiere_2.min',
+            'RB_Tiere_2.min',
+            'Tiere_Summe_min',
+            'Tiere_Summe_R',
+            'Tiere_Summe_RB']
     
     print "measures verbal fluency: Task: find as many words as you can from a category or with a certain letter"
     
@@ -196,14 +237,49 @@ def run_RWT(df):
     print 'at least one rule book: N(subjects) = %s' %count 
     
  
+    if out_dir:
+        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'gender', 'age'] + cols
+        df[cols_export].to_csv('%s/RWT.csv' % out_dir, index=False)  
+    
+ 
 
 ##############################################################################    
-############################# TAP Alertness ##################################
+#################################### TAP #####################################
 ############################################################################## 
-    
-#Tap Alertness
 
-def run_TAP_alertness(df):
+############################# TAP Alertness ##################################
+
+def run_TAP(df, out_dir = None):
+    
+    cols = ['Alert_1_RT_MD',
+            'Alert_2_RT_MD',
+            'Alert_3_RT_MD',
+            'Alert_4_RT_MD',
+            'Alert_no_sig_Mean',
+            'Alert_no_sig_MD',
+            'Alert_sig_Mean',
+            'Alert_sig_MD',
+            'phasische alertness',
+            'compat_Mean',
+            'compat_MD',
+            'compat_errors',
+            'Incompat_Mean',
+            'Incompat_MD',
+            'Incompat_errors',
+            'Incompat_total_Mean',
+            'Incompat_total_MD',
+            'Incompat_total_Errors',
+            'visual_field',
+            'hand',
+            'visual_field_x_hand',
+            'WM_Mean_ms',
+            'WM_MD_ms',
+            'WM_SD',
+            'WM_correct',
+            'WM_errors',
+            'WM_omissions',
+            'WM_outliers']
     
     print '\n' 'Task: press button when target stim appears on screen; two conditions: with and without prime (tone)'
     print 'two runs for each condition'
@@ -226,14 +302,9 @@ def run_TAP_alertness(df):
     Alert_sig_Mean = list(Alert_sig_Mean.dropna())
     sns.distplot(Alert_sig_Mean, kde = True) 
     plt.xlabel('Mean_RTs', fontsize = 14)
+    plt.show()
     
-
-
-############################################################################## 
 ########################## TAP incompat ######################################
-############################################################################## 
-    
-def run_TAP_incompat(df):
     
     print '\n' 'Task: button press left/right depending on which side an arrow points (ignore on which side target appears)'
     print 'two runs for each condition - congruent/incongruent'    
@@ -257,13 +328,9 @@ def run_TAP_incompat(df):
     incompat_Mean = list(incompat_Mean.dropna())
     sns.distplot(incompat_Mean, kde = True)     
     plt.xlabel('Mean_RTs', fontsize = 14)
+    plt.show()
     
-
-############################################################################## 
 ########################## TAP WM ############################################
-############################################################################## 
-    
-def run_TAP_WM(df):
     
     print '\n' 'Task: button press if a number is equal to the second last number (numbers 1-9)'
     
@@ -274,6 +341,13 @@ def run_TAP_WM(df):
     WM_means_ms = list(WM_means_ms.dropna())
     sns.distplot(WM_means_ms, kde = True)     
     plt.xlabel('Mean_RTs', fontsize = 14)
+    plt.show()
+
+    if out_dir:
+        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ID', 'gender', 'age'] + cols
+        df[cols_export].to_csv('%s/TAP.csv' % out_dir, index=False) 
+
 
 
 
