@@ -57,14 +57,12 @@ def run_SelfCtrl(df, out_dir=None):
     sns.distplot(df["SelfCtrl_sum"].dropna(), kde = True)
     
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ["SelfCtrl_sum"]        
-        df[cols_export].to_csv('%s/SCS.csv' % out_dir, index=False)
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['SelfCtrl_sum']
+        df[cols_export].to_csv('%s/self_control.csv' % out_dir, index=False)
         
     
-
 
 ##############################################################################                      
 ################ Internet Addiction test #####################################
@@ -101,11 +99,10 @@ def run_IAT(df, out_dir=None):
     sns.distplot(df["IAT_sum"].dropna(), kde = True)
     
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ["IAT_sum"]        
-        df[cols_export].to_csv('%s/IAT.csv' % out_dir, index=False)
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["IAT_sum"]
+        df[cols_export].to_csv('%s/internet_addiction.csv' % out_dir, index=False)
 
 
 
@@ -190,13 +187,11 @@ def run_VIS(df, out_dir=None):
                 'AISaBASEQ[AIS9]', 'AISaBASEQ[AIS10]', 'AISbBASEQ[AIS11]', 'AISbBASEQ[AIS12]',
                 'AISbBASEQ[AIS13]', 'AISbBASEQ[AIS14]', 'AISbBASEQ[AIS15]', 'AISbBASEQ[AIS16]',
                 'AISbBASEQ[AIS17]', 'AISbBASEQ[AIS18]']
-                
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['VIS_dialog_sum', 
-        'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum']        
-        df[cols_export].to_csv('%s/VIS.csv' % out_dir, index=False)
+            
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum'] 
+        df[cols_export].to_csv('%s/varieties_inner_speech.csv' % out_dir, index=False)
 
 
 
@@ -236,11 +231,10 @@ def run_MW_SD(df, out_dir=None):
         cols = ["MWBASEQ[MWD1]", "MWBASEQ[MWD2]", "MWBASEQ[MWD3]", "MWBASEQ[MWD4]",
                 "MWBASEQ[MWS1]", "MWBASEQ[MWS2]", "MWBASEQ[MWS3]", "MWBASEQ[MWS4]"]
         
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['Mean_MW_delib_mean', 'Mean_MW_spont_mean']          
-        df[cols_export].to_csv('%s/MW_SD.csv' % out_dir, index=False)
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mean_MW_delib_mean', 'Mean_MW_spont_mean']
+        df[cols_export].to_csv('%s/spontaneous_and_deliberate_mind_wandering.csv' % out_dir, index=False)
 
 
 
@@ -328,11 +322,10 @@ def run_SDT(df, out_dir=None):
                 'SDTpBASEQ[SDTP3]', 'SDTpBASEQ[SDTP4]', 'SDTpBASEQ[SDTP5]', 'SDTpBASEQ[SDTP6]',
                 'SDTpBASEQ[SDTP7r]', 'SDTpBASEQ[SDTP8]', 'SDTpBASEQ[SDTP9]']
         
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['Mach_sum', 'Narc_sum', 'Psycho_sum']          
-        df[cols_export].to_csv('%s/SDT.csv' % out_dir, index=False)
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mach_sum', 'Narc_sum', 'Psycho_sum']    
+        df[cols_export].to_csv('%s/short_dark_triad.csv' % out_dir, index=False)
 
 
 
@@ -380,20 +373,19 @@ def run_SES(df, out_dir=None):
             'SESbBASEQ[SES17r]']     
 
     #Calculate total score as the sum of Item 1-17.
-    df['SES_sum'] = df[cols].sum(axis=1)
+    df['SDS_sum'] = df[cols].sum(axis=1)
                     
-    print df['SES_sum'].describe()
+    print df['SDS_sum'].describe()
                    
     #create histo
-    sns.distplot(df['SES_sum'].dropna(), kde = True)              
+    sns.distplot(df['SDS_sum'].dropna(), kde = True)              
     
     if out_dir:
-        
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['SES_sum']          
-        df[cols_export].to_csv('%s/SES.csv' % out_dir, index=False)
+    
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['SDS_sum']      
+        df[cols_export].to_csv('%s/social_desirability.csv' % out_dir, index=False)
   
 
 
@@ -543,11 +535,10 @@ def run_UPPSP(df, out_dir=None):
                 'UPPSfBASEQ[UPP53r]', 'UPPSfBASEQ[UPP54]', 'UPPSfBASEQ[UPP55r]', 'UPPSfBASEQ[UPP56r]',
                 'UPPSfBASEQ[UPP57r]', 'UPPSfBASEQ[UPP58r]','UPPSfBASEQ[UPP59r]']        
         
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['Mean_NegUrg', 'Mean_Premed', 'Mean_Persev', 'Mean_SS','Mean_PosUrg']          
-        df[cols_export].to_csv('%s/SES.csv' % out_dir, index=False)
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mean_NegUrg', 'Mean_Premed', 'Mean_Persev', 'Mean_SS','Mean_PosUrg']       
+        df[cols_export].to_csv('%s/UPPSP_impulsivity.csv' % out_dir, index=False)
   
 
 
@@ -595,12 +586,12 @@ def run_TPS(df, out_dir=None):
     sns.distplot(df['TPS_D_sum'].dropna(), kde = True)                  
 
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['TPS_D_sum']          
-        df[cols_export].to_csv('%s/TPS.csv' % out_dir, index=False)
         
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['TPS_D_sum']        
+        df[cols_export].to_csv('%s/tuckmann_procrastination.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -940,10 +931,9 @@ def run_ASR(data, out_dir=None):
                 'ASRQ111BASEQ[ASRQ113]','ASRQ111BASEQ[ASRQ114]','ASRQ111BASEQ[ASRQ115]','ASRQ111BASEQ[ASRQ116]','ASRQ111BASEQ[ASRQ117]','ASRQ111BASEQ[ASRQ118]',
                 'ASRQ111BASEQ[ASRQ119]','ASRQ111BASEQ[ASRQ120]','ASRQ121BASEQ[ASRQ121]','ASRQ121BASEQ[ASRQ122]','ASRQ121BASEQ[ASRQ123]','ASRQ124','ASRQ125','ASRQ126']
 
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
                                                     'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
                                                     'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
                                                     'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
@@ -957,9 +947,9 @@ def run_ASR(data, out_dir=None):
                                                     'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
                                                     'ASR_summary_syndromeProfiles_intrusive_sum', 
                                                     'ASR_summary_syndromeProfiles_internalizing_sum', 
-                                                    'ASR_summary_syndromeProfiles_externalizing_sum']          
-        df[cols_export].to_csv('%s/ASR.csv' % out_dir, index=False)
-
+                                                    'ASR_summary_syndromeProfiles_externalizing_sum']        
+        df[cols_export].to_csv('%s/adult_self_report.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -997,12 +987,11 @@ def run_SelfEst(df, out_dir=None):
     sns.distplot(df['Mean_SelfEst'].dropna(), kde = True)                                  
 
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['Mean_SelfEst']          
-        df[cols_export].to_csv('%s/SelfEst.csv' % out_dir, index=False)
-
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mean_SelfEst']          
+        df[cols_export].to_csv('%s/self_esteem.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -1097,12 +1086,12 @@ def run_IMIS(df, out_dir=None):
         cols = ['EWSaBASEQ[AQ_1]','EWSbBASEQ[NV1]','EWSbBASEQ[NV2]','EWSbBASEQ[NV3]','EWSbBASEQ[NV4]','EWSbBASEQ[NV5]',
                 'EWSbBASEQ[NV6]','EWSbBASEQ[NV7]','EWScBASEQ[M1]','EWScBASEQ[M2]','EWScBASEQ[M3]','EWScBASEQ[PR1]',
                 'EWScBASEQ[PR2]','EWScBASEQ[PR3]','EWScBASEQ[H1]','EWScBASEQ[H2]','EWSdBASEQ[AQ2]','EWSeBASEQ[AQ3]']
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]       
-        df[cols_export].to_csv('%s/IMIS.csv' % out_dir, index=False)
-    
+                
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]          
+        df[cols_export].to_csv('%s/involuntary_musical_imagery.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -1147,12 +1136,12 @@ def run_GoldMSI(df, out_dir=None):
         cols = ['MUSaBASEQ[MUS_1]','MUSaBASEQ[MUS_3]','MUSaBASEQ[MUS_8]','MUSaBASEQ[MUS_15]','MUSaBASEQ[MUS_21]','MUSaBASEQ[MUS_24]',
                 'MUSaBASEQ[MUS_28]','MUSbBASEQ[MUS_34]','MUScBASEQ[MUS_38]','MUSdBASEQ[MUS_14]','MUSdBASEQ[MUS_27]','MUSeBASEQ[MUS_32]',
                 'MUSfBASEQ[MUS_33]','MUSgBASEQ[MUS_35]','MUShBASEQ[MUS_36]','MUSiBASEQ[MUS_37]']
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']       
-        df[cols_export].to_csv('%s/GoldMSI.csv' % out_dir, index=False)
-
+               
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']          
+        df[cols_export].to_csv('%s/goldsmith_musical_sophisticatoin.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -1174,13 +1163,13 @@ def run_ESS(data, out_dir=None):
     plt.show()
     
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['ESS_summary_sum']          
-        df[cols_export].to_csv('%s/ESS.csv' % out_dir, index=False)
+        
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['ESS_summary_sum']      
+        df[cols_export].to_csv('%s/epsworth_sleepiness.csv' % out_dir, index=False)
+  
     
-
 
 ##############################################################################
 ############################## BDI ###########################################
@@ -1188,7 +1177,7 @@ def run_ESS(data, out_dir=None):
 
 def run_BDI(data, out_dir=None):
 
-    cols_BDI = ['BDIABASEQ[BDIA0]','BDIABASEQ[BDIA1]','BDIABASEQ[BDIA2]','BDIABASEQ[BDIA3]','BDIBBASEQ[BDIB0]','BDIBBASEQ[BDIB1]','BDIBBASEQ[BDIB2]','BDIBBASEQ[BDIB3]',
+    cols = ['BDIABASEQ[BDIA0]','BDIABASEQ[BDIA1]','BDIABASEQ[BDIA2]','BDIABASEQ[BDIA3]','BDIBBASEQ[BDIB0]','BDIBBASEQ[BDIB1]','BDIBBASEQ[BDIB2]','BDIBBASEQ[BDIB3]',
                 'BDICBASEQ[BDIC0]','BDICBASEQ[BDIC1]','BDICBASEQ[BDIC2]','BDICBASEQ[BDIC3]','BDIDBASEQ[BDID0]','BDIDBASEQ[BDID1]','BDIDBASEQ[BDID2]','BDIDBASEQ[BDID3]',
                 'BDIEBASEQ[BDIE0]','BDIEBASEQ[BDIE1]','BDIEBASEQ[BDIE2]','BDIEBASEQ[BDIE3]','BDIFBASEQ[BDIF0]','BDIFBASEQ[BDIF1]','BDIFBASEQ[BDIF2]','BDIFBASEQ[BDIF3]',
                 'BDIGBASEQ[BDIG0]','BDIGBASEQ[BDIG1]','BDIGBASEQ[BDIG2]','BDIGBASEQ[BDIG3]','BDIHBASEQ[BDIH0]','BDIHBASEQ[BDIH1]','BDIHBASEQ[BDIH2]','BDIHBASEQ[BDIH3]',
@@ -1246,19 +1235,19 @@ def run_BDI(data, out_dir=None):
         data[item].replace(to_replace='NaN', value=0, inplace=True)         
              
     # output
-    data['BDI_summary_sum'] = data[cols_BDI].sum(axis=1)                
+    data['BDI_summary_sum'] = data[cols].sum(axis=1)                
     print 'For the general population, a score of 21 or over represents depression\n'   
     print data['BDI_summary_sum'].describe()
     sns.countplot(data['BDI_summary_sum'].dropna(), order=range(int(data['BDI_summary_sum'].min()),int(data['BDI_summary_sum'].max())))
     plt.show()
     
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols_BDI + ['BDI_summary_sum']          
-        df[cols_export].to_csv('%s/BDI.csv' % out_dir, index=False)
-    
+        
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['BDI_summary_sum']              
+        df[cols_export].to_csv('%s/beck_depression_inventar.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -1309,11 +1298,11 @@ def run_HADS(data, out_dir=None):
         cols = ['HADS1BASEQ[HADS1]','HADS2BASEQ[HADS2]','HADS3BASEQ[HADS3]','HADS4BASEQ[HADS4]','HADS5BASEQ[HADS5]',
                 'HADS6BASEQ[HADS6]','HADS7BASEQ[HADS7]','HADS8BASEQ[HADS8]','HADS9BASEQ[HADS9]','HADS10BASEQ[HADS10]',
                 'HADS11BASEQ[HADS11]','HADS12BASEQ[HADS12]','HADS13BASEQ[HADS13]','HADS14BASEQ[HADS14]']
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']          
-        df[cols_export].to_csv('%s/HADS.csv' % out_dir, index=False)
+        
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']               
+        df[cols_export].to_csv('%s/hamilton_anxiety_depression.csv' % out_dir, index=False)
 
 
 
@@ -1362,12 +1351,12 @@ def run_BPS(df, out_dir=None):
     sns.distplot(df['BPS_sum'].dropna(), kde = True)                
     
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['BPS_sum']          
-        df[cols_export].to_csv('%s/BPS.csv' % out_dir, index=False)
-
+        
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['BPS_sum']                 
+        df[cols_export].to_csv('%s/boredom_proness.csv' % out_dir, index=False)
+  
 
 
 ##############################################################################
@@ -1407,13 +1396,13 @@ def run_DAC(df, out_dir=None):
     sns.distplot(df['DAC_sum'].dropna(), kde = True)
     
     if out_dir:
-        age = pd.Series(pd.to_datetime(df['submitdate']) - pd.to_datetime(df['GBT']))
-        df['age'] = age.dt.days / 365
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'GSH', 'age'] + cols + ['DAC_sum']          
-        df[cols_export].to_csv('%s/DAC.csv' % out_dir, index=False)
+        
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['DAC_sum']                  
+        df[cols_export].to_csv('%s/derryberry_attention_control.csv' % out_dir, index=False)
   
-
+  
 
 ##############################################################################
 ############################## NEO-PI-R ######################################
@@ -1470,9 +1459,7 @@ def run_NEOPIR():
     #N6 Vulnerability
     df['NEO_N6_vuln'] = df[['26','56','86','116','146','176','206','236']].mean(axis=1)
     
-    
-    
-    
+
     #Extraversion
     
     df['NEO_E'] = df[['2','32','62','92','122','152','182','212',
@@ -1527,6 +1514,8 @@ def run_NEOPIR():
     df['NEO_O5_idea'] = df[['23','53','113','143','173','203','233']].mean(axis=1)
     #06 values
     df['NEO_O6_value'] = df[['28','58','88','118','148','178','208','238']].mean(axis=1)
+        
+    
     
     #Agreeableness
     
@@ -1555,6 +1544,8 @@ def run_NEOPIR():
     #A6 tender_mindedness
     df['NEO_A6_tenmind'] = df[['29','59','89','119','149','179','209','239']].mean(axis=1)
     
+    
+    
     #Conscientiousness
     
     df['NEO_C'] = df[['5','35','65','95','125','155','185','215',
@@ -1582,6 +1573,7 @@ def run_NEOPIR():
     #C6 deliberation
     df['NEO_C6_deli'] = df[['30','60','90','120','150','180','210','240']].mean(axis=1)
   
+  
     #create histograms of subscales
     plt.figure(figsize =(16,12))
     
@@ -1607,8 +1599,6 @@ def run_NEOPIR():
     sns.distplot(df['NEO_C'].dropna(), kde = True)
     plt.xlabel('NEO_C', fontsize = 14)
     plt.show()
-    clf()
-    
   
     
     
@@ -1734,14 +1724,17 @@ def run_NEOPIR():
     sns.distplot(df['NEO_C6_deli'].dropna(), kde = True)
     plt.xlabel('NEO_C6_deli', fontsize = 14)
 
-
+    if out_dir:
+        df.to_csv('%s/NEO_PI_R.csv' % out_dir, index=False)
+  
+  
 
 ##############################################################################
 ############# PSSI - Persönlichkeitsstil- und Störungsinventar################
 ##############################################################################
 
 def run_PSSI(df, out_dir=None):
-    cols_PSSI = ['PSSaBASEQ[PSS1]','PSSaBASEQ[PSS2]','PSSaBASEQ[PSS3]','PSSaBASEQ[PSS4]','PSSaBASEQ[PSS5]','PSSaBASEQ[PSS6]','PSSaBASEQ[PSS7]','PSSaBASEQ[PSS8]','PSSaBASEQ[PSS9]',
+    cols = ['PSSaBASEQ[PSS1]','PSSaBASEQ[PSS2]','PSSaBASEQ[PSS3]','PSSaBASEQ[PSS4]','PSSaBASEQ[PSS5]','PSSaBASEQ[PSS6]','PSSaBASEQ[PSS7]','PSSaBASEQ[PSS8]','PSSaBASEQ[PSS9]',
              'PSSaBASEQ[PSS10]','PSSbBASEQ[PSS11]','PSSbBASEQ[PSS12]','PSSbBASEQ[PSS13]','PSSbBASEQ[PSS14]','PSSbBASEQ[PSS15r]','PSSbBASEQ[PSS16]','PSSbBASEQ[PSS17]',
              'PSSbBASEQ[PSS18]','PSSbBASEQ[PSS19]','PSSbBASEQ[PSS20]','PSScBASEQ[PSS21]','PSScBASEQ[PSS22]','PSScBASEQ[PSS23]','PSScBASEQ[PSS24]','PSScBASEQ[PSS25]',
              'PSScBASEQ[PSS26]','PSScBASEQ[PSS27]','PSScBASEQ[PSS28]','PSScBASEQ[PSS29]','PSScBASEQ[PSS30]','PSSdBASEQ[PSS31]','PSSdBASEQ[PSS32]','PSSdBASEQ[PSS33]',
@@ -1761,7 +1754,7 @@ def run_PSSI(df, out_dir=None):
              'PSSnBASEQ[PSS138]','PSSnBASEQ[PSS139]','PSSnBASEQ[PSS140]']
     #recode all items to original format (limesurvey: 1234, original = 0123)
     recoder = {1: 0, 2: 1, 3: 2, 4: 3 }
-    for i in cols_PSSI:
+    for i in cols:
         df[i] = df[i].map(recoder).astype(float64) 
         
     #recode reversed items
@@ -2062,7 +2055,16 @@ def run_PSSI(df, out_dir=None):
     sns.distplot(df['PSSI_AS'].dropna(), kde = True)
     plt.xlabel('PSSI_AS', fontsize = 12)
 
-
+    if out_dir:
+        
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["PSSI_PN", 'PSSI_SZ', 'PSSI_ST', 'PSSI_BL', 
+                                                                    'PSSI_HI', 'PSSI_NA', 'PSSI_SU', 'PSSI_AB', 
+                                                                    'PSSI_ZW', 'PSSI_NT', 'PSSI_DP', 'PSSI_SL', 
+                                                                    'PSSI_RH', 'PSSI_AS']                 
+        df[cols_export].to_csv('%s/persönlichkeits-stil_störungs_inventar.csv' % out_dir, index=False)
+  
 
 ##############################################################################
 ################################## MMI #######################################
@@ -2070,7 +2072,7 @@ def run_PSSI(df, out_dir=None):
 
 def run_MMI(df, out_dir=None):
 #items to be recoded                                
-    items_recoded= ['MMIadBASEQ[MMI41]' ,'MMIadBASEQ[MMI42]' ,'MMIadBASEQ[MMI43]' ,'MMIadBASEQ[MMI44]' ,'MMIadBASEQ[MMI45]' ,'MMIadBASEQ[MMI46]' ,
+    cols= ['MMIadBASEQ[MMI41]' ,'MMIadBASEQ[MMI42]' ,'MMIadBASEQ[MMI43]' ,'MMIadBASEQ[MMI44]' ,'MMIadBASEQ[MMI45]' ,'MMIadBASEQ[MMI46]' ,
                    'MMIadBASEQ[MMI47]' ,'MMIadBASEQ[MMI48]' ,'MMIadBASEQ[MMI49]' ,'MMIadBASEQ[MMI410]' ,'MMIadBASEQ[MMI411]' ,'MMIadBASEQ[MMI412]' ,
                    'MMIahBASEQ[MMI81]' ,'MMIahBASEQ[MMI82]' ,'MMIahBASEQ[MMI83]' ,'MMIahBASEQ[MMI84]' ,'MMIahBASEQ[MMI85]' ,'MMIahBASEQ[MMI86]' ,
                    'MMIahBASEQ[MMI87]' ,'MMIahBASEQ[MMI88]' ,'MMIahBASEQ[MMI89]' ,'MMIahBASEQ[MMI810]' ,'MMIahBASEQ[MMI811]' ,'MMIahBASEQ[MMI812]' ,
@@ -2097,7 +2099,7 @@ def run_MMI(df, out_dir=None):
     
     #recode items                 
     recoder = {5 : 'NaN', 4 : 1, 3: 0.66, 2: 0.33, 1: 0}
-    for i in items_recoded:
+    for i in cols:
         df[i] = df[i].map(recoder).astype(float64)   
     
     #Calculate total score as the sum for media types
@@ -2295,8 +2297,14 @@ def run_MMI(df, out_dir=None):
     print df["MMI"].describe()
        
     sns.distplot(df["MMI"].dropna(), kde = True)
-
-
+    
+    if out_dir:
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['MMI']                  
+        df[cols_export].to_csv('%s/multimediaI.csv' % out_dir, index=False)
+  
+  
 
 ##############################################################################
 ############################## BIS/BAS #######################################
@@ -2340,14 +2348,25 @@ def run_BISBAS(df, out_dir=None):
     plt.xlabel('BAS', fontsize = 14)
  
 
-  
+    if out_dir:
+        cols = ['BISBAS01[SQ001]','BISBAS02[SQ001]','BISBAS03[SQ001]','BISBAS04[SQ001]','BISBAS05[SQ001]','BISBAS06[SQ001]','BISBAS07[SQ001]','BISBAS08[SQ001]',
+               'BISBAS09[SQ001]','BISBAS10[SQ001]','BISBAS11[SQ001]','BISBAS12[SQ001]','BISBAS13[SQ001]','BISBAS14[SQ001]','BISBAS15[SQ001]','BISBAS16[SQ001]',
+               'BISBAS17[SQ001]','BISBAS18[SQ001]','BISBAS19[SQ001]','BISBAS20[SQ001]','BISBAS21[SQ001]','BISBAS22[SQ001]','BISBAS23[SQ001]','BISBAS24[SQ001]']
+     
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['BIS', 'BAS']                  
+        df[cols_export].to_csv('%s/BISBAS.csv' % out_dir, index=False)
+      
+    
+      
 ##############################################################################
 ################################# STAI #######################################
 ##############################################################################
 
 def run_STAI(df, out_dir=None):
 
-    cols_STAI = ['STAI01[STAI01]','STAI01[STAI02]','STAI01[STAI03]','STAI01[STAI04]','STAI01[STAI05]','STAI01[STAI06]','STAI01[STAI07]','STAI01[STAI08]',
+    cols = ['STAI01[STAI01]','STAI01[STAI02]','STAI01[STAI03]','STAI01[STAI04]','STAI01[STAI05]','STAI01[STAI06]','STAI01[STAI07]','STAI01[STAI08]',
                  'STAI01[STAI09]','STAI01[STAI10]','STAI11[STAI11]','STAI11[STAI12]','STAI11[STAI13]','STAI11[STAI14]','STAI11[STAI15]','STAI11[STAI16]',
                  'STAI11[STAI17]','STAI11[STAI18]','STAI11[STAI19]','STAI11[STAI20]']
     
@@ -2358,14 +2377,19 @@ def run_STAI(df, out_dir=None):
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
     
-    df['STAI_A-Trait_summary_sum'] = df[cols_STAI].sum(axis=1)
+    df['STAI_A-Trait_summary_sum'] = df[cols].sum(axis=1)
     
     print df['STAI_A-Trait_summary_sum'].describe()  
     plt.figure
     sns.distplot(df['STAI_A-Trait_summary_sum'].dropna(), kde = True)
     plt.show()
-    clf()
     
+    if out_dir:
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['STAI_A-Trait_summary_sum']                  
+        df[cols_export].to_csv('%s/state-trait_anxiety.csv' % out_dir, index=False)
+      
 
 
 ##############################################################################    
@@ -2419,3 +2443,18 @@ def run_STAXI(df, out_dir=None):
     plt.subplot(224)
     sns.distplot(df["anger_control"].dropna(), kde = True)
     plt.xlabel('anger control', fontsize = 14)
+
+    if out_dir:
+        
+        cols = ['STAXI01[STAXI01]','STAXI01[STAXI02]','STAXI01[STAXI03]','STAXI01[STAXI04]','STAXI01[STAXI05]','STAXI01[STAXI06]','STAXI01[STAXI07]',
+              'STAXI01[STAXI08]','STAXI01[STAXI09]','STAXI01[STAXI10]','STAXI11[STAXI11]','STAXI11[STAXI12]','STAXI11[STAXI13]','STAXI11[STAXI14]','STAXI11[STAXI15]',
+              'STAXI11[STAXI16]','STAXI11[STAXI17]','STAXI11[STAXI18]','STAXI11[STAXI19]','STAXI11[STAXI20]','STAXI21[STAXI21]','STAXI21[STAXI22]','STAXI21[STAXI23]',
+              'STAXI21[STAXI24]','STAXI21[STAXI25]','STAXI21[STAXI26]','STAXI21[STAXI27]','STAXI21[STAXI28]','STAXI21[STAXI29]','STAXI21[STAXI30]','STAXI21[STAXI31]',
+              'STAXI21[STAXI32]','STAXI21[STAXI33]','STAXI34[STAXI34]','STAXI34[STAXI35]','STAXI34[STAXI36]','STAXI34[STAXI37]','STAXI34[STAXI38]','STAXI34[STAXI39]',
+              'STAXI34[STAXI40]','STAXI34[STAXI41]','STAXI34[STAXI42]','STAXI34[STAXI43]','STAXI34[STAXI44]']
+
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols_STAI, [x+1 for x in range(len(cols_STAI))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols_STAI))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
+        df[cols_export].to_csv('%s/state-trait_anger_expression.csv' % out_dir, index=False)
+      
