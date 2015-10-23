@@ -598,7 +598,7 @@ def run_TPS(df, out_dir=None):
 ############################ ASR 18-59 #######################################
 ##############################################################################
 
-def run_ASR(data, out_dir=None):
+def run_ASR(df, out_dir=None):
     ######################## adaptive functioning #################################
     print 'The Adult Self-Report (ASR; part of the Achenbach System of Empirically Based Assessment)\n' 
     print 'Adaptive Functioning Scales: \nFriends; Spouse/Partner; Family; Job; Education, Personal Strengths\n'
@@ -611,7 +611,7 @@ def run_ASR(data, out_dir=None):
     print '\n\n', '##### Adaptive Functioning #####'
     
     ##### friends #####     
-    data['ASR_summary_adaptiveFunctioning_friends_sum' ] = data[['ASRIABASEQ[ASRIA]',
+    df['ASR_summary_adaptiveFunctioning_friends_sum' ] = df[['ASRIABASEQ[ASRIA]',
                                                                  'ASRIBBASEQ[ASRIB]',
                                                                  'ASRICBASEQ[ASRIC]',
                                                                  'ASRIDBASEQ[ASRID]']].sum(axis=1)
@@ -620,8 +620,8 @@ def run_ASR(data, out_dir=None):
     ##### spouse / partner #####
     recoded = ['ASRII3BASEQ[ASRIIBr]', 'ASRII3BASEQ[ASRIIEr]', 'ASRII3BASEQ[ASRIIFr]', 'ASRII3BASEQ[ASRIIHr]']
     for item in recoded:
-        data[item] = -data[item]
-    data['ASR_summary_adaptiveFunctioning_spouse_sum'] = data[['ASRII3BASEQ[ASRIIA]', 
+        df[item] = -df[item]
+    df['ASR_summary_adaptiveFunctioning_spouse_sum'] = df[['ASRII3BASEQ[ASRIIA]', 
                                                               'ASRII3BASEQ[ASRIIBr]',
                                                               'ASRII3BASEQ[ASRIIC]',
                                                               'ASRII3BASEQ[ASRIID]',
@@ -635,25 +635,25 @@ def run_ASR(data, out_dir=None):
     items = ['ASRIIIABASEQ[ASRIIIA]', 'ASRIIIBBASEQ[ASRIIIB]', 'ASRIIICBASEQ[ASRIIIC]',
             'ASRIIIDBASEQ[ASRIIID]', 'ASRIIIEbBASEQ[ASRIIIE1]', 'ASRIIIEbBASEQ[ASRIIIE2]',
             'ASRIIIEbBASEQ[ASRIIIE3]', 'ASRIIIEbBASEQ[ASRIIIE4]', 'ASRIIIFBASEQ[ASRIIIF]']
-    data['ASR_summary_adaptiveFunctioning_family_sum'] = pd.Series('NaN', index=data.index)
-    for sub in range(len(data)):
+    df['ASR_summary_adaptiveFunctioning_family_sum'] = pd.Series('NaN', index=df.index)
+    for sub in range(len(df)):
         score = 0
         for i in items:
             try:
-                if int(data[i].iloc[[sub]]) in [0,1,2,3]:
+                if int(df[i].iloc[[sub]]) in [0,1,2,3]:
                     score += 1
             except:
                 pass
-        data['ASR_summary_adaptiveFunctioning_family_sum'].iloc[[sub]] = float(score)
+        df['ASR_summary_adaptiveFunctioning_family_sum'].iloc[[sub]] = float(score)
     
     
     ##### job #####
-    #satisfied_job = data['ASRIVbBASEQ[ASRIVE]'] is not scored
+    #satisfied_job = df['ASRIVbBASEQ[ASRIVE]'] is not scored
     recoded = ['ASRIVbBASEQ[ASRIVBr]', 'ASRIVbBASEQ[ASRIVDr]', 'ASRIVbBASEQ[ASRIVFr]',
                'ASRIVbBASEQ[ASRIVGr]', 'ASRIVbBASEQ[ASRIVHr]', 'ASRIVbBASEQ[ASRIVIr]']
     for item in recoded:
-        data[item] = -data[item]
-    data['ASR_summary_adaptiveFunctioning_job_sum'] = data[['ASRIVbBASEQ[ASRIVA]',
+        df[item] = -df[item]
+    df['ASR_summary_adaptiveFunctioning_job_sum'] = df[['ASRIVbBASEQ[ASRIVA]',
                                                             'ASRIVbBASEQ[ASRIVBr]',
                                                             'ASRIVbBASEQ[ASRIVC]',
                                                             'ASRIVbBASEQ[ASRIVDr]',
@@ -667,8 +667,8 @@ def run_ASR(data, out_dir=None):
     # though we're using raw total scores, it's important to notice that normed scores only available for ages 18-29
     recoded = ['ASRVcBASEQ[ASRVCr]', 'ASRVcBASEQ[ASRVEr]']
     for item in recoded:
-        data[item] = -data[item]
-    data['ASR_summary_adaptiveFunctioning_education_sum'] = data[['ASRVcBASEQ[ASRVA]',
+        df[item] = -df[item]
+    df['ASR_summary_adaptiveFunctioning_education_sum'] = df[['ASRVcBASEQ[ASRVA]',
                                                                   'ASRVcBASEQ[ASRVB]',
                                                                   'ASRVcBASEQ[ASRVCr]',
                                                                   'ASRVcBASEQ[ASRVD]',
@@ -685,8 +685,8 @@ def run_ASR(data, out_dir=None):
    
     for scale in scales:
         print '\n'
-        print data[scale].describe()
-        sns.countplot(data[scale].dropna(), order=range(int(data[scale].min()),int(data[scale].max())))
+        print df[scale].describe()
+        sns.countplot(df[scale].dropna(), order=range(int(df[scale].min()),int(df[scale].max())))
         plt.xlabel(scale, fontsize=14)
         plt.show()
         
@@ -697,9 +697,9 @@ def run_ASR(data, out_dir=None):
     
     print '\n\n\n', '##### Substance Use #####'
     
-    data['ASR_scale_substanceUse_tabaco_perday'] = data['ASRQ124']
-    data['ASR_scale_substanceUse_alcohol_daysdrunk'] = data['ASRQ125']
-    data['ASR_scale_substanceUse_drugs_daysused'] = data['ASRQ126']
+    df['ASR_scale_substanceUse_tabaco_perday'] = df['ASRQ124']
+    df['ASR_scale_substanceUse_alcohol_daysdrunk'] = df['ASRQ125']
+    df['ASR_scale_substanceUse_drugs_daysused'] = df['ASRQ126']
     
     substance_scales = ['ASR_scale_substanceUse_tabaco_perday', 
                         'ASR_scale_substanceUse_alcohol_daysdrunk', 
@@ -707,151 +707,151 @@ def run_ASR(data, out_dir=None):
     
     for scale in substance_scales:
         print '\n'
-        print data[scale].describe() 
-        sns.countplot(data[scale].dropna(), order=range(int(data[scale].min()),int(data[scale].max())))
+        print df[scale].describe() 
+        sns.countplot(df[scale].dropna(), order=range(int(df[scale].min()),int(df[scale].max())))
         plt.xlabel(scale, fontsize=14)
         plt.show()
     
     
     ######################### items #############################################
-    Q1 = data['ASRQ1BASEQ[ASRQ1]']
-    Q2 = data['ASRQ1BASEQ[ASRQ2]']
-    Q3 = data['ASRQ1BASEQ[ASRQ3]']
-    Q4 = data['ASRQ1BASEQ[ASRQ4]']
-    Q5 = data['ASRQ1BASEQ[ASRQ5]']
-    Q6 = data['ASRQ1BASEQ[ASRQ6]']
-    Q7 = data['ASRQ7BASEQ[ASRQ7]']
-    Q8 = data['ASRQ7BASEQ[ASRQ8]']
-    Q9 = data['ASRQ7BASEQ[ASRQ9]']
-    Q10 = data['ASRQ10BASEQ[ASRQ10]']
-    Q11 = data['ASRQ10BASEQ[ASRQ11]']
-    Q12 = data['ASRQ10BASEQ[ASRQ12]']
-    Q13 = data['ASRQ10BASEQ[ASRQ13]']
-    Q14 = data['ASRQ10BASEQ[ASRQ14]']
-    Q15 = data['ASRQ10BASEQ[ASRQ15]']
-    Q16 = data['ASRQ10BASEQ[ASRQ16]']
-    Q17 = data['ASRQ10BASEQ[ASRQ17]']
-    Q18 = data['ASRQ10BASEQ[ASRQ18]']
-    Q19 = data['ASRQ10BASEQ[ASRQ19]']
-    Q20 = data['ASRQ10BASEQ[ASRQ20]']
-    Q21 = data['ASRQ21BASEQ[ASRQ21]']
-    Q22 = data['ASRQ21BASEQ[ASRQ22]']
-    Q23 = data['ASRQ21BASEQ[ASRQ23]']
-    Q24 = data['ASRQ21BASEQ[ASRQ24]']
-    Q25 = data['ASRQ21BASEQ[ASRQ25]']
-    Q26 = data['ASRQ21BASEQ[ASRQ26]']
-    Q27 = data['ASRQ21BASEQ[ASRQ27]']
-    Q28 = data['ASRQ21BASEQ[ASRQ28]']
-    Q29 = data['ASRQ21BASEQ[ASRQ29]']
-    Q30 = data['ASRQ30BASEQ[ASRQ30]']
-    Q31 = data['ASRQ30BASEQ[ASRQ31]']
-    Q32 = data['ASRQ30BASEQ[ASRQ32]']
-    Q33 = data['ASRQ30BASEQ[ASRQ33]']
-    Q34 = data['ASRQ30BASEQ[ASRQ34]']
-    Q35 = data['ASRQ30BASEQ[ASRQ35]']
-    Q36 = data['ASRQ30BASEQ[ASRQ36]']
-    Q37 = data['ASRQ30BASEQ[ASRQ37]']
-    Q38 = data['ASRQ30BASEQ[ASRQ38]']
-    Q39 = data['ASRQ30BASEQ[ASRQ39]']
-    Q40 = data['ASRQ30BASEQ[ASRQ40]']
-    Q41 = data['ASRQ41BASEQ[ASRQ41]']
-    Q42 = data['ASRQ41BASEQ[ASRQ42]']
-    Q43 = data['ASRQ41BASEQ[ASRQ43]']
-    Q44 = data['ASRQ41BASEQ[ASRQ44]']
-    Q45 = data['ASRQ41BASEQ[ASRQ45]']
-    Q46 = data['ASRQ41BASEQ[ASRQ46]']
-    Q47 = data['ASRQ41BASEQ[ASRQ47]']
-    Q48 = data['ASRQ41BASEQ[ASRQ48]']
-    Q49 = data['ASRQ41BASEQ[ASRQ49]']
-    Q50 = data['ASRQ41BASEQ[ASRQ50]']
-    Q51 = data['ASRQ51BASEQ[ASRQ51]']
-    Q52 = data['ASRQ51BASEQ[ASRQ52]']
-    Q53 = data['ASRQ51BASEQ[ASRQ53]']
-    Q54 = data['ASRQ51BASEQ[ASRQ54]']
-    Q55 = data['ASRQ51BASEQ[ASRQ55]']
-    Q56a = data['ASRQ56BASEQ[ASRVIII561]']
-    Q56b = data['ASRQ56BASEQ[ASRVIII562]']
-    Q56c = data['ASRQ56BASEQ[ASRVIII563]']
-    Q56d = data['ASRQ56BASEQ[ASRVIII564]']
-    Q56e = data['ASRQ56BASEQ[ASRVIII565]']
-    Q56f = data['ASRQ56BASEQ[ASRVIII566]']
-    Q56g = data['ASRQ56BASEQ[ASRVIII567]']
-    Q57 = data['ASRQ57BASEQ[ASRQ57]']
-    Q58 = data['ASRQ57BASEQ[ASRQ58]']
-    Q59 = data['ASRQ57BASEQ[ASRQ59]']
-    Q60 = data['ASRQ57BASEQ[ASRQ60]']
-    Q61 = data['ASRQ61BASEQ[ASRQ61]']
-    Q62 = data['ASRQ61BASEQ[ASRQ62]']
-    Q63 = data['ASRQ61BASEQ[ASRQ63]']
-    Q64 = data['ASRQ61BASEQ[ASRQ64]']
-    Q65 = data['ASRQ61BASEQ[ASRQ65]']
-    Q66 = data['ASRQ61BASEQ[ASRQ66]']
-    Q67 = data['ASRQ61BASEQ[ASRQ67]']
-    Q68 = data['ASRQ61BASEQ[ASRQ68]']
-    Q69 = data['ASRQ61BASEQ[ASRQ69]']
-    Q70 = data['ASRQ61BASEQ[ASRQ70]']
-    Q71 = data['ASRQ71BASEQ[ASRQ71]']
-    Q72 = data['ASRQ71BASEQ[ASRQ72]']
-    Q73 = data['ASRQ71BASEQ[ASRQ73]']
-    Q74 = data['ASRQ71BASEQ[ASRQ74]']
-    Q75 = data['ASRQ71BASEQ[ASRQ75]']
-    Q76 = data['ASRQ71BASEQ[ASRQ76]']
-    Q77 = data['ASRQ71BASEQ[ASRQ77]']
-    Q78 = data['ASRQ71BASEQ[ASRQ78]']
-    Q79 = data['ASRQ71BASEQ[ASRQ79]']
-    Q80 = data['ASRQ71BASEQ[ASRQ80]']
-    Q81 = data['ASRQ81BASEQ[ASRQ81]']
-    Q82 = data['ASRQ81BASEQ[ASRQ82]']
-    Q83 = data['ASRQ81BASEQ[ASRQ83]']
-    Q84 = data['ASRQ81BASEQ[ASRQ84]']
-    Q85 = data['ASRQ81BASEQ[ASRQ85]']
-    Q86 = data['ASRQ81BASEQ[ASRQ86]']
-    Q87 = data['ASRQ81BASEQ[ASRQ87]']
-    Q88 = data['ASRQ81BASEQ[ASRQ88]']
-    Q89 = data['ASRQ81BASEQ[ASRQ89]']
-    Q90 = data['ASRQ81BASEQ[ASRQ90]']
-    Q91 = data['ASRQ91BASEQ[ASRQ91]']
-    Q92 = data['ASRQ91BASEQ[ASRQ92]']
-    Q93 = data['ASRQ91BASEQ[ASRQ93]']
-    Q94 = data['ASRQ91BASEQ[ASRQ94]']
-    Q95 = data['ASRQ91BASEQ[ASRQ95]']
-    Q96 = data['ASRQ91BASEQ[ASRQ96]']
-    Q97 = data['ASRQ91BASEQ[ASRQ97]']
-    Q98 = data['ASRQ91BASEQ[ASRQ98]']
-    Q99 = data['ASRQ91BASEQ[ASRQ99]']
-    Q100 = data['ASRQ91BASEQ[ASRQ100]']
-    Q101 = data['ASRQ101BASEQ[ASRQ101]']
-    Q102 = data['ASRQ101BASEQ[ASRQ102]']
-    Q103 = data['ASRQ101BASEQ[ASRQ103]']
-    Q104 = data['ASRQ101BASEQ[ASRQ104]']
-    Q105 = data['ASRQ101BASEQ[ASRQ105]']
-    Q106 = data['ASRQ101BASEQ[ASRQ106]']
-    Q107 = data['ASRQ101BASEQ[ASRQ107]']
-    Q108 = data['ASRQ101BASEQ[ASRQ108]']
-    Q109 = data['ASRQ101BASEQ[ASRQ109]']
-    Q110 = data['ASRQ101BASEQ[ASRQ110]']
-    Q111 = data['ASRQ111BASEQ[ASRQ111]']
-    Q112 = data['ASRQ111BASEQ[ASRQ112]']
-    Q113 = data['ASRQ111BASEQ[ASRQ113]']
-    Q114 = data['ASRQ111BASEQ[ASRQ114]']
-    Q115 = data['ASRQ111BASEQ[ASRQ115]']
-    Q116 = data['ASRQ111BASEQ[ASRQ116]']
-    Q117 = data['ASRQ111BASEQ[ASRQ117]']
-    Q118 = data['ASRQ111BASEQ[ASRQ118]']
-    Q119 = data['ASRQ111BASEQ[ASRQ119]']
-    Q120 = data['ASRQ111BASEQ[ASRQ120]']
-    Q121 = data['ASRQ121BASEQ[ASRQ121]']
-    Q122 = data['ASRQ121BASEQ[ASRQ122]']
-    Q123 = data['ASRQ121BASEQ[ASRQ123]']
+    Q1 = df['ASRQ1BASEQ[ASRQ1]']
+    Q2 = df['ASRQ1BASEQ[ASRQ2]']
+    Q3 = df['ASRQ1BASEQ[ASRQ3]']
+    Q4 = df['ASRQ1BASEQ[ASRQ4]']
+    Q5 = df['ASRQ1BASEQ[ASRQ5]']
+    Q6 = df['ASRQ1BASEQ[ASRQ6]']
+    Q7 = df['ASRQ7BASEQ[ASRQ7]']
+    Q8 = df['ASRQ7BASEQ[ASRQ8]']
+    Q9 = df['ASRQ7BASEQ[ASRQ9]']
+    Q10 = df['ASRQ10BASEQ[ASRQ10]']
+    Q11 = df['ASRQ10BASEQ[ASRQ11]']
+    Q12 = df['ASRQ10BASEQ[ASRQ12]']
+    Q13 = df['ASRQ10BASEQ[ASRQ13]']
+    Q14 = df['ASRQ10BASEQ[ASRQ14]']
+    Q15 = df['ASRQ10BASEQ[ASRQ15]']
+    Q16 = df['ASRQ10BASEQ[ASRQ16]']
+    Q17 = df['ASRQ10BASEQ[ASRQ17]']
+    Q18 = df['ASRQ10BASEQ[ASRQ18]']
+    Q19 = df['ASRQ10BASEQ[ASRQ19]']
+    Q20 = df['ASRQ10BASEQ[ASRQ20]']
+    Q21 = df['ASRQ21BASEQ[ASRQ21]']
+    Q22 = df['ASRQ21BASEQ[ASRQ22]']
+    Q23 = df['ASRQ21BASEQ[ASRQ23]']
+    Q24 = df['ASRQ21BASEQ[ASRQ24]']
+    Q25 = df['ASRQ21BASEQ[ASRQ25]']
+    Q26 = df['ASRQ21BASEQ[ASRQ26]']
+    Q27 = df['ASRQ21BASEQ[ASRQ27]']
+    Q28 = df['ASRQ21BASEQ[ASRQ28]']
+    Q29 = df['ASRQ21BASEQ[ASRQ29]']
+    Q30 = df['ASRQ30BASEQ[ASRQ30]']
+    Q31 = df['ASRQ30BASEQ[ASRQ31]']
+    Q32 = df['ASRQ30BASEQ[ASRQ32]']
+    Q33 = df['ASRQ30BASEQ[ASRQ33]']
+    Q34 = df['ASRQ30BASEQ[ASRQ34]']
+    Q35 = df['ASRQ30BASEQ[ASRQ35]']
+    Q36 = df['ASRQ30BASEQ[ASRQ36]']
+    Q37 = df['ASRQ30BASEQ[ASRQ37]']
+    Q38 = df['ASRQ30BASEQ[ASRQ38]']
+    Q39 = df['ASRQ30BASEQ[ASRQ39]']
+    Q40 = df['ASRQ30BASEQ[ASRQ40]']
+    Q41 = df['ASRQ41BASEQ[ASRQ41]']
+    Q42 = df['ASRQ41BASEQ[ASRQ42]']
+    Q43 = df['ASRQ41BASEQ[ASRQ43]']
+    Q44 = df['ASRQ41BASEQ[ASRQ44]']
+    Q45 = df['ASRQ41BASEQ[ASRQ45]']
+    Q46 = df['ASRQ41BASEQ[ASRQ46]']
+    Q47 = df['ASRQ41BASEQ[ASRQ47]']
+    Q48 = df['ASRQ41BASEQ[ASRQ48]']
+    Q49 = df['ASRQ41BASEQ[ASRQ49]']
+    Q50 = df['ASRQ41BASEQ[ASRQ50]']
+    Q51 = df['ASRQ51BASEQ[ASRQ51]']
+    Q52 = df['ASRQ51BASEQ[ASRQ52]']
+    Q53 = df['ASRQ51BASEQ[ASRQ53]']
+    Q54 = df['ASRQ51BASEQ[ASRQ54]']
+    Q55 = df['ASRQ51BASEQ[ASRQ55]']
+    Q56a = df['ASRQ56BASEQ[ASRVIII561]']
+    Q56b = df['ASRQ56BASEQ[ASRVIII562]']
+    Q56c = df['ASRQ56BASEQ[ASRVIII563]']
+    Q56d = df['ASRQ56BASEQ[ASRVIII564]']
+    Q56e = df['ASRQ56BASEQ[ASRVIII565]']
+    Q56f = df['ASRQ56BASEQ[ASRVIII566]']
+    Q56g = df['ASRQ56BASEQ[ASRVIII567]']
+    Q57 = df['ASRQ57BASEQ[ASRQ57]']
+    Q58 = df['ASRQ57BASEQ[ASRQ58]']
+    Q59 = df['ASRQ57BASEQ[ASRQ59]']
+    Q60 = df['ASRQ57BASEQ[ASRQ60]']
+    Q61 = df['ASRQ61BASEQ[ASRQ61]']
+    Q62 = df['ASRQ61BASEQ[ASRQ62]']
+    Q63 = df['ASRQ61BASEQ[ASRQ63]']
+    Q64 = df['ASRQ61BASEQ[ASRQ64]']
+    Q65 = df['ASRQ61BASEQ[ASRQ65]']
+    Q66 = df['ASRQ61BASEQ[ASRQ66]']
+    Q67 = df['ASRQ61BASEQ[ASRQ67]']
+    Q68 = df['ASRQ61BASEQ[ASRQ68]']
+    Q69 = df['ASRQ61BASEQ[ASRQ69]']
+    Q70 = df['ASRQ61BASEQ[ASRQ70]']
+    Q71 = df['ASRQ71BASEQ[ASRQ71]']
+    Q72 = df['ASRQ71BASEQ[ASRQ72]']
+    Q73 = df['ASRQ71BASEQ[ASRQ73]']
+    Q74 = df['ASRQ71BASEQ[ASRQ74]']
+    Q75 = df['ASRQ71BASEQ[ASRQ75]']
+    Q76 = df['ASRQ71BASEQ[ASRQ76]']
+    Q77 = df['ASRQ71BASEQ[ASRQ77]']
+    Q78 = df['ASRQ71BASEQ[ASRQ78]']
+    Q79 = df['ASRQ71BASEQ[ASRQ79]']
+    Q80 = df['ASRQ71BASEQ[ASRQ80]']
+    Q81 = df['ASRQ81BASEQ[ASRQ81]']
+    Q82 = df['ASRQ81BASEQ[ASRQ82]']
+    Q83 = df['ASRQ81BASEQ[ASRQ83]']
+    Q84 = df['ASRQ81BASEQ[ASRQ84]']
+    Q85 = df['ASRQ81BASEQ[ASRQ85]']
+    Q86 = df['ASRQ81BASEQ[ASRQ86]']
+    Q87 = df['ASRQ81BASEQ[ASRQ87]']
+    Q88 = df['ASRQ81BASEQ[ASRQ88]']
+    Q89 = df['ASRQ81BASEQ[ASRQ89]']
+    Q90 = df['ASRQ81BASEQ[ASRQ90]']
+    Q91 = df['ASRQ91BASEQ[ASRQ91]']
+    Q92 = df['ASRQ91BASEQ[ASRQ92]']
+    Q93 = df['ASRQ91BASEQ[ASRQ93]']
+    Q94 = df['ASRQ91BASEQ[ASRQ94]']
+    Q95 = df['ASRQ91BASEQ[ASRQ95]']
+    Q96 = df['ASRQ91BASEQ[ASRQ96]']
+    Q97 = df['ASRQ91BASEQ[ASRQ97]']
+    Q98 = df['ASRQ91BASEQ[ASRQ98]']
+    Q99 = df['ASRQ91BASEQ[ASRQ99]']
+    Q100 = df['ASRQ91BASEQ[ASRQ100]']
+    Q101 = df['ASRQ101BASEQ[ASRQ101]']
+    Q102 = df['ASRQ101BASEQ[ASRQ102]']
+    Q103 = df['ASRQ101BASEQ[ASRQ103]']
+    Q104 = df['ASRQ101BASEQ[ASRQ104]']
+    Q105 = df['ASRQ101BASEQ[ASRQ105]']
+    Q106 = df['ASRQ101BASEQ[ASRQ106]']
+    Q107 = df['ASRQ101BASEQ[ASRQ107]']
+    Q108 = df['ASRQ101BASEQ[ASRQ108]']
+    Q109 = df['ASRQ101BASEQ[ASRQ109]']
+    Q110 = df['ASRQ101BASEQ[ASRQ110]']
+    Q111 = df['ASRQ111BASEQ[ASRQ111]']
+    Q112 = df['ASRQ111BASEQ[ASRQ112]']
+    Q113 = df['ASRQ111BASEQ[ASRQ113]']
+    Q114 = df['ASRQ111BASEQ[ASRQ114]']
+    Q115 = df['ASRQ111BASEQ[ASRQ115]']
+    Q116 = df['ASRQ111BASEQ[ASRQ116]']
+    Q117 = df['ASRQ111BASEQ[ASRQ117]']
+    Q118 = df['ASRQ111BASEQ[ASRQ118]']
+    Q119 = df['ASRQ111BASEQ[ASRQ119]']
+    Q120 = df['ASRQ111BASEQ[ASRQ120]']
+    Q121 = df['ASRQ121BASEQ[ASRQ121]']
+    Q122 = df['ASRQ121BASEQ[ASRQ122]']
+    Q123 = df['ASRQ121BASEQ[ASRQ123]']
     
     
     ######################## critical items #################################
     
     print '\n\n\n', '##### Critical Items #####'
-    data['ASR_summary_criticalItems_sum'] = Q6 + Q8 + Q9 + Q10 + Q14 + Q16 + Q18 + Q21 + Q40 + Q55 + Q57 + Q66 + Q70 + Q84 + Q90 + Q91 + Q92 + Q97 + Q103
+    df['ASR_summary_criticalItems_sum'] = Q6 + Q8 + Q9 + Q10 + Q14 + Q16 + Q18 + Q21 + Q40 + Q55 + Q57 + Q66 + Q70 + Q84 + Q90 + Q91 + Q92 + Q97 + Q103
     print '\n\n', 'ASR_summary_criticalItems_sum', '\n'
-    print data['ASR_summary_criticalItems_sum'].describe()
-    sns.countplot(data['ASR_summary_criticalItems_sum'].dropna(), order=range(int(data['ASR_summary_criticalItems_sum'].min()),int(data['ASR_summary_criticalItems_sum'].max())))
+    print df['ASR_summary_criticalItems_sum'].describe()
+    sns.countplot(df['ASR_summary_criticalItems_sum'].dropna(), order=range(int(df['ASR_summary_criticalItems_sum'].min()),int(df['ASR_summary_criticalItems_sum'].max())))
     plt.show()
     
     
@@ -859,20 +859,20 @@ def run_ASR(data, out_dir=None):
     
     print '\n\n\n', '##### Syndrome Profiles #####'
     
-    data['ASR_summary_syndromeProfiles_anxiousdepressed_sum'] = Q12 + Q13 + Q14 + Q22 + Q31 + Q33 + Q34 + Q35 + Q45 + Q47 + Q50 + Q52 + Q71 + Q91 + Q103 + Q107 + Q112 + Q113 
-    data['ASR_summary_syndromeProfiles_withdrawn_sum'] = Q25 + Q30 + Q42 + Q48 + Q60 + Q65 + Q67 + Q69 + Q111
-    data['ASR_summary_syndromeProfiles_somaticComplaints_sum'] = Q51 + Q54 + Q56a + Q56b + Q56c + Q56d + Q56e + Q56f + Q56g + Q100
-    data['ASR_summary_syndromeProfiles_thoughtProblems_sum'] = Q9 + Q18 + Q36 + Q40 + Q46 + Q63 + Q66 + Q70 + Q84 + Q85 
-    data['ASR_summary_syndromeProfiles_attentionProblems_sum'] = Q1 + Q8 + Q11 + Q17 + Q53 + Q59 + Q61 + Q64 + Q78 + Q101 + Q102 + Q105 + Q108 + Q119 + Q121
-    data['ASR_summary_syndromeProfiles_aggressiveBehavior_sum'] = Q3 + Q5 + Q16 + Q28 + Q37 + Q55 + Q57 + Q68 + Q81 + Q86 + Q87 + Q95 + Q97 + Q116 + Q118
-    data['ASR_summary_syndromeProfiles_rulebreakingBehavior_sum'] = Q6 + Q20 + Q23 + Q26 + Q39 + Q41 + Q43 + Q76 + Q82 + Q90 + Q92 + Q114 + Q117 + Q122 
-    data['ASR_summary_syndromeProfiles_intrusive_sum'] = Q7 + Q19 + Q74 + Q93 + Q94 + Q104
+    df['ASR_summary_syndromeProfiles_anxiousdepressed_sum'] = Q12 + Q13 + Q14 + Q22 + Q31 + Q33 + Q34 + Q35 + Q45 + Q47 + Q50 + Q52 + Q71 + Q91 + Q103 + Q107 + Q112 + Q113 
+    df['ASR_summary_syndromeProfiles_withdrawn_sum'] = Q25 + Q30 + Q42 + Q48 + Q60 + Q65 + Q67 + Q69 + Q111
+    df['ASR_summary_syndromeProfiles_somaticComplaints_sum'] = Q51 + Q54 + Q56a + Q56b + Q56c + Q56d + Q56e + Q56f + Q56g + Q100
+    df['ASR_summary_syndromeProfiles_thoughtProblems_sum'] = Q9 + Q18 + Q36 + Q40 + Q46 + Q63 + Q66 + Q70 + Q84 + Q85 
+    df['ASR_summary_syndromeProfiles_attentionProblems_sum'] = Q1 + Q8 + Q11 + Q17 + Q53 + Q59 + Q61 + Q64 + Q78 + Q101 + Q102 + Q105 + Q108 + Q119 + Q121
+    df['ASR_summary_syndromeProfiles_aggressiveBehavior_sum'] = Q3 + Q5 + Q16 + Q28 + Q37 + Q55 + Q57 + Q68 + Q81 + Q86 + Q87 + Q95 + Q97 + Q116 + Q118
+    df['ASR_summary_syndromeProfiles_rulebreakingBehavior_sum'] = Q6 + Q20 + Q23 + Q26 + Q39 + Q41 + Q43 + Q76 + Q82 + Q90 + Q92 + Q114 + Q117 + Q122 
+    df['ASR_summary_syndromeProfiles_intrusive_sum'] = Q7 + Q19 + Q74 + Q93 + Q94 + Q104
     
-    data['ASR_summary_syndromeProfiles_internalizing_sum'] = data[['ASR_summary_syndromeProfiles_anxiousdepressed_sum',
+    df['ASR_summary_syndromeProfiles_internalizing_sum'] = df[['ASR_summary_syndromeProfiles_anxiousdepressed_sum',
                                                                    'ASR_summary_syndromeProfiles_withdrawn_sum', 
                                                                    'ASR_summary_syndromeProfiles_somaticComplaints_sum']].sum(axis=1)
     
-    data['ASR_summary_syndromeProfiles_externalizing_sum'] = data[['ASR_summary_syndromeProfiles_aggressiveBehavior_sum',
+    df['ASR_summary_syndromeProfiles_externalizing_sum'] = df[['ASR_summary_syndromeProfiles_aggressiveBehavior_sum',
                                                                    'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum',
                                                                    'ASR_summary_syndromeProfiles_intrusive_sum']].sum(axis=1)
     
@@ -890,13 +890,13 @@ def run_ASR(data, out_dir=None):
     
     for scale in syndrome_scales:
         print '\n\n', scale, '\n'
-        print data[scale].describe()  
-        sns.countplot(data[scale].dropna(), order=range(int(data[scale].min()),int(data[scale].max())))
+        print df[scale].describe()  
+        sns.countplot(df[scale].dropna(), order=range(int(df[scale].min()),int(df[scale].max())))
         plt.xlabel(scale, fontsize=14)
         plt.show()
     
     print '\n\n'
-    sns.lmplot(x='ASR_summary_syndromeProfiles_externalizing_sum', y='ASR_summary_syndromeProfiles_internalizing_sum', data=data)
+    sns.lmplot(x='ASR_summary_syndromeProfiles_externalizing_sum', y='ASR_summary_syndromeProfiles_internalizing_sum', data=df)
 
 
     if out_dir:
@@ -1148,18 +1148,18 @@ def run_GoldMSI(df, out_dir=None):
 ####################### Epsworth Sleepiness Scale ############################
 ##############################################################################
 
-def run_ESS(data, out_dir=None):
+def run_ESS(df, out_dir=None):
 
     print 'Questionnaire measures general level of sleepiness as the sum of 8 Items\n'
     
     cols = ['ESSBASEQ[ESS1]', 'ESSBASEQ[ESS2]', 'ESSBASEQ[ESS3]', 'ESSBASEQ[ESS4]',
             'ESSBASEQ[ESS5]', 'ESSBASEQ[ESS6]', 'ESSBASEQ[ESS7]', 'ESSBASEQ[ESS8]']    
     
-    data['ESS_summary_sum'] = data[cols].sum(axis=1)
+    df['ESS_summary_sum'] = df[cols].sum(axis=1)
     
                                 
-    print data['ESS_summary_sum'].describe()
-    sns.countplot(data['ESS_summary_sum'].dropna(), order=range(int(data['ESS_summary_sum'].min()),int(data['ESS_summary_sum'].max())))
+    print df['ESS_summary_sum'].describe()
+    sns.countplot(df['ESS_summary_sum'].dropna(), order=range(int(df['ESS_summary_sum'].min()),int(df['ESS_summary_sum'].max())))
     plt.show()
     
     if out_dir:
@@ -1175,7 +1175,7 @@ def run_ESS(data, out_dir=None):
 ############################## BDI ###########################################
 ##############################################################################
 
-def run_BDI(data, out_dir=None):
+def run_BDI(df, out_dir=None):
 
     cols = ['BDIABASEQ[BDIA0]','BDIABASEQ[BDIA1]','BDIABASEQ[BDIA2]','BDIABASEQ[BDIA3]','BDIBBASEQ[BDIB0]','BDIBBASEQ[BDIB1]','BDIBBASEQ[BDIB2]','BDIBBASEQ[BDIB3]',
                 'BDICBASEQ[BDIC0]','BDICBASEQ[BDIC1]','BDICBASEQ[BDIC2]','BDICBASEQ[BDIC3]','BDIDBASEQ[BDID0]','BDIDBASEQ[BDID1]','BDIDBASEQ[BDID2]','BDIDBASEQ[BDID3]',
@@ -1198,8 +1198,8 @@ def run_BDI(data, out_dir=None):
             'BDIPBASEQ[BDIP0]', 'BDIQBASEQ[BDIQ0]', 'BDIRBASEQ[BDIR0]',
             'BDISBASEQ[BDIS0]', 'BDITBASEQ[BDIT0]', 'BDIUBASEQ[BDIU0]']
     for item in zero:
-        data[item].replace(to_replace='Y', value=0, inplace=True)
-        data[item].replace(to_replace='NaN', value=0, inplace=True)
+        df[item].replace(to_replace='Y', value=0, inplace=True)
+        df[item].replace(to_replace='NaN', value=0, inplace=True)
             
     one = ['BDIABASEQ[BDIA1]', 'BDIBBASEQ[BDIB1]', 'BDICBASEQ[BDIC1]',
            'BDIDBASEQ[BDID1]', 'BDIEBASEQ[BDIE1]', 'BDIFBASEQ[BDIF1]',
@@ -1209,8 +1209,8 @@ def run_BDI(data, out_dir=None):
            'BDIPBASEQ[BDIP1]', 'BDIQBASEQ[BDIQ1]', 'BDIRBASEQ[BDIR1]',
            'BDISBASEQ[BDIS1]', 'BDITBASEQ[BDIT1]', 'BDIUBASEQ[BDIU1]']
     for item in one:
-        data[item].replace(to_replace='Y', value=1, inplace=True)
-        data[item].replace(to_replace='NaN', value=0, inplace=True)
+        df[item].replace(to_replace='Y', value=1, inplace=True)
+        df[item].replace(to_replace='NaN', value=0, inplace=True)
             
     two = ['BDIABASEQ[BDIA2]', 'BDIBBASEQ[BDIB2]', 'BDICBASEQ[BDIC2]',
            'BDIDBASEQ[BDID2]', 'BDIEBASEQ[BDIE2]', 'BDIFBASEQ[BDIF2]',
@@ -1220,8 +1220,8 @@ def run_BDI(data, out_dir=None):
            'BDIPBASEQ[BDIP2]', 'BDIQBASEQ[BDIQ2]', 'BDIRBASEQ[BDIR2]',
            'BDISBASEQ[BDIS2]', 'BDITBASEQ[BDIT2]', 'BDIUBASEQ[BDIU2]']
     for item in two:
-        data[item].replace(to_replace='Y', value=2, inplace=True)
-        data[item].replace(to_replace='NaN', value=0, inplace=True)
+        df[item].replace(to_replace='Y', value=2, inplace=True)
+        df[item].replace(to_replace='NaN', value=0, inplace=True)
             
     three = ['BDIABASEQ[BDIA3]', 'BDIBBASEQ[BDIB3]', 'BDICBASEQ[BDIC3]',
              'BDIDBASEQ[BDID3]', 'BDIEBASEQ[BDIE3]', 'BDIFBASEQ[BDIF3]', 
@@ -1231,14 +1231,14 @@ def run_BDI(data, out_dir=None):
              'BDIPBASEQ[BDIP3]', 'BDIQBASEQ[BDIQ3]', 'BDIRBASEQ[BDIR3]',
              'BDISBASEQ[BDIS3]', 'BDITBASEQ[BDIT3]', 'BDIUBASEQ[BDIU3]']
     for item in three:
-        data[item].replace(to_replace='Y', value=3, inplace=True)
-        data[item].replace(to_replace='NaN', value=0, inplace=True)         
+        df[item].replace(to_replace='Y', value=3, inplace=True)
+        df[item].replace(to_replace='NaN', value=0, inplace=True)         
              
     # output
-    data['BDI_summary_sum'] = data[cols].sum(axis=1)                
+    df['BDI_summary_sum'] = df[cols].sum(axis=1)                
     print 'For the general population, a score of 21 or over represents depression\n'   
-    print data['BDI_summary_sum'].describe()
-    sns.countplot(data['BDI_summary_sum'].dropna(), order=range(int(data['BDI_summary_sum'].min()),int(data['BDI_summary_sum'].max())))
+    print df['BDI_summary_sum'].describe()
+    sns.countplot(df['BDI_summary_sum'].dropna(), order=range(int(df['BDI_summary_sum'].min()),int(df['BDI_summary_sum'].max())))
     plt.show()
     
     if out_dir:
@@ -1254,44 +1254,44 @@ def run_BDI(data, out_dir=None):
 ############################## HADS ##########################################
 ##############################################################################
 
-def run_HADS(data, out_dir=None):
+def run_HADS(df, out_dir=None):
     # rescaled by 1- and reversed coding for items tense, frightened, worry, restless, panic, cheerful, slowed, appearance
     
     # anxiety / HADS-A
-    tense = data['HADS1BASEQ[HADS1]'].subtract(1).multiply(-1).add(3)
-    frightened = data['HADS3BASEQ[HADS3]'].subtract(1).multiply(-1).add(3)
-    worry = data['HADS5BASEQ[HADS5]'].subtract(1).multiply(-1).add(3)
-    relaxed = data['HADS7BASEQ[HADS7]'].subtract(1)
-    butterflies = data['HADS9BASEQ[HADS9]'].subtract(1)
-    restless = data['HADS11BASEQ[HADS11]'].subtract(1).multiply(-1).add(3)
-    panic = data['HADS13BASEQ[HADS13]'].subtract(1).multiply(-1).add(3)
+    tense = df['HADS1BASEQ[HADS1]'].subtract(1).multiply(-1).add(3)
+    frightened = df['HADS3BASEQ[HADS3]'].subtract(1).multiply(-1).add(3)
+    worry = df['HADS5BASEQ[HADS5]'].subtract(1).multiply(-1).add(3)
+    relaxed = df['HADS7BASEQ[HADS7]'].subtract(1)
+    butterflies = df['HADS9BASEQ[HADS9]'].subtract(1)
+    restless = df['HADS11BASEQ[HADS11]'].subtract(1).multiply(-1).add(3)
+    panic = df['HADS13BASEQ[HADS13]'].subtract(1).multiply(-1).add(3)
     anxiety = [tense, frightened, worry, relaxed, butterflies, restless, panic]
     
     # depression / HADS-D
-    enjoy = data['HADS2BASEQ[HADS2]'].subtract(1)
-    laugh = data['HADS4BASEQ[HADS4]'].subtract(1)
-    cheerful = data['HADS6BASEQ[HADS6]'].subtract(1).multiply(-1).add(3)
-    slowed = data['HADS8BASEQ[HADS8]'].subtract(1).multiply(-1).add(3)
-    appearance = data['HADS10BASEQ[HADS10]'].subtract(1).multiply(-1).add(3)
-    lookforward = data['HADS12BASEQ[HADS12]'].subtract(1)
-    entertain = data['HADS14BASEQ[HADS14]'].subtract(1)
+    enjoy = df['HADS2BASEQ[HADS2]'].subtract(1)
+    laugh = df['HADS4BASEQ[HADS4]'].subtract(1)
+    cheerful = df['HADS6BASEQ[HADS6]'].subtract(1).multiply(-1).add(3)
+    slowed = df['HADS8BASEQ[HADS8]'].subtract(1).multiply(-1).add(3)
+    appearance = df['HADS10BASEQ[HADS10]'].subtract(1).multiply(-1).add(3)
+    lookforward = df['HADS12BASEQ[HADS12]'].subtract(1)
+    entertain = df['HADS14BASEQ[HADS14]'].subtract(1)
     depression = [enjoy, laugh, cheerful, slowed, appearance, lookforward, entertain]
     
     print 'rough interpretation: \n0-7 normal range, 8-10 suggestive presence of mood disorder, >11 probable presence of mood disorder \n'
     
     #### anxiety ####
     print 'HADS-A - anxiety\n'
-    data['HADS_summary_HADS-A_sum'] = tense + frightened + worry + relaxed + butterflies + restless + panic
-    print data['HADS_summary_HADS-A_sum'].describe()
-    sns.countplot(data['HADS_summary_HADS-A_sum'].dropna(), order=range(int(data['HADS_summary_HADS-A_sum'].min()),int(data['HADS_summary_HADS-A_sum'].max())))
+    df['HADS_summary_HADS-A_sum'] = tense + frightened + worry + relaxed + butterflies + restless + panic
+    print df['HADS_summary_HADS-A_sum'].describe()
+    sns.countplot(df['HADS_summary_HADS-A_sum'].dropna(), order=range(int(df['HADS_summary_HADS-A_sum'].min()),int(df['HADS_summary_HADS-A_sum'].max())))
     plt.show()
      
     
     #### depression ####
     print '\n\nHADS-D - depression\n'
-    data['HADS_summary_HADS-D_sum'] = enjoy + laugh + cheerful + slowed + appearance + lookforward + entertain
-    print data['HADS_summary_HADS-D_sum'].describe()
-    sns.countplot(data['HADS_summary_HADS-D_sum'].dropna(), order=range(int(data['HADS_summary_HADS-D_sum'].min()),int(data['HADS_summary_HADS-D_sum'].max())))
+    df['HADS_summary_HADS-D_sum'] = enjoy + laugh + cheerful + slowed + appearance + lookforward + entertain
+    print df['HADS_summary_HADS-D_sum'].describe()
+    sns.countplot(df['HADS_summary_HADS-D_sum'].dropna(), order=range(int(df['HADS_summary_HADS-D_sum'].min()),int(df['HADS_summary_HADS-D_sum'].max())))
     plt.show()
     
     if out_dir:
@@ -1408,13 +1408,137 @@ def run_DAC(df, out_dir=None):
 ############################## NEO-PI-R ######################################
 ##############################################################################
 
-def run_NEOPIR():
+def run_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
     
+    
+#####  create combined dataframe ####    
+    
+
+    cols_neo_pir = ['ID', 'NEOaBASEQ[NEO2]','NEOaBASEQ[NEO3]','NEOaBASEQ[NEO5]','NEOaBASEQ[NEO7r]','NEOaBASEQ[NEO8r]','NEOaBASEQ[NEO9]','NEOaBASEQ[NEO10r]','NEOaBASEQ[NEO12]',
+                'NEOaBASEQ[NEO13]','NEOaBASEQ[NEO16]','NEObBASEQ[NEO17r]','NEObBASEQ[NEO18r]','NEObBASEQ[NEO20r]','NEObBASEQ[NEO21r]','NEObBASEQ[NEO22]','NEObBASEQ[NEO24r]',
+                'NEObBASEQ[NEO27r]','NEObBASEQ[NEO29]','NEObBASEQ[NEO30r]','NEObBASEQ[NEO31]','NEOcBASEQ[NEO32r]','NEOcBASEQ[NEO33r]','NEOcBASEQ[NEO34]','NEOcBASEQ[NEO35r]',
+                'NEOcBASEQ[NEO36r]','NEOcBASEQ[NEO38]','NEOcBASEQ[NEO42r]','NEOcBASEQ[NEO43r]','NEOcBASEQ[NEO47]','NEOcBASEQ[NEO48]','NEOdBASEQ[NEO49r]','NEOdBASEQ[NEO51]',
+                'NEOdBASEQ[NEO52r]','NEOdBASEQ[NEO54]','NEOdBASEQ[NEO56r]','NEOdBASEQ[NEO57]','NEOdBASEQ[NEO58]','NEOdBASEQ[NEO60]','NEOdBASEQ[NEO62]','NEOdBASEQ[NEO63]',
+                'NEOeBASEQ[NEO65]','NEOeBASEQ[NEO66]','NEOeBASEQ[NEO68r]','NEOeBASEQ[NEO69]','NEOeBASEQ[NEO70r]','NEOeBASEQ[NEO71r]','NEOeBASEQ[NEO72]','NEOeBASEQ[NEO73]',
+                'NEOeBASEQ[NEO75]','NEOeBASEQ[NEO77r]','NEOfBASEQ[NEO78r]','NEOfBASEQ[NEO79]','NEOfBASEQ[NEO80r]','NEOfBASEQ[NEO81r]','NEOfBASEQ[NEO82]','NEOfBASEQ[NEO84r]',
+                'NEOfBASEQ[NEO89]','NEOfBASEQ[NEO90r]','NEOfBASEQ[NEO92r]','NEOfBASEQ[NEO94]','NEOgBASEQ[NEO95r]','NEOgBASEQ[NEO96r]','NEOgBASEQ[NEO97]','NEOgBASEQ[NEO99r]',
+                'NEOgBASEQ[NEO100]','NEOgBASEQ[NEO101]','NEOgBASEQ[NEO102r]','NEOgBASEQ[NEO103r]','NEOgBASEQ[NEO105r]','NEOgBASEQ[NEO106r]','NEOhBASEQ[NEO111]','NEOhBASEQ[NEO112r]',
+                'NEOhBASEQ[NEO113r]','NEOhBASEQ[NEO114]','NEOhBASEQ[NEO115r]','NEOhBASEQ[NEO116r]','NEOhBASEQ[NEO117]','NEOhBASEQ[NEO118]','NEOhBASEQ[NEO119r]','NEOhBASEQ[NEO120]',
+                'NEOiBASEQ[NEO121r]','NEOiBASEQ[NEO123]','NEOiBASEQ[NEO124r]','NEOiBASEQ[NEO125]','NEOiBASEQ[NEO126]','NEOiBASEQ[NEO127r]','NEOiBASEQ[NEO129]','NEOiBASEQ[NEO131]',
+                'NEOiBASEQ[NEO132]','NEOiBASEQ[NEO133]','NEOjBASEQ[NEO134r]','NEOjBASEQ[NEO137r]','NEOjBASEQ[NEO138r]','NEOjBASEQ[NEO139]','NEOjBASEQ[NEO140r]','NEOjBASEQ[NEO141r]',
+                'NEOjBASEQ[NEO143]','NEOjBASEQ[NEO144r]','NEOjBASEQ[NEO145]','NEOjBASEQ[NEO146]','NEOkBASEQ[NEO148r]','NEOkBASEQ[NEO149]','NEOkBASEQ[NEO150r]','NEOkBASEQ[NEO151]',
+                'NEOkBASEQ[NEO152]','NEOkBASEQ[NEO153r]','NEOkBASEQ[NEO154]','NEOkBASEQ[NEO155r]','NEOkBASEQ[NEO156r]','NEOkBASEQ[NEO157]','NEOlBASEQ[NEO158]','NEOlBASEQ[NEO159r]',
+                'NEOlBASEQ[NEO160]','NEOlBASEQ[NEO161]','NEOlBASEQ[NEO165]','NEOlBASEQ[NEO166r]','NEOlBASEQ[NEO167]','NEOlBASEQ[NEO168]','NEOlBASEQ[NEO169r]','NEOlBASEQ[NEO170]',
+                'NEOmBASEQ[NEO171]','NEOmBASEQ[NEO172]','NEOmBASEQ[NEO174]','NEOmBASEQ[NEO175r]','NEOmBASEQ[NEO176r]','NEOmBASEQ[NEO178]','NEOmBASEQ[NEO179]','NEOmBASEQ[NEO180]',
+                'NEOmBASEQ[NEO181r]','NEOmBASEQ[NEO182]','NEOnBASEQ[NEO183r]','NEOnBASEQ[NEO184]','NEOnBASEQ[NEO185]','NEOnBASEQ[NEO186]','NEOnBASEQ[NEO187r]','NEOnBASEQ[NEO189r]',
+                'NEOnBASEQ[NEO190r]','NEOnBASEQ[NEO191]','NEOnBASEQ[NEO192]','NEOnBASEQ[NEO193]','NEOoBASEQ[NEO194]','NEOoBASEQ[NEO195]','NEOoBASEQ[NEO196]','NEOoBASEQ[NEO198r]',
+                'NEOoBASEQ[NEO199r]','NEOoBASEQ[NEO201]','NEOoBASEQ[NEO202]','NEOoBASEQ[NEO204]','NEOoBASEQ[NEO205r]','NEOoBASEQ[NEO206r]','NEOpBASEQ[NEO207r]','NEOpBASEQ[NEO208r]',
+                'NEOpBASEQ[NEO209]','NEOpBASEQ[NEO210]','NEOpBASEQ[NEO211]','NEOpBASEQ[NEO212]','NEOpBASEQ[NEO213r]','NEOpBASEQ[NEO214]','NEOpBASEQ[NEO215]','NEOpBASEQ[NEO216]',
+                'NEOqBASEQ[NEO217]','NEOqBASEQ[NEO218]','NEOqBASEQ[NEO219r]','NEOqBASEQ[NEO220r]','NEOqBASEQ[NEO222r]','NEOqBASEQ[NEO223]','NEOqBASEQ[NEO224]','NEOqBASEQ[NEO225]',
+                'NEOqBASEQ[NEO226]','NEOqBASEQ[NEO228r]','NEOrBASEQ[NEO230]','NEOrBASEQ[NEO231r]','NEOrBASEQ[NEO232]','NEOrBASEQ[NEO233]','NEOrBASEQ[NEO234r]','NEOrBASEQ[NEO235]',
+                'NEOrBASEQ[NEO236r]','NEOrBASEQ[NEO238r]','NEOrBASEQ[NEO239]','NEOrBASEQ[NEO240]','NEOrBASEQ[NEO241]']
+    
+    cols_NEOFFI = ['ID', 'NEOFFI01[NEOFFI01]','NEOFFI01[NEOFFI02]','NEOFFI01[NEOFFI03]','NEOFFI01[NEOFFI04]','NEOFFI01[NEOFFI05]','NEOFFI01[NEOFFI06]','NEOFFI01[NEOFFI07]',
+                   'NEOFFI01[NEOFFI08]','NEOFFI01[NEOFFI09]','NEOFFI01[NEOFFI10]','NEOFFI01[NEOFFI11]','NEOFFI01[NEOFFI12]','NEOFFI13[NEOFFI13]','NEOFFI13[NEOFFI14]',
+                   'NEOFFI13[NEOFFI15]','NEOFFI13[NEOFFI16]','NEOFFI13[NEOFFI17]','NEOFFI13[NEOFFI18]','NEOFFI13[NEOFFI19]','NEOFFI13[NEOFFI20]','NEOFFI13[NEOFFI21]',
+                   'NEOFFI13[NEOFFI22]','NEOFFI13[NEOFFI23]','NEOFFI13[NEOFFI24]','NEOFFI25[NEOFFI25]','NEOFFI25[NEOFFI26]','NEOFFI25[NEOFFI27]','NEOFFI25[NEOFFI28]',
+                   'NEOFFI25[NEOFFI29]','NEOFFI25[NEOFFI30]','NEOFFI25[NEOFFI31]','NEOFFI25[NEOFFI32]','NEOFFI25[NEOFFI33]','NEOFFI25[NEOFFI34]','NEOFFI25[NEOFFI35]',
+                   'NEOFFI25[NEOFFI36]','NEOFFI37[NEOFFI37]','NEOFFI37[NEOFFI38]','NEOFFI37[NEOFFI39]','NEOFFI37[NEOFFI40]','NEOFFI37[NEOFFI41]','NEOFFI37[NEOFFI42]',
+                   'NEOFFI37[NEOFFI43]','NEOFFI37[NEOFFI44]','NEOFFI37[NEOFFI45]','NEOFFI37[NEOFFI46]','NEOFFI37[NEOFFI47]','NEOFFI37[NEOFFI48]','NEOFFI49[NEOFFI49]',
+                   'NEOFFI49[NEOFFI50]','NEOFFI49[NEOFFI51]','NEOFFI49[NEOFFI52]','NEOFFI49[NEOFFI53]','NEOFFI49[NEOFFI54]','NEOFFI49[NEOFFI55]','NEOFFI49[NEOFFI56]',
+                   'NEOFFI49[NEOFFI57]','NEOFFI49[NEOFFI58]','NEOFFI49[NEOFFI59]','NEOFFI49[NEOFFI60]']
+     
+    
+    ##### Neo PI R lemon & lsd #### 
+    
+    df_pir = pd.read_csv(pir_f, sep = ",")[cols_neo_pir]
+    # prep df
+    df_pir['ID'].replace('LSD2', '25729', inplace = True)
+    df_pir['ID'] = df_pir['ID'].map(lambda x: str(x)[0:5])
+    
+    # recode item names from complicated to item numbers
+    new_items = []
+    for item in df_pir.columns.values[1:]:
+        item = item[13:]
+        item = item[:-1]
+        if item[-1] == 'r':
+            item = item[:-1]
+        new_items.append(item)
+    dictionary1 = dict(zip(df_pir.columns.values[1:], new_items))
+    df_pir.rename(columns=dictionary1, inplace=True)
+    df_pir.dropna(inplace=True)
+    
+    
+    
+    ##### NEO FFI lsd #####
+    
+    df_ffi_lsd = pd.read_csv(ffi_lsd_f, sep = ",", converters={'ID':str})[cols_NEOFFI]
+    
+    # recode item names from complicated to 1-60
+    new_items = []
+    for item in df_ffi_lsd.columns.values[1:]:
+        item = item[15:]
+        item = item[:-1]
+        item = int(item)
+        item = str(item)
+        new_items.append(item)
+    dictionary2 = dict(zip(df_ffi_lsd.columns.values[1:], new_items))
+    df_ffi_lsd.rename(columns=dictionary2, inplace=True)
+    
+    # recode ffi item numbers into pir item numbers
+    ffi2pir = pd.read_excel('/scr/liberia1/data/lsd/behavioral/NEO/NEO KEY.xlsx', converters={0:str, 1:str})
+    dictionary3 = dict(zip(ffi2pir['Neo FFI'],ffi2pir['NEO PI R']))
+    df_ffi_lsd.rename(columns=dictionary3, inplace=True)
+    df_ffi_lsd.dropna(inplace=True)
+    
+    
+    
+    ##### NEO FFI lemon #####
+    
+    # read in lemon ffi
+    df_ffi_lemon = pd.read_csv('/scr/liberia1/data/lsd/behavioral/NEO/NEO-FFI_60.csv').ix[:, 0:61]
+    # recode ffi item numbers into pir item numbers
+    df_ffi_lemon.rename(columns=dictionary3, inplace=True)
+    # change lemon ID to db ID
+    df_ffi_lemon.rename(columns={'ID':'Lemon_ID'}, inplace=True)
+    df_ffi_lemon.dropna(inplace=True)
+    IDentifier = pd.read_excel('/scr/liberia1/data/lsd/behavioral/NEO/LEMONidentifier.xlsx', 
+                               sheetname='Overview', converters={1:str}).ix[:193, :2]
+    for n in range(len(IDentifier)):
+        try:
+            IDentifier['DB_ID'][n] = str(IDentifier['DB_ID'][n])[:5]
+        except:
+            pass
+    IDentifier.dropna(inplace=True)
+    for n in range(len(IDentifier)):
+        if (IDentifier['Lemon_ID'][n][0] != 'L') & (len(IDentifier['Lemon_ID'][n]) == 1):
+            IDentifier['Lemon_ID'][n] = 'LEMON00' + IDentifier['Lemon_ID'][n]
+        if (IDentifier['Lemon_ID'][n][0] != 'L') & (len(IDentifier['Lemon_ID'][n]) == 2):
+            IDentifier['Lemon_ID'][n] = 'LEMON0' + IDentifier['Lemon_ID'][n]
+        if (IDentifier['Lemon_ID'][n][0] != 'L') & (len(IDentifier['Lemon_ID'][n]) == 3):
+            IDentifier['Lemon_ID'][n] = 'LEMON' + IDentifier['Lemon_ID'][n]
+    IDentifier.rename(columns={'DB_ID':'ID'}, inplace=True)
+    df_ffi_lemon = pd.merge(df_ffi_lemon, IDentifier, on='Lemon_ID', how='left')
+    df_ffi_lemon.drop('Lemon_ID', axis=1, inplace=True)
+    
+    
+    ##### merge everything #####
+    
+    # combine FFI of lemon and lsd
+    df_ffi = pd.concat([df_ffi_lemon, df_ffi_lsd])
+    # merge FFI with PI R
+    df_neo = pd.merge(df_pir, df_ffi, on='ID', how='inner')
+    df_neo.rename(columns={'70_x':'70_pir', '70_y':'70'}, inplace=True)
+    col_ordered = ['ID']+[str(x+1) for x in range(241) if x != 82]
+    df =  df_neo[col_ordered].copy()
+    
+
+#### compute scales ####    
+
     print 'measure of the Five Factor Model and uses these five dimensions to evaluate adult personality' 
     print '– emotional, interpersonal, experiential, attitudinal, and motivational styles –' 
-    print '181 items using a 5-point scale'
+    print '241 items using a 5-point scale'
     
-    df = pd.read_pickle('/scr/liberia1/data/lsd/behavioral/NEO/Neo_complete.pkl')
         
     #recode reversed items
     items_recoded = ['61','1','121','181','36','96','156','11','71','46','106','166','21'
