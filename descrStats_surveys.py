@@ -11,6 +11,39 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+##############################################################################
+#################### Abbreviated Math Anxiety Scale ##########################
+##############################################################################
+
+def run_AMAS(df, out_dir=None):
+ 
+
+    #Calculate total score as the sum of Item 1-9.
+    
+    cols = ['AMAS[1]',
+            'AMAS[2]',
+            'AMAS[3]',
+            'AMAS[4]',
+            'AMAS[5]',
+            'AMAS[6]',
+            'AMAS[7]',
+            'AMAS[8]',
+            'AMAS[9]']    
+    
+    df['AMAS_sum'] = df[cols].sum(axis=1)
+                      
+    print "Questionnaire measures math anxiety (total score is calculated as the sum of the 9 items)\n"   
+    print df["AMAS_sum"].describe() 
+    sns.distplot(df["AMAS_sum"].dropna(), kde = True)
+    
+    if out_dir:
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['AMAS_sum']
+        df[cols_export].to_csv('%s/AMAS.csv' % out_dir, index=False)
+        
+    
+
 
 ##############################################################################
 ########################## self control scale ################################
