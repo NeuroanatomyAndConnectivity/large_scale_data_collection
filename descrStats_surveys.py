@@ -109,6 +109,7 @@ def run_IAT(df, out_dir=None):
     
     cols = ['IATaBASEQ[IAT1]',
             'IATaBASEQ[IAT2]',
+            'IATbBASEQ[IAT3]',
             'IATcBASEQ[IAT4]',
             'IATcBASEQ[IAT5]',
             'IATcBASEQ[IAT6]',
@@ -125,7 +126,14 @@ def run_IAT(df, out_dir=None):
             'IATdBASEQ[IAT17]',
             'IATdBASEQ[IAT18]',
             'IATdBASEQ[IAT19]',
-            'IATdBASEQ[IAT20]']    
+            'IATdBASEQ[IAT20]']
+                             
+    #recode items                 
+    recoder = {1:1, 2:2, 3:3, 4:4, 5:5, 6:0}
+    for i in cols:
+        df[i] = df[i].map(recoder).astype(float64)              
+                        
+                
     df['IAT_sum'] = df[cols].sum(axis=1)
     
     print "Questionnaire measures internet addiction (total score is calculated as the sum of the 19 items; Item 3 not incl (different format)\n"   
@@ -384,7 +392,7 @@ def run_SES(df, out_dir=None):
                      'SESbBASEQ[SES17r]']    
                              
     #recode items                 
-    recoder = {1:2, 3:3, 2:1}
+    recoder = {1:1, 2:0}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
