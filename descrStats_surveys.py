@@ -11,6 +11,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
+
 ##############################################################################
 #################### Abbreviated Math Anxiety Scale ##########################
 ##############################################################################
@@ -40,8 +42,7 @@ def run_AMAS(df, out_dir=None):
         df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['AMAS_sum']
-        df[cols_export].to_csv('%s/AMAS.csv' % out_dir, index=False)
-        
+        df[cols_export].to_csv('%s/AMAS.csv' % out_dir, index=False)        
     
 
 
@@ -63,7 +64,7 @@ def run_SelfCtrl(df, out_dir=None):
                      'SCSbBASEQ[SCS11r]' ]    
                              
     #recode items                 
-    recoder = {1: 5, 2: 4, 4: 2, 5: 1 }
+    recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -149,7 +150,7 @@ def run_VIS(df, out_dir=None):
     items_recoded = ['AISaBASEQ[AIS7]',
                      'AISbBASEQ[AIS15]']  
     #recode items                 
-    recoder = {1: 6, 2: 5, 3: 4, 4: 3, 5: 2, 6: 1}
+    recoder = {1:6, 2:5, 3:4, 4:3, 5:2, 6:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
            
@@ -284,7 +285,7 @@ def run_SDT(df, out_dir=None):
                      'SDTpBASEQ[SDTP7r]']             
                                                       
     #recode items                 
-    recoder = {1: 5, 2: 4, 4: 2, 5: 1 }
+    recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -383,7 +384,7 @@ def run_SES(df, out_dir=None):
                      'SESbBASEQ[SES17r]']    
                              
     #recode items                 
-    recoder = {1: 2 , 2: 1}
+    recoder = {1:2, 3:3, 2:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -445,7 +446,7 @@ def run_UPPSP(df, out_dir=None):
                      'UPPSfBASEQ[UPP52r]','UPPSfBASEQ[UPP54]','UPPSfBASEQ[UPP56r]',
                      'UPPSfBASEQ[UPP57r]','UPPSfBASEQ[UPP58r]','UPPSfBASEQ[UPP59r]']
     #recode items                 
-    recoder = {1: 4, 2: 3, 3: 2, 4: 1}
+    recoder = {1:4, 2:3, 3:2, 4:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)
     #calculate subscales (averages)
@@ -591,7 +592,7 @@ def run_TPS(df, out_dir=None):
                      'TPSBASEQ[TPS16]']    
                              
     #recode items                 
-    recoder = {1: 5, 2: 4, 4: 2, 5: 1 }
+    recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -1171,7 +1172,7 @@ def run_SelfEst(df, out_dir=None):
                      'SEBASEQ[SE7r]',
                      'SEBASEQ[SE8r]'] 
     
-    recoder = {1: 5, 2: 4, 4: 2, 5: 1}     
+    recoder = {1:5, 2:4, 3:3, 4:2, 5:1}     
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64) 
     
@@ -1307,7 +1308,7 @@ def run_GoldMSI(df, out_dir=None):
     items_recoded = ['MUSaBASEQ[MUS_21]',
                      'MUSdBASEQ[MUS_14]',
                      'MUSdBASEQ[MUS_27]'] 
-    recoder = {1: 8, 2: 7, 3: 6, 4: 5, 5:4, 6:3, 7:2, 8:1}
+    recoder = {1:8, 2:7, 3:6, 4:5, 5:4, 6:3, 7:2, 8:1}
      
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64) 
@@ -1619,7 +1620,7 @@ def run_BPS(df, out_dir=None):
                          
                              
     #recode items                 
-    recoder = {1: 7 , 2: 6, 3: 5, 5: 3, 6: 2, 7: 1 }
+    recoder = {1:7 , 2:6, 3:5, 4:4, 5:3, 6:2, 7:1 }
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -1668,7 +1669,7 @@ def run_DAC(df, out_dir=None):
                     'DACcBASEQ[DAC20]']
     
     #recode items                 
-    recoder = {1: 4 , 2: 3, 3: 2, 4: 1}
+    recoder = {1:4 , 2:3, 3:2, 4:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -1843,7 +1844,7 @@ def run_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
                  
                   
                      
-    recoder = {0: 4, 1: 3, 3: 1, 4: 0}    
+    recoder = {0:4, 1:3, 2:2, 3:1, 4:0}    
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)  
     
@@ -2167,7 +2168,7 @@ def run_PSSI(df, out_dir=None):
              'PSSmBASEQ[PSS130]','PSSnBASEQ[PSS131]','PSSnBASEQ[PSS132]','PSSnBASEQ[PSS133]','PSSnBASEQ[PSS134]','PSSnBASEQ[PSS135]','PSSnBASEQ[PSS136]','PSSnBASEQ[PSS137r]',
              'PSSnBASEQ[PSS138]','PSSnBASEQ[PSS139]','PSSnBASEQ[PSS140]']
     #recode all items to original format (limesurvey: 1234, original = 0123)
-    recoder = {1: 0, 2: 1, 3: 2, 4: 3 }
+    recoder = {1:0, 2:1, 3:2, 4:3 }
     for i in cols:
         df[i] = df[i].map(recoder).astype(float64) 
         
@@ -2188,7 +2189,7 @@ def run_PSSI(df, out_dir=None):
                      'PSSkBASEQ[PSS109r]',
                      'PSSnBASEQ[PSS137r]']    
                      
-    recoder = {0: 3, 1: 2, 2: 1, 3: 0}     
+    recoder = {0:3, 1:2, 2:1, 3:0}     
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)  
     
@@ -2512,7 +2513,7 @@ def run_MMI(df, out_dir=None):
                    'MMIbwBASEQ[MMI497]' ,'MMIbwBASEQ[MMI498]'] 
     
     #recode items                 
-    recoder = {5 : 'NaN', 4 : 1, 3: 0.66, 2: 0.33, 1: 0}
+    recoder = {5 :'NaN', 4 :1, 3:0.66, 2:0.33, 1:0}
     for i in cols:
         df[i] = df[i].map(recoder).astype(float64)   
     
@@ -2962,7 +2963,7 @@ def run_BISBAS(df, out_dir=None):
                      'BISBAS22[SQ001]']    
                              
     #recode items                 
-    recoder = {1: 4, 2: 3, 3: 2, 4: 1 }
+    recoder = {1:4, 2:3, 3:2, 4:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
 
@@ -3019,7 +3020,7 @@ def run_STAI(df, out_dir=None):
     items_recoded = ['STAI01[STAI01]', 'STAI01[STAI06]', 'STAI01[STAI07]', 'STAI01[STAI10]', 
                      'STAI11[STAI13]', 'STAI11[STAI16]', 'STAI11[STAI19]']
                     
-    recoder = {1: 4, 2: 3, 3: 2, 4: 1 }
+    recoder = {1:4, 2:3, 3:2, 4:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64)   
     
