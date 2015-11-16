@@ -936,9 +936,6 @@ def run_ASR(df, out_dir=None):
         sns.countplot(df[scale].dropna(), order=range(int(df[scale].min()),int(df[scale].max())))
         plt.xlabel(scale, fontsize=14)
         plt.show()
-    
-    print '\n\n'
-    sns.lmplot(x='ASR_summary_syndromeProfiles_externalizing_sum', y='ASR_summary_syndromeProfiles_internalizing_sum', data=df)
 
 
     if out_dir:
@@ -1144,23 +1141,45 @@ def run_ASR(df, out_dir=None):
              'ASRVcBASEQ[ASRVD]': '5.L',
              'ASRVcBASEQ[ASRVEr]': '5.M'}
         
+        item_order = ['1.A', '1.B.', '1.C', '1.D', 
+                      '2.A', '2.B', '2.C', '2.D', '2.E', '2.F', '2.G', '2.H', '2.I', '2.J', '2.K',
+                      '3.A', '3.B.', '3.C', '3.D', '3.E', '3.F', '3.G', '3.H', '3.I', '3.J',
+                      '4.A', '4.B', '4.C', '4.D', '4.E', '4.F', '4.G', '4.H', '4.I', '4.J',
+                      '5.A', '5.B', '5.C', '5.D', '5.E', '5.F', '5.G', '5.H', '5.I', '5.J', '5.K', '5.L', '5.M',
+                      '6.A', '6.B', '7.A', '7.B', '8.A', '9', '10', 
+                      '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25',
+                      '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', 
+                      '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', 
+                      '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', 
+                      '69.A', '69.B', '69.C', '69.D', '69.E', '69.F', '69.G', '69.H', '70',
+                      '71', '72', '73', '74', '75', '76', '77', '78', '79', '80',
+                      '81', '82', '83', '84', '85', '86', '87', '88', '89', '90',
+                      '91', '92', '93', '94', '95', '96', '97', '98', '99', '100', 
+                      '101', '102', '103','104', '105', '106', '107', '108', '109',  '110', 
+                      '111', '112', '113', '114', '115', '116', '117', '118', '119', '120', 
+                      '121', '122', '123', '124', '125', '126', '127', '128', '129', '130',
+                      '131', '132', '133', '134', '135', '136', '137', '138', '139', '140', 
+                      '141', '142', '143', '144', '145', '146', '147', '148']
+        
+        
+        
         df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
-        cols_export = ['ID'] + list(sort(d.values())) + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
-                                                    'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
-                                                    'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
-                                                    'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
-                                                    'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
-                                                    'ASR_summary_syndromeProfiles_anxiousdepressed_sum', 
-                                                    'ASR_summary_syndromeProfiles_withdrawn_sum', 
-                                                    'ASR_summary_syndromeProfiles_somaticComplaints_sum',
-                                                    'ASR_summary_syndromeProfiles_thoughtProblems_sum', 
-                                                    'ASR_summary_syndromeProfiles_attentionProblems_sum', 
-                                                    'ASR_summary_syndromeProfiles_aggressiveBehavior_sum', 
-                                                    'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
-                                                    'ASR_summary_syndromeProfiles_intrusive_sum', 
-                                                    'ASR_summary_syndromeProfiles_internalizing_sum', 
-                                                    'ASR_summary_syndromeProfiles_externalizing_sum']        
+        cols_export = ['ID'] + item_order + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
+                                            'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
+                                            'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
+                                            'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
+                                            'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
+                                            'ASR_summary_syndromeProfiles_anxiousdepressed_sum', 
+                                            'ASR_summary_syndromeProfiles_withdrawn_sum', 
+                                            'ASR_summary_syndromeProfiles_somaticComplaints_sum',
+                                            'ASR_summary_syndromeProfiles_thoughtProblems_sum', 
+                                            'ASR_summary_syndromeProfiles_attentionProblems_sum', 
+                                            'ASR_summary_syndromeProfiles_aggressiveBehavior_sum', 
+                                            'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
+                                            'ASR_summary_syndromeProfiles_intrusive_sum', 
+                                            'ASR_summary_syndromeProfiles_internalizing_sum', 
+                                            'ASR_summary_syndromeProfiles_externalizing_sum']        
         df[cols_export].to_csv('%s/adult_self_report.csv' % out_dir, index=False)
   
 
@@ -1389,18 +1408,6 @@ def run_ESS(df, out_dir=None):
 ##############################################################################
 
 def run_BDI(df, out_dir=None):
-
-    cols = ['BDIABASEQ[BDIA0]','BDIABASEQ[BDIA1]','BDIABASEQ[BDIA2]','BDIABASEQ[BDIA3]','BDIBBASEQ[BDIB0]','BDIBBASEQ[BDIB1]','BDIBBASEQ[BDIB2]','BDIBBASEQ[BDIB3]',
-                'BDICBASEQ[BDIC0]','BDICBASEQ[BDIC1]','BDICBASEQ[BDIC2]','BDICBASEQ[BDIC3]','BDIDBASEQ[BDID0]','BDIDBASEQ[BDID1]','BDIDBASEQ[BDID2]','BDIDBASEQ[BDID3]',
-                'BDIEBASEQ[BDIE0]','BDIEBASEQ[BDIE1]','BDIEBASEQ[BDIE2]','BDIEBASEQ[BDIE3]','BDIFBASEQ[BDIF0]','BDIFBASEQ[BDIF1]','BDIFBASEQ[BDIF2]','BDIFBASEQ[BDIF3]',
-                'BDIGBASEQ[BDIG0]','BDIGBASEQ[BDIG1]','BDIGBASEQ[BDIG2]','BDIGBASEQ[BDIG3]','BDIHBASEQ[BDIH0]','BDIHBASEQ[BDIH1]','BDIHBASEQ[BDIH2]','BDIHBASEQ[BDIH3]',
-                'BDIIBASEQ[BDII0]','BDIIBASEQ[BDII1]','BDIIBASEQ[BDII2]','BDIIBASEQ[BDII3]','BDIJBASEQ[BDIJ0]','BDIJBASEQ[BDIJ1]','BDIJBASEQ[BDIJ2]','BDIJBASEQ[BDIJ3]',
-                'BDIKBASEQ[BDIK0]','BDIKBASEQ[BDIK1]','BDIKBASEQ[BDIK2]','BDIKBASEQ[BDIK3]','BDILBASEQ[BDIL0]','BDILBASEQ[BDIL1]','BDILBASEQ[BDIL2]','BDILBASEQ[BDIL3]',
-                'BDIMBASEQ[BDIM0]','BDIMBASEQ[BDIM1]','BDIMBASEQ[BDIM2]','BDIMBASEQ[BDIM3]','BDINBASEQ[BDIN0]','BDINBASEQ[BDIN1]','BDINBASEQ[BDIN2]','BDINBASEQ[BDIN3]',
-                'BDIOBASEQ[BDIO0]','BDIOBASEQ[BDIO1]','BDIOBASEQ[BDIO2]','BDIOBASEQ[BDIO3]','BDIPBASEQ[BDIP0]','BDIPBASEQ[BDIP1]','BDIPBASEQ[BDIP2]','BDIPBASEQ[BDIP3]',
-                'BDIQBASEQ[BDIQ0]','BDIQBASEQ[BDIQ1]','BDIQBASEQ[BDIQ2]','BDIQBASEQ[BDIQ3]','BDIRBASEQ[BDIR0]','BDIRBASEQ[BDIR1]','BDIRBASEQ[BDIR2]','BDIRBASEQ[BDIR3]',
-                'BDISBASEQ[BDIS0]','BDISBASEQ[BDIS1]','BDISBASEQ[BDIS2]','BDISBASEQ[BDIS3]','BDIS4','BDITBASEQ[BDIT0]','BDITBASEQ[BDIT1]','BDITBASEQ[BDIT2]',
-                'BDITBASEQ[BDIT3]','BDIUBASEQ[BDIU0]','BDIUBASEQ[BDIU1]','BDIUBASEQ[BDIU2]','BDIUBASEQ[BDIU3]']
     
     # recode items
     zero = ['BDIABASEQ[BDIA0]', 'BDIBBASEQ[BDIB0]', 'BDICBASEQ[BDIC0]',
@@ -1411,7 +1418,7 @@ def run_BDI(df, out_dir=None):
             'BDIPBASEQ[BDIP0]', 'BDIQBASEQ[BDIQ0]', 'BDIRBASEQ[BDIR0]',
             'BDISBASEQ[BDIS0]', 'BDITBASEQ[BDIT0]', 'BDIUBASEQ[BDIU0]']
     for item in zero:
-        df[item].replace(to_replace='Y', value=0, inplace=True)
+        df[item].replace(to_replace=1, value=0, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)
             
     one = ['BDIABASEQ[BDIA1]', 'BDIBBASEQ[BDIB1]', 'BDICBASEQ[BDIC1]',
@@ -1422,7 +1429,7 @@ def run_BDI(df, out_dir=None):
            'BDIPBASEQ[BDIP1]', 'BDIQBASEQ[BDIQ1]', 'BDIRBASEQ[BDIR1]',
            'BDISBASEQ[BDIS1]', 'BDITBASEQ[BDIT1]', 'BDIUBASEQ[BDIU1]']
     for item in one:
-        df[item].replace(to_replace='Y', value=1, inplace=True)
+        df[item].replace(to_replace=1, value=1, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)
             
     two = ['BDIABASEQ[BDIA2]', 'BDIBBASEQ[BDIB2]', 'BDICBASEQ[BDIC2]',
@@ -1433,7 +1440,7 @@ def run_BDI(df, out_dir=None):
            'BDIPBASEQ[BDIP2]', 'BDIQBASEQ[BDIQ2]', 'BDIRBASEQ[BDIR2]',
            'BDISBASEQ[BDIS2]', 'BDITBASEQ[BDIT2]', 'BDIUBASEQ[BDIU2]']
     for item in two:
-        df[item].replace(to_replace='Y', value=2, inplace=True)
+        df[item].replace(to_replace=1, value=2, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)
             
     three = ['BDIABASEQ[BDIA3]', 'BDIBBASEQ[BDIB3]', 'BDICBASEQ[BDIC3]',
@@ -1444,107 +1451,43 @@ def run_BDI(df, out_dir=None):
              'BDIPBASEQ[BDIP3]', 'BDIQBASEQ[BDIQ3]', 'BDIRBASEQ[BDIR3]',
              'BDISBASEQ[BDIS3]', 'BDITBASEQ[BDIT3]', 'BDIUBASEQ[BDIU3]']
     for item in three:
-        df[item].replace(to_replace='Y', value=3, inplace=True)
+        df[item].replace(to_replace=1, value=3, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)         
-             
+    
+    df['1'] = df[['BDIABASEQ[BDIA0]', 'BDIABASEQ[BDIA1]', 'BDIABASEQ[BDIA2]', 'BDIABASEQ[BDIA3]']].sum(axis=1)
+    df['2'] = df[['BDIBBASEQ[BDIB0]', 'BDIBBASEQ[BDIB1]', 'BDIBBASEQ[BDIB2]', 'BDIBBASEQ[BDIB3]']].sum(axis=1)
+    df['3'] = df[['BDICBASEQ[BDIC0]', 'BDICBASEQ[BDIC1]', 'BDICBASEQ[BDIC2]', 'BDICBASEQ[BDIC3]']].sum(axis=1)
+    df['4'] = df[['BDIDBASEQ[BDID0]', 'BDIDBASEQ[BDID1]', 'BDIDBASEQ[BDID2]', 'BDIDBASEQ[BDID3]']].sum(axis=1)
+    df['5'] = df[['BDIEBASEQ[BDIE0]', 'BDIEBASEQ[BDIE1]', 'BDIEBASEQ[BDIE2]', 'BDIEBASEQ[BDIE3]']].sum(axis=1)
+    df['6'] = df[['BDIFBASEQ[BDIF0]', 'BDIFBASEQ[BDIF1]', 'BDIFBASEQ[BDIF2]', 'BDIFBASEQ[BDIF3]']].sum(axis=1)
+    df['7'] = df[['BDIGBASEQ[BDIG0]', 'BDIGBASEQ[BDIG1]', 'BDIGBASEQ[BDIG2]', 'BDIGBASEQ[BDIG3]']].sum(axis=1)
+    df['8'] = df[['BDIHBASEQ[BDIH0]', 'BDIHBASEQ[BDIH1]', 'BDIHBASEQ[BDIH2]', 'BDIHBASEQ[BDIH3]']].sum(axis=1)
+    df['9'] = df[['BDIIBASEQ[BDII0]', 'BDIIBASEQ[BDII1]', 'BDIIBASEQ[BDII2]', 'BDIIBASEQ[BDII3]']].sum(axis=1)
+    df['10'] = df[['BDIJBASEQ[BDIJ0]', 'BDIJBASEQ[BDIJ1]', 'BDIJBASEQ[BDIJ2]', 'BDIJBASEQ[BDIJ3]']].sum(axis=1)
+    df['11'] = df[['BDIKBASEQ[BDIK0]', 'BDIKBASEQ[BDIK1]', 'BDIKBASEQ[BDIK2]', 'BDIKBASEQ[BDIK3]']].sum(axis=1)
+    df['12'] = df[['BDILBASEQ[BDIL0]', 'BDILBASEQ[BDIL1]', 'BDILBASEQ[BDIL2]', 'BDILBASEQ[BDIL3]']].sum(axis=1)
+    df['13'] = df[['BDIMBASEQ[BDIM0]', 'BDIMBASEQ[BDIM1]', 'BDIMBASEQ[BDIM2]', 'BDIMBASEQ[BDIM3]']].sum(axis=1)
+    df['14'] = df[['BDINBASEQ[BDIN0]', 'BDINBASEQ[BDIN1]', 'BDINBASEQ[BDIN2]', 'BDINBASEQ[BDIN3]']].sum(axis=1)
+    df['15'] = df[['BDIOBASEQ[BDIO0]', 'BDIOBASEQ[BDIO1]', 'BDIOBASEQ[BDIO2]', 'BDIOBASEQ[BDIO3]']].sum(axis=1)
+    df['16'] = df[['BDIPBASEQ[BDIP0]', 'BDIPBASEQ[BDIP1]', 'BDIPBASEQ[BDIP2]', 'BDIPBASEQ[BDIP3]']].sum(axis=1)
+    df['17'] = df[['BDIQBASEQ[BDIQ0]', 'BDIQBASEQ[BDIQ1]', 'BDIQBASEQ[BDIQ2]', 'BDIQBASEQ[BDIQ3]']].sum(axis=1)
+    df['18'] = df[['BDIRBASEQ[BDIR0]', 'BDIRBASEQ[BDIR1]', 'BDIRBASEQ[BDIR2]', 'BDIRBASEQ[BDIR3]']].sum(axis=1)
+    df['19'] = df[['BDISBASEQ[BDIS0]', 'BDISBASEQ[BDIS1]', 'BDISBASEQ[BDIS2]', 'BDISBASEQ[BDIS3]']].sum(axis=1)
+    df['20'] = df[['BDIS4']]
+    df['21'] = df[['BDITBASEQ[BDIT0]', 'BDITBASEQ[BDIT1]', 'BDITBASEQ[BDIT2]', 'BDITBASEQ[BDIT3]']].sum(axis=1) 
+    df['22'] = df[['BDIUBASEQ[BDIU0]', 'BDIUBASEQ[BDIU1]', 'BDIUBASEQ[BDIU2]', 'BDIUBASEQ[BDIU3]']].sum(axis=1)
+                         
     # output
-    df['BDI_summary_sum'] = df[cols].sum(axis=1)                
+    df['BDI_summary_sum'] = df[[str(x+1) for x in range(22)]].sum(axis=1)                
     print 'For the general population, a score of 21 or over represents depression\n'   
     print df['BDI_summary_sum'].describe()
     sns.countplot(df['BDI_summary_sum'].dropna(), order=range(int(df['BDI_summary_sum'].min()),int(df['BDI_summary_sum'].max())))
     plt.show()
     
-    if out_dir:
-        
-        d = {'BDIABASEQ[BDIA0]': '1.A',
-             'BDIABASEQ[BDIA1]': '1.B',
-             'BDIABASEQ[BDIA2]': '1.C',
-             'BDIABASEQ[BDIA3]': '1.D',
-             'BDIBBASEQ[BDIB0]': '2.A',
-             'BDIBBASEQ[BDIB1]': '2.B',
-             'BDIBBASEQ[BDIB2]': '2.C',
-             'BDIBBASEQ[BDIB3]': '2.D',
-             'BDICBASEQ[BDIC0]': '3.A',
-             'BDICBASEQ[BDIC1]': '3.B',
-             'BDICBASEQ[BDIC2]': '3.C',
-             'BDICBASEQ[BDIC3]': '3.D',
-             'BDIDBASEQ[BDID0]': '4.A',
-             'BDIDBASEQ[BDID1]': '4.B',
-             'BDIDBASEQ[BDID2]': '4.C',
-             'BDIDBASEQ[BDID3]': '4.D',
-             'BDIEBASEQ[BDIE0]': '5.A',
-             'BDIEBASEQ[BDIE1]': '5.B',
-             'BDIEBASEQ[BDIE2]': '5.C',
-             'BDIEBASEQ[BDIE3]': '5.D',
-             'BDIFBASEQ[BDIF0]': '6.A',
-             'BDIFBASEQ[BDIF1]': '6.B',
-             'BDIFBASEQ[BDIF2]': '6.C',
-             'BDIFBASEQ[BDIF3]': '6.D',
-             'BDIGBASEQ[BDIG0]': '7.A',
-             'BDIGBASEQ[BDIG1]': '7.B',
-             'BDIGBASEQ[BDIG2]': '7.C',
-             'BDIGBASEQ[BDIG3]': '7.D',
-             'BDIHBASEQ[BDIH0]': '8.A',
-             'BDIHBASEQ[BDIH1]': '8.B',
-             'BDIHBASEQ[BDIH2]': '8.C',
-             'BDIHBASEQ[BDIH3]': '8.D',
-             'BDIIBASEQ[BDII0]': '9.A',
-             'BDIIBASEQ[BDII1]': '9.B',
-             'BDIIBASEQ[BDII2]': '9.C',
-             'BDIIBASEQ[BDII3]': '9.D',
-             'BDIJBASEQ[BDIJ0]': '10.A',
-             'BDIJBASEQ[BDIJ1]': '10.B',
-             'BDIJBASEQ[BDIJ2]': '10.C',
-             'BDIJBASEQ[BDIJ3]': '10.D',
-             'BDIKBASEQ[BDIK0]': '11.A',
-             'BDIKBASEQ[BDIK1]': '11.B',
-             'BDIKBASEQ[BDIK2]': '11.C',
-             'BDIKBASEQ[BDIK3]': '11.D',
-             'BDILBASEQ[BDIL0]': '12.A',
-             'BDILBASEQ[BDIL1]': '12.B',
-             'BDILBASEQ[BDIL2]': '12.C',
-             'BDILBASEQ[BDIL3]': '12.D',
-             'BDIMBASEQ[BDIM0]': '13.A',
-             'BDIMBASEQ[BDIM1]': '13.B',
-             'BDIMBASEQ[BDIM2]': '13.C',
-             'BDIMBASEQ[BDIM3]': '13.D',
-             'BDINBASEQ[BDIN0]': '14.A',
-             'BDINBASEQ[BDIN1]': '14.B',
-             'BDINBASEQ[BDIN2]': '14.C',
-             'BDINBASEQ[BDIN3]': '14.D',
-             'BDIOBASEQ[BDIO0]': '15.A',
-             'BDIOBASEQ[BDIO1]': '15.B',
-             'BDIOBASEQ[BDIO2]': '15.C',
-             'BDIOBASEQ[BDIO3]': '15.D',
-             'BDIPBASEQ[BDIP0]': '16.A',
-             'BDIPBASEQ[BDIP1]': '16.B',
-             'BDIPBASEQ[BDIP2]': '16.C',
-             'BDIPBASEQ[BDIP3]': '16.D',
-             'BDIQBASEQ[BDIQ0]': '17.A',
-             'BDIQBASEQ[BDIQ1]': '17.B',
-             'BDIQBASEQ[BDIQ2]': '17.C',
-             'BDIQBASEQ[BDIQ3]': '17.D',
-             'BDIRBASEQ[BDIR0]': '18.A',
-             'BDIRBASEQ[BDIR1]': '18.B',
-             'BDIRBASEQ[BDIR2]': '18.c',
-             'BDIRBASEQ[BDIR3]': '18.D',
-             'BDIS4': '20',
-             'BDISBASEQ[BDIS0]': '19.A',
-             'BDISBASEQ[BDIS1]': '19.B',
-             'BDISBASEQ[BDIS2]': '19.C',
-             'BDISBASEQ[BDIS3]': '19.D',
-             'BDITBASEQ[BDIT0]': '21.A',
-             'BDITBASEQ[BDIT1]': '21.B',
-             'BDITBASEQ[BDIT2]': '21.C',
-             'BDITBASEQ[BDIT3]': '21.D',
-             'BDIUBASEQ[BDIU0]': '22.A',
-             'BDIUBASEQ[BDIU1]': '22.B',
-             'BDIUBASEQ[BDIU2]': '22.C',
-             'BDIUBASEQ[BDIU3]': '22.D'}          
+    if out_dir:  
         
         df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
-        df.rename(columns=d, inplace=True)
-        cols_export = ['ID'] + list(sort(d.values())) + ['BDI_summary_sum']              
+        cols_export = ['ID'] + [str(x+1) for x in range(22)] + ['BDI_summary_sum']              
         df[cols_export].to_csv('%s/beck_depression_inventar.csv' % out_dir, index=False)
   
 
@@ -1601,7 +1544,7 @@ def run_HADS(df, out_dir=None):
         df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']               
-        df[cols_export].to_csv('%s/hamilton_anxiety_depression.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/hospital_anxiety_depression.csv' % out_dir, index=False)
 
 
 
@@ -1674,6 +1617,7 @@ def run_DAC(df, out_dir=None):
                     'DACbBASEQ[DAC12]',     
                     'DACbBASEQ[DAC15]',
                     'DACcBASEQ[DAC16]',
+                    'DACcBASEQ[DAC18]',
                     'DACcBASEQ[DAC20]']
     
     #recode items                 
@@ -2954,9 +2898,47 @@ def run_MMI(df, out_dir=None):
              'MMIbwBASEQ[MMI498]': '12.4.H',
              'MMIbwBASEQ[MMI499]': '12.4.I'}
 
+
+        item_order = ['1.1.', '1.2.', '1.3.A', '1.3.B', '1.3.C', '1.3.D', '1.3.E',
+              '1.4.J', '1.4.K', '1.4.L','1.4.A', '1.4.B', '1.4.C', 
+              '1.4.D', '1.4.E', '1.4.F', '1.4.G', '1.4.H', '1.4.I',
+              '2.1.','2.2.', '2.3.A', '2.3.B', '2.3.C', '2.3.D', '2.3.E',
+              '2.4.J', '2.4.K', '2.4.L', '2.4.A', '2.4.B', '2.4.C',
+              '2.4.D', '2.4.E', '2.4.F', '2.4.G', '2.4.H', '2.4.I', 
+              '3.1.', '3.2.', '3.3.A', '3.3.B', '3.3.C', '3.3.D', '3.3.E',
+              '3.4.J', '3.4.K', '3.4.L', '3.4.A', '3.4.B', '3.4.C', 
+              '3.4.D', '3.4.E', '3.4.F', '3.4.G', '3.4.H', '3.4.I',
+              '4.1.', '4.2.', '4.3.A', '4.3.B', '4.3.C', '4.3.D', '4.3.E',
+              '4.4.J', '4.4.K', '4.4.L', '4.4.A', '4.4.B', '4.4.C',
+              '4.4.D', '4.4.E', '4.4.F', '4.4.G', '4.4.H', '4.4.I',
+              '5.1.', '5.2.', '5.3.A', '5.3.B', '5.3.C', '5.3.D', '5.3.E',
+              '5.4.J', '5.4.K', '5.4.L', '5.4.A', '5.4.B', '5.4.C',
+              '5.4.D', '5.4.E', '5.4.F', '5.4.G', '5.4.H', '5.4.I',
+              '6.1.', '6.2.', '6.3.B', '6.3.C', '6.3.D', '6.3.E', '6.3.A',
+              '6.4.J', '6.4.K', '6.4.L', '6.4.A', '6.4.B', '6.4.C', 
+              '6.4.D', '6.4.E', '6.4.F', '6.4.G', '6.4.H', '6.4.I',
+              '7.1.', '7.2.', '7.3.A', '7.3.B', '7.3.C', '7.3.D', '7.3.E',
+              '7.4.J', '7.4.K', '7.4.L', '7.4.A', '7.4.B', '7.4.C',
+              '7.4.D', '7.4.E', '7.4.F', '7.4.G', '7.4.H', '7.4.I',
+              '8.1.', '8.2.', '8.3.A', '8.3.B', '8.3.C', '8.3.D', '8.3.E',
+              '8.4.J', '8.4.K', '8.4.L', '8.4.A', '8.4.B', '8.4.C', 
+              '8.4.D', '8.4.E', '8.4.F', '8.4.G', '8.4.H', '8.4.I',
+              '9.1.', '9.2.', '9.3.', '9.4.', '9.5.A', '9.5.B', '9.5.C', '9.5.D', '9.5.E',
+              '9.6.J', '9.6.K', '9.6.L', '9.6.A', '9.6.B', '9.6.C',
+              '9.6.D', '9.6.E', '9.6.F', '9.6.G', '9.6.H', '9.6.I',
+              '10.1.', '10.2.', '10.3.B', '10.3.C', '10.3.D', '10.3.E', '10.3.A',
+              '10.4.J', '10.4.K', '10.4.L', '10.4.A', '10.4.B', '10.4.C',
+              '10.4.D', '10.4.E', '10.4.F', '10.4.G', '10.4.H', '10.4.I',
+              '11.1.', '11.2.', '11.3.A', '11.3.B', '11.3.C', '11.3.D', '11.3.E',
+              '11.4.J', '11.4.K', '11.4.L', '11.4.A', '11.4.B', '11.4.C', 
+              '11.4.D', '11.4.E', '11.4.F', '11.4.G', '11.4.H', '11.4.I',
+              '12.1.', '12.2.', '12.3.A', '12.3.B', '12.3.C', '12.3.D', '12.3.E',
+              '12.4.J', '12.4.K', '12.4.L', '12.4.A', '12.4.B', '12.4.C',
+              '12.4.D', '12.4.E', '12.4.F', '12.4.G', '12.4.H', '12.4.I']
+              
         df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
-        cols_export = ['ID'] + list(sort(d.values())) + ['MMI']                  
+        cols_export = ['ID'] + item_order + ['MMI']                  
         df[cols_export].to_csv('%s/multimediaI.csv' % out_dir, index=False)
   
   
@@ -3113,3 +3095,58 @@ def run_STAXI(df, out_dir=None):
         cols_export = ['ID'] + [x+1 for x in range(len(cols_STAI))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
         df[cols_export].to_csv('%s/state-trait_anger_expression.csv' % out_dir, index=False)
       
+
+
+##############################################################################
+#################### Gender Identitiy Questionnaire ##########################
+##############################################################################
+
+def run_GIQ(df, out_dir=None):
+    
+    cols = ['MGQ1BASEQ[MGQ1]', 'MGQ1BASEQ[MGQ2]', 'MGQ3BASEQ[MGQ3]',
+            'MGQ3BASEQ[MGQ4]', 'MGQ3BASEQ[MGQ5]', 'MGQ3BASEQ[MGQ6]',
+            'MGQ3BASEQ[MGQ7]', 'MGQ3BASEQ[MGQ8]', 'MGQ3BASEQ[MGQ9]',
+            'MGQ3BASEQ[MGQ10]', 'MGQ11BASEQ[MGQ11]', 'MGQ11BASEQ[MGQ12]',
+            'MGQ11BASEQ[MGQ13]', 'MGQ11BASEQ[MGQ14]', 'MGQ11BASEQ[MGQ15]',
+            'MGQ11BASEQ[MGQ16]', 'MGQ11BASEQ[MGQ17]', 'MGQ11BASEQ[MGQ18]',
+            'MGQ11BASEQ[MGQ19]', 'MGQ20BASEQ[MGQ20]', 'MGQ21BASEQ[MGQ21]',
+            'MGQ22BASEQ[MGQ22]', 'MGQ22BASEQ[MGQ23]', 'MGQ24BASEQ[MGQ24]',
+            'MGQ25BASEQ[MGQ25]', 'MGQ25BASEQ[MGQ26]', 'MGQ27BASEQ[MGQ27]',
+            'MGQ27BASEQ[MGQ28]', 'MGQ29BASEQ[MGQ29]', 'MGQ29BASEQ[MGQ30]',
+            'MGQ31BASEQ[MGQ31]', 'MGQ31BASEQ[MGQ32]', 'MGQ33', 'MGQ33[other]',
+            'MGQ34', 'MGQ34[comment]', 'MGQ35', 'MGQ36', 'MGQ37',
+            'MGQ37[comment]', 'MGQ38', 'MGQ39', 'MGQ40', 'MGQ41', 'MGQ42',
+            'MGQ43BASEQ[MGQ431]', 'MGQ43BASEQ[MGQ432]', 'MGQ43BASEQ[MGQ433]',
+            'MGQ43BASEQ[MGQ434]', 'MGQ43BASEQ[MGQ435]', 'MGQ43BASEQ[MGQ436]',
+            'MGQ43BASEQ[MGQ437]', 'MGQ43BASEQ[MGQ438]', 'MGQ43BASEQ[MGQ439]',
+            'MGQ43BASEQ[other]', 'MGQ44BASEQ[MGQ44]', 'MGQ44BASEQ[MGQ45]',
+            'MGQ46', 'MGQ46[other]', 'MGQ47', 'MGQ48', 'MGQ48[other]',
+           'MGQ49BASEQ[MGQ49a]', 'MGQ49BASEQ[MGQ49b]', 'MGQ49BASEQ[MGQ49c]',
+           'MGQ49BASEQ[MGQ49d]', 'MGQ49BASEQ[MGQ49e]', 'MGQ49BASEQ[MGQ49f]',
+           'MGQ49BASEQ[MGQ49g]', 'MGQ49BASEQ[MGQ49h]', 'MGQ49BASEQ[MGQ49i]',
+           'MGQ49BASEQ[MGQ49j]', 'MGQ49BASEQ[MGQ49k]', 'MGQ49BASEQ[MGQ49l]',
+           'MGQ49BASEQ[other]', 'MGQ50BASEQ[MGQ50]', 'MGQ50BASEQ[MGQ51]',
+           'MGQ52BASEQ[MGQ52]', 'MGQ52BASEQ[MGQ53]', 'MGQ52BASEQ[MGQ54]',
+           'MGQ52BASEQ[MGQ55]', 'MGQ52BASEQ[MGQ56]', 'MGQ52BASEQ[MGQ57]',
+           'MGQ52BASEQ[MGQ58]', 'MGQ52BASEQ[MGQ59]', 'MGQ52BASEQ[MGQ60]',
+           'MGQ52BASEQ[MGQ61]', 'MGQ62BASEQ[MGQ62]', 'MGQ62BASEQ[MGQ63]',
+           'MGQ62BASEQ[MGQ64]', 'MGQ62BASEQ[MGQ65]', 'MGQ62BASEQ[MGQ66]',
+           'MGQ62BASEQ[MGQ67]', 'MGQ62BASEQ[MGQ68]', 'MGQ62BASEQ[MGQ69]',
+           'MGQ62BASEQ[MGQ70]', 'MGQ62BASEQ[MGQ71]', 'MGQ62BASEQ[MGQ72]',
+           'MGQ73BASEQ[MGQ73]', 'MGQ73BASEQ[MGQ74]', 'MGQ73BASEQ[MGQ75]',
+           'MGQ73BASEQ[MGQ76]', 'MGQ73BASEQ[MGQ77]', 'MGQ73BASEQ[MGQ78]',
+           'MGQ73BASEQ[MGQ79]', 'MGQ73BASEQ[MGQ80]', 'MGQ73BASEQ[MGQ81]',
+           'MGQ73BASEQ[MGQ82]', 'MGQ73BASEQ[MGQ83]', 'MGQ84BASEQ[MGQ84]',
+           'MGQ85BASEQ[MGQ85]', 'MGQ85BASEQ[MGQ86]', 'MGQ85BASEQ[MGQ87]',
+           'MGQ88BASEQ[MGQ88]', 'MGQ89BASEQ[MGQ89]', 'MGQ89BASEQ[MGQ90]',
+           'MGQ89BASEQ[MGQ91]', 'MGQ89BASEQ[MGQ92]', 'MGQ89BASEQ[MGQ93]',
+           'MGQ89BASEQ[MGQ94]', 'MGQ89BASEQ[MGQ95]', 'MGQ96BASEQ[MGQ96]',
+           'MGQ96BASEQ[MGQ97]', 'MGQ96BASEQ[MGQ98]', 'MGQ96BASEQ[MGQ99]',
+           'MGQ96BASEQ[MGQ100]', 'MGQ96BASEQ[MGQ101]', 'MGQ96BASEQ[MGQ102]']
+        
+    if out_dir:
+        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/gender_identity.csv' % out_dir, index=False)  
+
