@@ -39,9 +39,9 @@ def run_AMAS(df, out_dir=None):
     sns.distplot(df["AMAS_sum"].dropna(), kde = True)
     
     if out_dir:
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['AMAS_sum']
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['AMAS_sum']
         df[cols_export].to_csv('%s/AMAS.csv' % out_dir, index=False)        
     
 
@@ -91,9 +91,9 @@ def run_SelfCtrl(df, out_dir=None):
     sns.distplot(df["SelfCtrl_sum"].dropna(), kde = True)
     
     if out_dir:
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['SelfCtrl_sum']
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['SelfCtrl_sum']
         df[cols_export].to_csv('%s/self_control.csv' % out_dir, index=False)
         
     
@@ -141,9 +141,9 @@ def run_IAT(df, out_dir=None):
     sns.distplot(df["IAT_sum"].dropna(), kde = True)
     
     if out_dir:
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["IAT_sum"]
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["IAT_sum"]
         df[cols_export].to_csv('%s/internet_addiction.csv' % out_dir, index=False)
 
 
@@ -230,9 +230,9 @@ def run_VIS(df, out_dir=None):
                 'AISbBASEQ[AIS13]', 'AISbBASEQ[AIS14]', 'AISbBASEQ[AIS15]', 'AISbBASEQ[AIS16]',
                 'AISbBASEQ[AIS17]', 'AISbBASEQ[AIS18]']
             
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum'] 
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum'] 
         df[cols_export].to_csv('%s/varieties_inner_speech.csv' % out_dir, index=False)
 
 
@@ -273,9 +273,9 @@ def run_MW_SD(df, out_dir=None):
         cols = ["MWBASEQ[MWD1]", "MWBASEQ[MWD2]", "MWBASEQ[MWD3]", "MWBASEQ[MWD4]",
                 "MWBASEQ[MWS1]", "MWBASEQ[MWS2]", "MWBASEQ[MWS3]", "MWBASEQ[MWS4]"]
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mean_MW_delib_mean', 'Mean_MW_spont_mean']
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mean_MW_delib_mean', 'Mean_MW_spont_mean']
         df[cols_export].to_csv('%s/spontaneous_and_deliberate_mind_wandering.csv' % out_dir, index=False)
 
 
@@ -364,9 +364,9 @@ def run_SDT(df, out_dir=None):
                 'SDTpBASEQ[SDTP3]', 'SDTpBASEQ[SDTP4]', 'SDTpBASEQ[SDTP5]', 'SDTpBASEQ[SDTP6]',
                 'SDTpBASEQ[SDTP7r]', 'SDTpBASEQ[SDTP8]', 'SDTpBASEQ[SDTP9]']
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mach_sum', 'Narc_sum', 'Psycho_sum']    
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mach_sum', 'Narc_sum', 'Psycho_sum']    
         df[cols_export].to_csv('%s/short_dark_triad.csv' % out_dir, index=False)
 
 
@@ -424,9 +424,9 @@ def run_SES(df, out_dir=None):
     
     if out_dir:
     
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['SDS_sum']      
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['SDS_sum']      
         df[cols_export].to_csv('%s/social_desirability.csv' % out_dir, index=False)
   
 
@@ -577,9 +577,9 @@ def run_UPPSP(df, out_dir=None):
                 'UPPSfBASEQ[UPP53r]', 'UPPSfBASEQ[UPP54]', 'UPPSfBASEQ[UPP55r]', 'UPPSfBASEQ[UPP56r]',
                 'UPPSfBASEQ[UPP57r]', 'UPPSfBASEQ[UPP58r]','UPPSfBASEQ[UPP59r]']        
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mean_NegUrg', 'Mean_Premed', 'Mean_Persev', 'Mean_SS','Mean_PosUrg']       
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mean_NegUrg', 'Mean_Premed', 'Mean_Persev', 'Mean_SS','Mean_PosUrg']       
         df[cols_export].to_csv('%s/UPPSP_impulsivity.csv' % out_dir, index=False)
   
 
@@ -629,9 +629,9 @@ def run_TPS(df, out_dir=None):
 
     if out_dir:
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['TPS_D_sum']        
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['TPS_D_sum']        
         df[cols_export].to_csv('%s/tuckmann_procrastination.csv' % out_dir, index=False)
   
 
@@ -1163,9 +1163,9 @@ def run_ASR(df, out_dir=None):
         
         
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
-        cols_export = ['ID'] + item_order + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
+        cols_export = ['ids'] + item_order + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
                                             'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
                                             'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
                                             'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
@@ -1219,9 +1219,9 @@ def run_SelfEst(df, out_dir=None):
     sns.distplot(df['Mean_SelfEst'].dropna(), kde = True)                                  
 
     if out_dir:
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['Mean_SelfEst']          
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mean_SelfEst']          
         df[cols_export].to_csv('%s/self_esteem.csv' % out_dir, index=False)
   
 
@@ -1319,9 +1319,9 @@ def run_IMIS(df, out_dir=None):
                 'EWSbBASEQ[NV6]','EWSbBASEQ[NV7]','EWScBASEQ[M1]','EWScBASEQ[M2]','EWScBASEQ[M3]','EWScBASEQ[PR1]',
                 'EWScBASEQ[PR2]','EWScBASEQ[PR3]','EWScBASEQ[H1]','EWScBASEQ[H2]','EWSdBASEQ[AQ2]','EWSeBASEQ[AQ3]']
                 
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]          
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]          
         df[cols_export].to_csv('%s/involuntary_musical_imagery.csv' % out_dir, index=False)
   
 
@@ -1369,9 +1369,9 @@ def run_GoldMSI(df, out_dir=None):
                 'MUSaBASEQ[MUS_28]','MUSbBASEQ[MUS_34]','MUScBASEQ[MUS_38]','MUSdBASEQ[MUS_14]','MUSdBASEQ[MUS_27]','MUSeBASEQ[MUS_32]',
                 'MUSfBASEQ[MUS_33]','MUSgBASEQ[MUS_35]','MUShBASEQ[MUS_36]','MUSiBASEQ[MUS_37]']
                
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']          
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']          
         df[cols_export].to_csv('%s/goldsmith_musical_sophisticatoin.csv' % out_dir, index=False)
   
 
@@ -1396,9 +1396,9 @@ def run_ESS(df, out_dir=None):
     
     if out_dir:
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['ESS_summary_sum']      
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['ESS_summary_sum']      
         df[cols_export].to_csv('%s/epsworth_sleepiness.csv' % out_dir, index=False)
   
     
@@ -1486,8 +1486,8 @@ def run_BDI(df, out_dir=None):
     
     if out_dir:  
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
-        cols_export = ['ID'] + [str(x+1) for x in range(22)] + ['BDI_summary_sum']              
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
+        cols_export = ['ids'] + [str(x+1) for x in range(22)] + ['BDI_summary_sum']              
         df[cols_export].to_csv('%s/beck_depression_inventar.csv' % out_dir, index=False)
   
 
@@ -1541,9 +1541,9 @@ def run_HADS(df, out_dir=None):
                 'HADS6BASEQ[HADS6]','HADS7BASEQ[HADS7]','HADS8BASEQ[HADS8]','HADS9BASEQ[HADS9]','HADS10BASEQ[HADS10]',
                 'HADS11BASEQ[HADS11]','HADS12BASEQ[HADS12]','HADS13BASEQ[HADS13]','HADS14BASEQ[HADS14]']
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']               
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']               
         df[cols_export].to_csv('%s/hospital_anxiety_depression.csv' % out_dir, index=False)
 
 
@@ -1594,9 +1594,9 @@ def run_BPS(df, out_dir=None):
     
     if out_dir:
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['BPS_sum']                 
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['BPS_sum']                 
         df[cols_export].to_csv('%s/boredom_proness.csv' % out_dir, index=False)
   
 
@@ -1640,9 +1640,9 @@ def run_DAC(df, out_dir=None):
     
     if out_dir:
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['DAC_sum']                  
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['DAC_sum']                  
         df[cols_export].to_csv('%s/derryberry_attention_control.csv' % out_dir, index=False)
   
   
@@ -2424,9 +2424,9 @@ def run_PSSI(df, out_dir=None):
 
     if out_dir:
         
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["PSSI_PN", 'PSSI_SZ', 'PSSI_ST', 'PSSI_BL', 
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["PSSI_PN", 'PSSI_SZ', 'PSSI_ST', 'PSSI_BL', 
                                                                     'PSSI_HI', 'PSSI_NA', 'PSSI_SU', 'PSSI_AB', 
                                                                     'PSSI_ZW', 'PSSI_NT', 'PSSI_DP', 'PSSI_SL', 
                                                                     'PSSI_RH', 'PSSI_AS']                 
@@ -2936,9 +2936,9 @@ def run_MMI(df, out_dir=None):
               '12.4.J', '12.4.K', '12.4.L', '12.4.A', '12.4.B', '12.4.C',
               '12.4.D', '12.4.E', '12.4.F', '12.4.G', '12.4.H', '12.4.I']
               
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
-        cols_export = ['ID'] + item_order + ['MMI']                  
+        cols_export = ['ids'] + item_order + ['MMI']                  
         df[cols_export].to_csv('%s/multimediaI.csv' % out_dir, index=False)
   
   
@@ -2990,9 +2990,9 @@ def run_BISBAS(df, out_dir=None):
                'BISBAS09[SQ001]','BISBAS10[SQ001]','BISBAS11[SQ001]','BISBAS12[SQ001]','BISBAS13[SQ001]','BISBAS14[SQ001]','BISBAS15[SQ001]','BISBAS16[SQ001]',
                'BISBAS17[SQ001]','BISBAS18[SQ001]','BISBAS19[SQ001]','BISBAS20[SQ001]','BISBAS21[SQ001]','BISBAS22[SQ001]','BISBAS23[SQ001]','BISBAS24[SQ001]']
      
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['BIS', 'BAS']                  
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['BIS', 'BAS']                  
         df[cols_export].to_csv('%s/BISBAS.csv' % out_dir, index=False)
       
     
@@ -3022,9 +3022,9 @@ def run_STAI(df, out_dir=None):
     plt.show()
     
     if out_dir:
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ['STAI_A-Trait_summary_sum']                  
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['STAI_A-Trait_summary_sum']                  
         df[cols_export].to_csv('%s/state-trait_anxiety.csv' % out_dir, index=False)
       
 
@@ -3090,9 +3090,9 @@ def run_STAXI(df, out_dir=None):
               'STAXI21[STAXI32]','STAXI21[STAXI33]','STAXI34[STAXI34]','STAXI34[STAXI35]','STAXI34[STAXI36]','STAXI34[STAXI37]','STAXI34[STAXI38]','STAXI34[STAXI39]',
               'STAXI34[STAXI40]','STAXI34[STAXI41]','STAXI34[STAXI42]','STAXI34[STAXI43]','STAXI34[STAXI44]']
 
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
         df[cols_export].to_csv('%s/state-trait_anger_expression.csv' % out_dir, index=False)
       
 
@@ -3145,8 +3145,51 @@ def run_GIQ(df, out_dir=None):
            'MGQ96BASEQ[MGQ100]', 'MGQ96BASEQ[MGQ101]', 'MGQ96BASEQ[MGQ102]']
         
     if out_dir:
-        df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols))] 
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
         df[cols_export].to_csv('%s/gender_identity.csv' % out_dir, index=False)  
 
+
+
+##############################################################################
+################################# DS14 #######################################
+##############################################################################
+
+def run_DS14(df, out_dir=None):
+    
+    cols = ['DS14BASEQ[1]', 'DS14BASEQ[2]', 'DS14BASEQ[3]', 'DS14BASEQ[4]',
+            'DS14BASEQ[5]', 'DS14BASEQ[6]', 'DS14BASEQ[7]', 'DS14BASEQ[8]',
+            'DS14BASEQ[9]', 'DS14BASEQ[10]', 'DS14BASEQ[11]', 'DS14BASEQ[12]',
+            'DS14BASEQ[13]', 'DS14BASEQ[14]']
+        
+    if out_dir:
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/DS14.csv' % out_dir, index=False)  
+
+
+
+##############################################################################
+#################### childhood trauma questionnaire ##########################
+##############################################################################
+
+def run_CTQ(df, out_dir=None):
+    
+    cols = ['ChildTraum1BASE[1]', 'ChildTraum1BASE[2]', 'ChildTraum1BASE[3]',
+           'ChildTraum1BASE[4]', 'ChildTraum1BASE[5]', 'ChildTraum1BASE[6]',
+           'ChildTraum1BASE[7]', 'ChildTraum1BASE[8]', 'ChildTraum1BASE[9]',
+           'ChildTraum2BASE[10]', 'ChildTraum2BASE[11]', 'ChildTraum2BASE[12]',
+           'ChildTraum2BASE[13]', 'ChildTraum2BASE[14]', 'ChildTraum2BASE[15]',
+           'ChildTraum2BASE[16]', 'ChildTraum2BASE[17]', 'ChildTraum2BASE[18]',
+           'ChildTraum3BASE[19]', 'ChildTraum3BASE[20]', 'ChildTraum3BASE[21]',
+           'ChildTraum3BASE[22]', 'ChildTraum3BASE[23]', 'ChildTraum3BASE[24]',
+           'ChildTraum3BASE[25]', 'ChildTraum3BASE[26]', 'ChildTraum3BASE[27]',
+           'ChildTraum3BASE[28]']
+        
+    if out_dir:
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/childhood_trauma.csv' % out_dir, index=False)  
