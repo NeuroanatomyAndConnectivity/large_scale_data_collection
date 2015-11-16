@@ -3091,8 +3091,8 @@ def run_STAXI(df, out_dir=None):
               'STAXI34[STAXI40]','STAXI34[STAXI41]','STAXI34[STAXI42]','STAXI34[STAXI43]','STAXI34[STAXI44]']
 
         df['ID'] = df['ID'].map(lambda x: str(x)[0:5])        
-        df.rename(columns=dict(zip(cols_STAI, [x+1 for x in range(len(cols_STAI))])), inplace=True)
-        cols_export = ['ID'] + [x+1 for x in range(len(cols_STAI))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ID'] + [x+1 for x in range(len(cols))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
         df[cols_export].to_csv('%s/state-trait_anger_expression.csv' % out_dir, index=False)
       
 
