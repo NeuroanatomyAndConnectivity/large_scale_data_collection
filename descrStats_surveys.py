@@ -3192,4 +3192,23 @@ def run_CTQ(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/childhood_trauma.csv' % out_dir, index=False)  
+        df[cols_export].to_csv('%s/childhood_trauma.csv' % out_dir, index=False)
+        
+        
+
+##############################################################################
+######################## LIMIT - NYC-Q post scan #############################
+##############################################################################
+        
+def run_NYCQ(df, out_dir=None):
+    
+    cols = ['Q01', 'Q02', 'Q03', 'Q04', 'Q05', 'Q06', 'Q07', 'Q08', 
+            'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16',
+            'Q17', 'Q18', 'Q19', 'Q20', 'Q21', 'Q22', 'Q23', 'Q24', 
+            'Q25', 'Q26', 'Q27', 'Q28', 'Q29', 'Q30', 'Q31']
+        
+    if out_dir:
+        df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/NYCQ-LIMIT_postscan.csv' % out_dir, index=False)  
