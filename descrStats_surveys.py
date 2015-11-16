@@ -1335,7 +1335,7 @@ def run_GoldMSI(df, out_dir=None):
     items_recoded = ['MUSaBASEQ[MUS_21]',
                      'MUSdBASEQ[MUS_14]',
                      'MUSdBASEQ[MUS_27]'] 
-    recoder = {1:8, 2:7, 3:6, 4:5, 5:4, 6:3, 7:2, 8:1}
+    recoder = {1:7, 2:6, 3:5, 4:4, 5:3, 6:2, 7:1} 
      
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype(float64) 
