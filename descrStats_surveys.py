@@ -3200,7 +3200,7 @@ def run_CTQ(df, out_dir=None):
 ######################## LIMIT - NYC-Q post scan #############################
 ##############################################################################
         
-def run_NYCQ(df, out_dir=None):
+def run_NYCQ_postscan(df, out_dir=None):
     
     cols = ['Q01', 'Q02', 'Q03', 'Q04', 'Q05', 'Q06', 'Q07', 'Q08', 
             'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16',
@@ -3212,3 +3212,23 @@ def run_NYCQ(df, out_dir=None):
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
         df[cols_export].to_csv('%s/NYCQ-LIMIT_postscan.csv' % out_dir, index=False)  
+        
+        
+        
+##############################################################################
+######################## short NYC-Q post tasks ##############################
+##############################################################################                
+        
+def run_NYCQ_posttasks(df, out_dir=None):
+    
+    cols_1 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10','11', '12']
+    cols_2 = ['1,00', '2,00', '3,00', '4,00','5,00', '6,00', 
+              '7,00', '8,00', '9,00', '10,00', '11,00', '12,00']
+    
+    if out_dir:
+        df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
+        df[['ids']+cols_1].to_csv('%s/NYCQ_posttask1.csv' % out_dir, index=False)
+        df = df[['ids']+cols_2]
+        df.rename(columns=dict(zip(cols_2, [x+1 for x in range(len(cols_2))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols_2))] 
+        df[cols_export].to_csv('%s/NYCQ_posttask2.csv' % out_dir, index=False)
