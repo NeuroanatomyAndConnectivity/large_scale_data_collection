@@ -13,34 +13,34 @@ import matplotlib.pyplot as plt
 def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, fileG, fileEdu, out_dir):
     
     # read in data files, calculate age and keep datestamp for later
-    df_A = pd.read_csv(survA_f)
+    df_A = pd.read_csv(fileA)
     df_A['ids'] = df_A['ID'].map(lambda x: str(x)[0:5])
     ageA = pd.Series(pd.to_datetime(df_A['datestamp']) - pd.to_datetime(df_A['GBT']))
     df_A['age_A'] = ageA.dt.days / 365
     df_A['datestamp_A'] = df_A['datestamp']
     
-    df_B = pd.read_csv(survB_f)
+    df_B = pd.read_csv(fileB)
     df_B['ids'] = df_B['ID'].map(lambda x: str(x)[0:5])
     ageB = pd.Series(pd.to_datetime(df_B['datestamp']) - pd.to_datetime(df_B['GBT']))
     df_B['age_B'] = ageB.dt.days / 365
     df_B['datestamp_B'] = df_B['datestamp']
     
-    df_C_active = pd.read_csv(survC_active_f)
-    df_C_inactive = pd.read_csv(survC_inactive_f)
-    df_C_corrected = pd.read_csv(survC_corrected_f)
+    df_C_active = pd.read_csv(fileC_act)
+    df_C_inactive = pd.read_csv(fileC_inact)
+    df_C_corrected = pd.read_csv(fileC_corrected)
     df_C = pd.concat([df_C_active, df_C_inactive, df_C_corrected])
     df_C['ids'] = df_C['ID'].map(lambda x: str(x)[0:5])
     ageC = pd.Series(pd.to_datetime(df_C['datestamp']) - pd.to_datetime(df_C['GBT']))
     df_C['age_C'] = ageC.dt.days / 365
     df_C['datestamp_C'] = df_C['datestamp']
     
-    df_F = pd.read_csv(survF_f)
+    df_F = pd.read_csv(fileF)
     df_F['ids'] = df_F['ID'].map(lambda x: str(x)[0:5])
     ageF = pd.Series(pd.to_datetime(df_F['datestamp']) - pd.to_datetime(df_F['GBT']))
     df_F['age_F'] = ageF.dt.days / 365
     df_F['datestamp_F'] = df_F['datestamp']
     
-    df_G = pd.read_csv(survG_f)
+    df_G = pd.read_csv(fileG)
     df_G['ids'] = df_G['ID'].map(lambda x: str(x)[0:5])
     ageG = pd.Series(pd.to_datetime(df_G['datestamp']) - pd.to_datetime(df_G['GBT']))
     df_G['age_G'] = ageG.dt.days / 365
@@ -70,7 +70,7 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     df_meta['day_diff_G'] = diffG.dt.days
     
     # add info on education
-    df_edu = pd.read_csv(edu_f, converters={'ids':str})
+    df_edu = pd.read_csv(fileEdu, converters={'ids':str})
     df_meta = pd.merge(df_meta, df_edu, on='ids', how='left')
     
     # meta info dataframe
