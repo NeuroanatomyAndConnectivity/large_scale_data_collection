@@ -3232,3 +3232,20 @@ def run_NYCQ_posttasks(df, out_dir=None):
         df.rename(columns=dict(zip(cols_2, [x+1 for x in range(len(cols_2))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols_2))] 
         df[cols_export].to_csv('%s/NYCQ_posttask2.csv' % out_dir, index=False)
+        
+##############################################################################
+##############################Facebook Intensity##############################
+##############################################################################
+
+def run_FIS(df, out_dir=None):
+    
+    cols = ["FACE0BASEQ","FACE1aBASEQ","FACE1bBASEQ","FACE2aBASEQ",
+            "FACE2bBASEQ","FACE3BASEQ","FACE4BASEQ[FACE4]","FACE4BASEQ[FACE5]",
+            "FACE4BASEQ[FACE6]","FACE4BASEQ[FACE7]","FACE4BASEQ[FACE8]",
+            "FACE4BASEQ[FACE9]"]
+        
+    if out_dir:
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/facebook_intensity.csv' % out_dir, index=False)  
