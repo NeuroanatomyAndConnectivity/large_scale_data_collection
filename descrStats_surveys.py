@@ -3211,30 +3211,67 @@ def run_NYCQ_postscan(df, out_dir=None):
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/NYCQ-LIMIT_postscan.csv' % out_dir, index=False)  
+        df[cols_export].to_csv('%s/NYCQ_postscan.csv' % out_dir, index=False)
         
         
         
 ##############################################################################
-######################## short NYC-Q post tasks ##############################
-##############################################################################                
+######################## LIMIT - NYC-Q  in Survey C ##########################
+##############################################################################
         
 def run_NYCQ_posttasks(df, out_dir=None):
     
-    cols_1 = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10','11', '12']
-    cols_2 = ['1,00', '2,00', '3,00', '4,00','5,00', '6,00', 
-              '7,00', '8,00', '9,00', '10,00', '11,00', '12,00']
+    cols = ['LMTaBASEQ[LMT1]', 'LMTaBASEQ[LMT2]', 'LMTaBASEQ[LMT3]',
+           'LMTaBASEQ[LMT4]', 'LMTaBASEQ[LMT5]', 'LMTaBASEQ[LMT6]',
+           'LMTaBASEQ[LMT7]', 'LMTaBASEQ[LMT8]', 'LMTaBASEQ[LMT9]',
+           'LMTaBASEQ[LMT10]', 'LMTbBASEQ[LMT11]', 'LMTbBASEQ[LMT12]',
+           'LMTbBASEQ[LMT13]', 'LMTbBASEQ[LMT14]', 'LMTbBASEQ[LMT15]',
+           'LMTbBASEQ[LMT16]', 'LMTbBASEQ[LMT17]', 'LMTbBASEQ[LMT18]',
+           'LMTcBASEQ[LMT19]', 'LMTcBASEQ[LMT20]', 'LMTcBASEQ[LMT21]',
+           'LMTcBASEQ[LMT22]', 'LMTcBASEQ[LMT23]']
+        
+    if out_dir:
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/NYCQ_posttasks.csv' % out_dir, index=False)          
+        
+        
+        
+##############################################################################
+##################### short NYC-Q post emotional task switching ##############
+##############################################################################                
+        
+def run_NYCQ_postemoswitch(df, out_dir=None):
+    
+    cols = ['1,00', '2,00', '3,00', '4,00','5,00', '6,00', 
+            '7,00', '8,00', '9,00', '10,00', '11,00', '12,00']
+            
+    drops = df[(df['1'] == '99')
+             & (df['2'] == '99')
+             & (df['3'] == '99')
+             & (df['4'] == '99')
+             & (df['5'] == '99')
+             & (df['6'] == '99')
+             & (df['7'] == '99')
+             & (df['8'] == '99')].index
+
+    df.drop(df.index[drops], inplace=True)
+    df.reset_index(inplace=True, drop=True)
+    
+    for col in cols:
+        df[col].replace('651,32', '', inplace=True)
     
     if out_dir:
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
-        df[['ids']+cols_1].to_csv('%s/NYCQ_posttask1.csv' % out_dir, index=False)
-        df = df[['ids']+cols_2]
-        df.rename(columns=dict(zip(cols_2, [x+1 for x in range(len(cols_2))])), inplace=True)
-        cols_export = ['ids'] + [x+1 for x in range(len(cols_2))] 
-        df[cols_export].to_csv('%s/NYCQ_posttask2.csv' % out_dir, index=False)
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/shortNYCQ_post_emotionalswitch.csv' % out_dir, index=False)
+
         
+
 ##############################################################################
-##############################Facebook Intensity##############################
+############################## Facebook Intensity#############################
 ##############################################################################
 
 def run_FIS(df, out_dir=None):
@@ -3249,3 +3286,21 @@ def run_FIS(df, out_dir=None):
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
         df[cols_export].to_csv('%s/facebook_intensity.csv' % out_dir, index=False)  
+
+
+
+##############################################################################
+############################ mobile phone usage ###############################
+##############################################################################
+
+def run_mobile(df, out_dir=None):
+    
+    cols = ['HND1', 'HND2', 'HND3', 'HND4', 'HND5', 'HND6', 'HND7', 'HND8', 
+            'HND9', 'HND10', 'HND11', 'HND12', 'HND13', 'HND14', 'HND15', 
+            'HND16', 'HND17', 'HND18', 'HND19']
+        
+    if out_dir:
+        df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        df[cols_export].to_csv('%s/mobile_phone_usage.csv' % out_dir, index=False)  
