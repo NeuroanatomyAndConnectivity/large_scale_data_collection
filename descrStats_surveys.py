@@ -1561,7 +1561,6 @@ def run_BPS(df, out_dir=None):
                      'BPSaBASEQ[BPS7]',
                      'BPSaBASEQ[BPS8]',
                      'BPSbBASEQ[BPS11]',
-                     'BPSbBASEQ[BPS11]',
                      'BPSbBASEQ[BPS13]',
                      'BPSbBASEQ[BPS15]',
                      'BPSbBASEQ[BPS18]',
