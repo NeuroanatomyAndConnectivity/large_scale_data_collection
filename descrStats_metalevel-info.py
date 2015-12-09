@@ -10,7 +10,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, fileG, fileHannes, fileCognTests, fileEdu, out_dir):
+def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, fileG, fileHannes, fileCognTests, fileEdu, fileSKID, out_dir):
     
     # read in data files, calculate age and keep datestamp for later
     df_A = pd.read_csv(fileA)
@@ -99,15 +99,18 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     df_edu = pd.read_csv(fileEdu, converters={'ids':str})
     df_meta = pd.merge(df_meta, df_edu, on='ids', how='left')
     
+    # add SKID and drug info
+    df_skid = pd.read_csv(fileSKID, skiprows=[0],converters={'DB_ID':str})
+    df_skid['ids'] = df_skid['DB_ID'].map(lambda x: str(x)[0:5])
+    df_meta = pd.merge(df_meta, df_skid[['ids', 'SKID_Diagnoses', 'Drug_Test (nothing=negative)']], on='ids', how='left')    
+        
     # meta info dataframe
     cols_export = ['ids', 'gender', 'age_A', 'age_B', 'age_C', 'age_F', 'age_G', 'age_Hannes', 'age_CognTests',
-                   'day_ref_A', 'day_ref_B', 'day_ref_C', 'day_ref_F', 'day_ref_G', 'day_ref_Hannes', 'day_ref_CognTests', 'education']
+                   'day_ref_A', 'day_ref_B', 'day_ref_C', 'day_ref_F', 'day_ref_G', 'day_ref_Hannes', 
+                   'day_ref_CognTests', 'education', 'SKID_Diagnoses', 'Drug_Test (nothing=negative)']
     
     df_meta[cols_export].to_csv('%s/meta_level_info.csv' % out_dir)   
     return df_meta[cols_export]
-
-
-
 
 
 
