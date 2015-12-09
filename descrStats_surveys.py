@@ -1497,53 +1497,50 @@ def run_BDI(df, out_dir=None):
 ##############################################################################
 
 def run_HADS(df, out_dir=None):
-    # rescaled by 1- and reversed coding for items tense, frightened, worry, restless, panic, cheerful, slowed, appearance
     
     # anxiety / HADS-A
-    tense = df['HADS1BASEQ[HADS1]'].subtract(1).multiply(-1).add(3)
-    frightened = df['HADS3BASEQ[HADS3]'].subtract(1).multiply(-1).add(3)
-    worry = df['HADS5BASEQ[HADS5]'].subtract(1).multiply(-1).add(3)
-    relaxed = df['HADS7BASEQ[HADS7]'].subtract(1)
-    butterflies = df['HADS9BASEQ[HADS9]'].subtract(1)
-    restless = df['HADS11BASEQ[HADS11]'].subtract(1).multiply(-1).add(3)
-    panic = df['HADS13BASEQ[HADS13]'].subtract(1).multiply(-1).add(3)
-    anxiety = [tense, frightened, worry, relaxed, butterflies, restless, panic]
+    df['tense'] = df['HADS1BASEQ[HADS1]'].subtract(1).multiply(-1).add(3)
+    df['frightened'] = df['HADS3BASEQ[HADS3]'].subtract(1).multiply(-1).add(3)
+    df['worry'] = df['HADS5BASEQ[HADS5]'].subtract(1).multiply(-1).add(3)
+    df['relaxed'] = df['HADS7BASEQ[HADS7]'].subtract(1)
+    df['butterflies'] = df['HADS9BASEQ[HADS9]'].subtract(1)
+    df['restless'] = df['HADS11BASEQ[HADS11]'].subtract(1).multiply(-1).add(3)
+    df['panic'] = df['HADS13BASEQ[HADS13]'].subtract(1).multiply(-1).add(3)
+    df['HADS-A_summary_sum'] = df[['tense', 'frightened', 'worry', 'relaxed', 'butterflies', 'restless', 'panic']].sum(axis=1)   
     
     # depression / HADS-D
-    enjoy = df['HADS2BASEQ[HADS2]'].subtract(1)
-    laugh = df['HADS4BASEQ[HADS4]'].subtract(1)
-    cheerful = df['HADS6BASEQ[HADS6]'].subtract(1).multiply(-1).add(3)
-    slowed = df['HADS8BASEQ[HADS8]'].subtract(1).multiply(-1).add(3)
-    appearance = df['HADS10BASEQ[HADS10]'].subtract(1).multiply(-1).add(3)
-    lookforward = df['HADS12BASEQ[HADS12]'].subtract(1)
-    entertain = df['HADS14BASEQ[HADS14]'].subtract(1)
-    depression = [enjoy, laugh, cheerful, slowed, appearance, lookforward, entertain]
+    df['enjoy'] = df['HADS2BASEQ[HADS2]'].subtract(1)
+    df['laugh'] = df['HADS4BASEQ[HADS4]'].subtract(1)
+    df['cheerful'] = df['HADS6BASEQ[HADS6]'].subtract(1).multiply(-1).add(3)
+    df['slowed'] = df['HADS8BASEQ[HADS8]'].subtract(1).multiply(-1).add(3)
+    df['appearance'] = df['HADS10BASEQ[HADS10]'].subtract(1).multiply(-1).add(3)
+    df['lookforward'] = df['HADS12BASEQ[HADS12]'].subtract(1)
+    df['entertain'] = df['HADS14BASEQ[HADS14]'].subtract(1)
+    df['HADS-D_summary_sum'] = df[['enjoy', 'laugh', 'cheerful', 'slowed', 'appearance', 'lookforward', 'entertain']].sum(axis=1)
+    
     
     print 'rough interpretation: \n0-7 normal range, 8-10 suggestive presence of mood disorder, >11 probable presence of mood disorder \n'
     
     #### anxiety ####
     print 'HADS-A - anxiety\n'
-    df['HADS_summary_HADS-A_sum'] = tense + frightened + worry + relaxed + butterflies + restless + panic
-    print df['HADS_summary_HADS-A_sum'].describe()
-    sns.countplot(df['HADS_summary_HADS-A_sum'].dropna(), order=range(int(df['HADS_summary_HADS-A_sum'].min()),int(df['HADS_summary_HADS-A_sum'].max())))
+    print df['HADS-A_summary_sum'].describe()
+    sns.countplot(df['HADS-A_summary_sum'].dropna(), order=range(int(df['HADS-A_summary_sum'].min()),int(df['HADS-A_summary_sum'].max())))
     plt.show()
      
     
     #### depression ####
     print '\n\nHADS-D - depression\n'
-    df['HADS_summary_HADS-D_sum'] = enjoy + laugh + cheerful + slowed + appearance + lookforward + entertain
-    print df['HADS_summary_HADS-D_sum'].describe()
-    sns.countplot(df['HADS_summary_HADS-D_sum'].dropna(), order=range(int(df['HADS_summary_HADS-D_sum'].min()),int(df['HADS_summary_HADS-D_sum'].max())))
+    print df['HADS-D_summary_sum'].describe()
+    sns.countplot(df['HADS-D_summary_sum'].dropna(), order=range(int(df['HADS-D_summary_sum'].min()),int(df['HADS-D_summary_sum'].max())))
     plt.show()
     
     if out_dir:
-        cols = ['HADS1BASEQ[HADS1]','HADS2BASEQ[HADS2]','HADS3BASEQ[HADS3]','HADS4BASEQ[HADS4]','HADS5BASEQ[HADS5]',
-                'HADS6BASEQ[HADS6]','HADS7BASEQ[HADS7]','HADS8BASEQ[HADS8]','HADS9BASEQ[HADS9]','HADS10BASEQ[HADS10]',
-                'HADS11BASEQ[HADS11]','HADS12BASEQ[HADS12]','HADS13BASEQ[HADS13]','HADS14BASEQ[HADS14]']
+        cols = ['tense','enjoy','frightened','laugh','worry','cheerful','relaxed','slowed',
+                'butterflies','appearance','restless','lookforward','panic','entertain']
         
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['HADS_summary_HADS-A_sum', 'HADS_summary_HADS-D_sum']               
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['HADS-A_summary_sum', 'HADS-D_summary_sum']               
         df[cols_export].to_csv('%s/quest_HADS_14.csv' % out_dir, index=False)
 
 
