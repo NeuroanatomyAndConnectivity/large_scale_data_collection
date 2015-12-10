@@ -97,6 +97,17 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     
     # add info on education
     df_edu = pd.read_csv(fileEdu, converters={'ids':str})
+    entries = ['Keinen Schulabschluss',
+               'Ohne Hauptschulabschluss/Volksschulabschluss',
+               'Hauptschulabschluss/Volksschulabschluss',
+               'Realschulabschluss/Mittlere Reife',
+               'Abschluss einer Sonderschule/Förderschule',
+               'Abschluss der Polytechnischen Oberschule, 10. Klasse vor 1965: 8. Klasse.',
+               'Fachhochschulreife, Abschluss Fachoberschule',
+               'Allgemeine oder fachgebundene Hochschulreife/Abitur Gymnasium bzw. EOS, auch EOS mit Lehre.',
+               'Sonstiges']
+    for n,entry in enumerate(entries):
+        df_edu['education'][df_edu['education'] == entry] = n+1
     df_meta = pd.merge(df_meta, df_edu, on='ids', how='left')
     
     # add SKID and drug info
