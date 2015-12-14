@@ -3335,6 +3335,42 @@ def run_NYCQ_posttasks(df, out_dir=None):
         df[cols_export].to_csv('%s/quest_NYC-Q_23_posttasks.csv' % out_dir, index=False)          
         
         
+
+##############################################################################
+########################### short NYC-Q pre-scan #############################
+############################################################################## 
+
+def run_NYCQ_prescan(df, out_dir=None):
+
+    if out_dir:
+        
+        cols = ['1', '2', '3', '4', '5', '6', 
+                '7', '8', '9','10', '11', '12']
+        
+        drops = df[(df['1'].isnull())
+                   & (df['2'].isnull())
+                   & (df['3'].isnull())
+                   & (df['4'].isnull())
+                   & (df['5'].isnull())
+                   & (df['6'].isnull())
+                   & (df['7'].isnull())
+                   & (df['8'].isnull())
+                   & (df['9'].isnull())
+                   & (df['10'].isnull())
+                   & (df['11'].isnull())
+                   & (df['12'].isnull())].index
+        
+        df.drop(df.index[drops], inplace=True)
+        df.reset_index(inplace=True, drop=True)
+        
+        for col in cols:
+            df[col] = 100 * df[col] / 15.2
+
+        df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
+        cols_export = ['ids'] + cols 
+        df[cols_export].to_csv('%s/quest_Short-NYC-Q_12_prescan.csv' % out_dir, decimal='.', index=False)
+
+
         
 ##############################################################################
 ##################### short NYC-Q post emotional task switching ##############
@@ -3352,7 +3388,11 @@ def run_NYCQ_postemoswitch(df, out_dir=None):
              & (df['5'] == '99')
              & (df['6'] == '99')
              & (df['7'] == '99')
-             & (df['8'] == '99')].index
+             & (df['8'] == '99')
+             & (df['9'] == '99')
+             & (df['10'] == '99')
+             & (df['11'] == '99')
+             & (df['12'] == '99')].index
 
     df.drop(df.index[drops], inplace=True)
     df.reset_index(inplace=True, drop=True)
