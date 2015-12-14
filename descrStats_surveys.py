@@ -42,7 +42,7 @@ def run_AMAS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['AMAS_sum']
-        df[cols_export].to_csv('%s/quest_AMAS_9.csv' % out_dir, index=False)        
+        df[cols_export].to_csv('%s/quest_AMAS_9.csv' % out_dir, decimal='.', index=False)        
     
 
 
@@ -94,7 +94,7 @@ def run_SelfCtrl(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['SelfCtrl_sum']
-        df[cols_export].to_csv('%s/quest_SCS_13.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_SCS_13.csv' % out_dir, decimal='.', index=False)
         
     
 
@@ -144,7 +144,7 @@ def run_IAT(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["IAT_sum"]
-        df[cols_export].to_csv('%s/quest_IAT_20.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_IAT_20.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -233,7 +233,7 @@ def run_VIS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum'] 
-        df[cols_export].to_csv('%s/quest_VISQ_18.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_VISQ_18.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -276,7 +276,7 @@ def run_MW_SD(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mean_MW_delib_mean', 'Mean_MW_spont_mean']
-        df[cols_export].to_csv('%s/quest_S-D-MW_8.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_S-D-MW_8.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -367,7 +367,7 @@ def run_SDT(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mach_sum', 'Narc_sum', 'Psycho_sum']    
-        df[cols_export].to_csv('%s/quest_SD3_27.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_SD3_27.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -427,7 +427,7 @@ def run_SES(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['SDS_sum']      
-        df[cols_export].to_csv('%s/quest_SDS_17.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_SDS_17.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -580,7 +580,7 @@ def run_UPPSP(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mean_NegUrg', 'Mean_Premed', 'Mean_Persev', 'Mean_SS','Mean_PosUrg']       
-        df[cols_export].to_csv('%s/quest_UPPS-P_59.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_UPPS-P_59.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -632,7 +632,7 @@ def run_TPS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['TPS_D_sum']        
-        df[cols_export].to_csv('%s/quest_TPS_16.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_TPS_16.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1180,7 +1180,7 @@ def run_ASR(df, out_dir=None):
                                             'ASR_summary_syndromeProfiles_intrusive_sum', 
                                             'ASR_summary_syndromeProfiles_internalizing_sum', 
                                             'ASR_summary_syndromeProfiles_externalizing_sum']        
-        df[cols_export].to_csv('%s/quest_ASR-18-59.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_ASR-18-59.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1222,7 +1222,7 @@ def run_SelfEst(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['Mean_SelfEst']          
-        df[cols_export].to_csv('%s/quest_SE_8.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_SE_8.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1322,7 +1322,7 @@ def run_IMIS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]          
-        df[cols_export].to_csv('%s/quest_IMIS_18.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_IMIS_18.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1372,7 +1372,7 @@ def run_GoldMSI(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']          
-        df[cols_export].to_csv('%s/quest_Gold-MSI_16.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_Gold-MSI_16.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1399,7 +1399,7 @@ def run_ESS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['ESS_summary_sum']      
-        df[cols_export].to_csv('%s/quest_ESS_8.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_ESS_8.csv' % out_dir, decimal='.', index=False)
   
     
 
@@ -1488,7 +1488,7 @@ def run_BDI(df, out_dir=None):
         
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         cols_export = ['ids'] + [str(x+1) for x in range(22)] + ['BDI_summary_sum']              
-        df[cols_export].to_csv('%s/quest_BDI_22.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_BDI_22.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1541,7 +1541,7 @@ def run_HADS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['HADS-A_summary_sum', 'HADS-D_summary_sum']               
-        df[cols_export].to_csv('%s/quest_HADS_14.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_HADS_14.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1593,7 +1593,7 @@ def run_BPS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['BPS_sum']                 
-        df[cols_export].to_csv('%s/quest_BP_28' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_BP_28' % out_dir, decimal='.', index=False)
   
 
 
@@ -1639,7 +1639,7 @@ def run_DAC(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['DAC_sum']                  
-        df[cols_export].to_csv('%s/quest_ACS_20.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_ACS_20.csv' % out_dir, decimal='.', index=False)
   
   
 
@@ -2088,7 +2088,7 @@ def run_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
     plt.xlabel('NEO_C6_deli', fontsize = 14)
 
     if out_dir:
-        df.to_csv('%s/quest_NEO-PI-R_241.csv' % out_dir, index=False)
+        df.to_csv('%s/quest_NEO-PI-R_241.csv' % out_dir, decimal='.', index=False)
   
   
 
@@ -2426,7 +2426,7 @@ def run_PSSI(df, out_dir=None):
                                                                     'PSSI_HI', 'PSSI_NA', 'PSSI_SU', 'PSSI_AB', 
                                                                     'PSSI_ZW', 'PSSI_NT', 'PSSI_DP', 'PSSI_SL', 
                                                                     'PSSI_RH', 'PSSI_AS']                 
-        df[cols_export].to_csv('%s/quest_PSSI_140.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_PSSI_140.csv' % out_dir, decimal='.', index=False)
   
 
 ##############################################################################
@@ -2935,7 +2935,7 @@ def run_MMI(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
         cols_export = ['ids'] + item_order + ['MMI']                  
-        df[cols_export].to_csv('%s/quest_MMI_12x4.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_MMI_12x4.csv' % out_dir, decimal='.', index=False)
   
   
 
@@ -2989,7 +2989,7 @@ def run_BISBAS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['BIS', 'BAS']                  
-        df[cols_export].to_csv('%s/quest_BISBAS_24.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_BISBAS_24.csv' % out_dir, decimal='.', index=False)
       
     
       
@@ -3021,7 +3021,7 @@ def run_STAI(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['STAI_A-Trait_summary_sum']                  
-        df[cols_export].to_csv('%s/quest_STAI-G-X2_20.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_STAI-G-X2_20.csv' % out_dir, decimal='.', index=False)
       
 
 
@@ -3089,7 +3089,7 @@ def run_STAXI(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ["anger_trait", "anger_inward", "anger_outward", "anger_control"]            
-        df[cols_export].to_csv('%s/quest_STAXI_44.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_STAXI_44.csv' % out_dir, decimal='.', index=False)
       
 
 
@@ -3246,7 +3246,7 @@ def run_GIQ(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
         cols_export = ['ids'] + item_order 
-        df[cols_export].to_csv('%s/quest_MGIQ_100.csv' % out_dir, index=False)  
+        df[cols_export].to_csv('%s/quest_MGIQ_100.csv' % out_dir, decimal='.', index=False)  
 
 
 
@@ -3265,7 +3265,7 @@ def run_DS14(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_DS_14.csv' % out_dir, index=False)  
+        df[cols_export].to_csv('%s/quest_DS_14.csv' % out_dir, decimal='.', index=False)  
 
 
 
@@ -3290,7 +3290,7 @@ def run_CTQ(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_CTQ_28.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_CTQ_28.csv' % out_dir, decimal='.', index=False)
         
         
 
@@ -3309,7 +3309,7 @@ def run_NYCQ_postscan(df, out_dir=None):
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_NYC-Q_31_postscan.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_NYC-Q_31_postscan.csv' % out_dir, decimal='.', index=False)
         
         
         
@@ -3332,7 +3332,7 @@ def run_NYCQ_posttasks(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_NYC-Q_23_posttasks.csv' % out_dir, index=False)          
+        df[cols_export].to_csv('%s/quest_NYC-Q_23_posttasks.csv' % out_dir, decimal='.', index=False)          
         
         
 
@@ -3404,7 +3404,7 @@ def run_NYCQ_postemoswitch(df, out_dir=None):
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_Short-NYC-Q_12_postETS.csv' % out_dir, index=False)
+        df[cols_export].to_csv('%s/quest_Short-NYC-Q_12_postETS.csv' % out_dir, decimal='.', index=False)
 
         
 
@@ -3423,7 +3423,7 @@ def run_FIS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_FBI_12.csv' % out_dir, index=False)  
+        df[cols_export].to_csv('%s/quest_FBI_12.csv' % out_dir, decimal='.', index=False)  
 
 
 
@@ -3441,4 +3441,4 @@ def run_mobile(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
-        df[cols_export].to_csv('%s/quest_MPU_19.csv' % out_dir, index=False)  
+        df[cols_export].to_csv('%s/quest_MPU_19.csv' % out_dir, decimal='.', index=False)  
