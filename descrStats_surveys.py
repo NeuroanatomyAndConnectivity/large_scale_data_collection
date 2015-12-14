@@ -381,21 +381,7 @@ def run_SES(df, out_dir=None):
     #items to be recoded     
 
     print 'Questionnaire measure social des. as the sum of 17 items\n'
-
-                           
-    items_recoded = ['SESaBASEQ[SES1r]',
-                     'SESaBASEQ[SES4r]',
-                     'SESaBASEQ[SES6r]',
-                     'SESaBASEQ[SES7r]',
-                     'SESbBASEQ[SES11r]',
-                     'SESbBASEQ[SES15r]',
-                     'SESbBASEQ[SES17r]']    
-                             
-    #recode items                 
-    recoder = {1:1, 2:0}
-    for i in items_recoded:
-        df[i] = df[i].map(recoder).astype(float64)   
-
+    
     cols = ['SESaBASEQ[SES1r]',
             'SESaBASEQ[SES2]',
             'SESaBASEQ[SES3]',
@@ -412,7 +398,26 @@ def run_SES(df, out_dir=None):
             'SESbBASEQ[SES14]',
             'SESbBASEQ[SES15r]',
             'SESbBASEQ[SES16]',
-            'SESbBASEQ[SES17r]']     
+            'SESbBASEQ[SES17r]']
+                           
+    #recode items                 
+    recoder = {1:1, 2:0}
+    for i in cols:
+        df[i] = df[i].map(recoder).astype(float64)
+    
+    
+    items_reversed = ['SESaBASEQ[SES1r]',
+                     'SESaBASEQ[SES4r]',
+                     'SESaBASEQ[SES6r]',
+                     'SESaBASEQ[SES7r]',
+                     'SESbBASEQ[SES11r]',
+                     'SESbBASEQ[SES15r]',
+                     'SESbBASEQ[SES17r]']    
+                             
+    #recode items                 
+    recoder = {1:0, 0:1}
+    for i in items_reversed:
+        df[i] = df[i].map(recoder).astype(float64)   
 
     #Calculate total score as the sum of Item 1-17.
     df['SDS_sum'] = df[cols].sum(axis=1)
@@ -3304,7 +3309,7 @@ def run_NYCQ_postscan(df, out_dir=None):
             'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16',
             'Q17', 'Q18', 'Q19', 'Q20', 'Q21', 'Q22', 'Q23', 'Q24', 
             'Q25', 'Q26', 'Q27', 'Q28', 'Q29', 'Q30', 'Q31']
-   
+            
     if out_dir:
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
