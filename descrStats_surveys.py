@@ -3304,7 +3304,7 @@ def run_NYCQ_postscan(df, out_dir=None):
             'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16',
             'Q17', 'Q18', 'Q19', 'Q20', 'Q21', 'Q22', 'Q23', 'Q24', 
             'Q25', 'Q26', 'Q27', 'Q28', 'Q29', 'Q30', 'Q31']
-        
+   
     if out_dir:
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
@@ -3347,22 +3347,6 @@ def run_NYCQ_prescan(df, out_dir=None):
         cols = ['1', '2', '3', '4', '5', '6', 
                 '7', '8', '9','10', '11', '12']
         
-        drops = df[(df['1'].isnull())
-                   & (df['2'].isnull())
-                   & (df['3'].isnull())
-                   & (df['4'].isnull())
-                   & (df['5'].isnull())
-                   & (df['6'].isnull())
-                   & (df['7'].isnull())
-                   & (df['8'].isnull())
-                   & (df['9'].isnull())
-                   & (df['10'].isnull())
-                   & (df['11'].isnull())
-                   & (df['12'].isnull())].index
-        
-        df.drop(df.index[drops], inplace=True)
-        df.reset_index(inplace=True, drop=True)
-        
         for col in cols:
             df[col] = 100 * df[col] / 15.2
 
@@ -3378,27 +3362,10 @@ def run_NYCQ_prescan(df, out_dir=None):
         
 def run_NYCQ_postemoswitch(df, out_dir=None):
     
-    cols = ['1,00', '2,00', '3,00', '4,00','5,00', '6,00', 
-            '7,00', '8,00', '9,00', '10,00', '11,00', '12,00']
-            
-    drops = df[(df['1'] == '99')
-             & (df['2'] == '99')
-             & (df['3'] == '99')
-             & (df['4'] == '99')
-             & (df['5'] == '99')
-             & (df['6'] == '99')
-             & (df['7'] == '99')
-             & (df['8'] == '99')
-             & (df['9'] == '99')
-             & (df['10'] == '99')
-             & (df['11'] == '99')
-             & (df['12'] == '99')].index
-
-    df.drop(df.index[drops], inplace=True)
-    df.reset_index(inplace=True, drop=True)
+    cols = ['1', '2', '3', '4','5', '6', '7', '8', '9', '10', '11', '12']
     
     for col in cols:
-        df[col].replace('651,32', '', inplace=True)
+        df[col] = 100 * df[col] / 15.2
     
     if out_dir:
         df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
