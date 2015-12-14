@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 
 def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, fileG, 
-                 fileHannes, fileCognTests, fileEdu, fileSKID, fileDrugs, out_dir):
+                 fileHannes, fileCognTests, fileEdu, fileSKID, fileDrugs, fileLemon, out_dir):
     
     # read in data files, calculate age and keep datestamp for later
     df_A = pd.read_csv(fileA)
@@ -63,6 +63,12 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     df_cogntests['age_CognTests'] = agecogntests.dt.days / 365
     df_cogntests['datestamp_CognTests'] = df_cogntests['test day']
     
+    df_lemon = pd.read_csv(fileLemon)
+    df_lemon['ids'] = df_lemon['ids'].map(lambda x: str(x)[0:5])
+    df_lemon = pd.merge(df_lemon, df_A[['ids', 'GBT']], on=['ids'], how='left')
+    age_lemon = pd.Series(pd.to_datetime(df_lemon['MRT day']) - pd.to_datetime(df_lemon['GBT']))
+    df_lemon['age_LEMON'] = age_lemon.dt.days / 365
+    df_lemon['datestamp_LEMON'] = df_lemon['MRT day']
 
     # merge surveys
     df_meta = pd.merge(df_A[['ids', 'GSH', 'age_A', 'datestamp_A']], df_B[['ids', 'GSH', 'age_B', 'datestamp_B']], on=['ids', 'GSH'], how='outer')
@@ -71,6 +77,7 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     df_meta = pd.merge(df_meta, df_G[['ids', 'GSH', 'age_G', 'datestamp_G']], on=['ids', 'GSH'], how='outer')
     df_meta = pd.merge(df_meta, df_hannes[['ids', 'age_Hannes', 'datestamp_hannes']], on=['ids'], how='outer')
     df_meta = pd.merge(df_meta, df_cogntests[['ids', 'age_CognTests', 'datestamp_CognTests']], on=['ids'], how='outer')
+    df_meta = pd.merge(df_meta, df_lemon[['ids', 'age_LEMON', 'datestamp_LEMON']], on=['ids'], how='outer')
     df_meta.rename(columns={'GSH': 'gender'}, inplace=True)
     
     # calculate time interval between scanning and other surveys
@@ -95,7 +102,9 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     diff_cogntests = pd.Series(pd.to_datetime(df_meta['datestamp_CognTests']) - pd.to_datetime(df_meta['datestamp_C']))
     df_meta['day_ref_CognTests'] = diff_cogntests.dt.days
     
-    
+    diff_lemon = pd.Series(pd.to_datetime(df_meta['datestamp_LEMON']) - pd.to_datetime(df_meta['datestamp_C']))
+    df_meta['day_ref_LEMON'] = diff_lemon.dt.days
+     
     # add info on education
     df_edu = pd.read_csv(fileEdu, converters={'ids':str})
     entries = ['Keinen Schulabschluss',
@@ -123,8 +132,8 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     
     # meta info dataframe
     cols_export = ['ids', 'gender', 'age_A', 'age_B', 'age_C', 'age_F', 'age_G', 'age_Hannes', 'age_CognTests',
-                   'day_ref_A', 'day_ref_B', 'day_ref_C', 'day_ref_F', 'day_ref_G', 'day_ref_Hannes', 
-                   'day_ref_CognTests', 'education', 'SKID_Diagnoses', 'drug test']
+                   'age_LEMON','day_ref_A', 'day_ref_B', 'day_ref_C', 'day_ref_F', 'day_ref_G', 'day_ref_Hannes', 
+                   'day_ref_CognTests', 'day_ref_LEMON', 'education', 'SKID_Diagnoses', 'drug test']
     
     df_meta[cols_export].to_csv('%s/meta_level_info.csv' % out_dir)   
     return df_meta[cols_export]
@@ -147,7 +156,7 @@ def run_demographics(df):
     plt.show()
     print '\n\n'
     
-    for survey in ['A', 'B', 'C', 'F', 'G', 'Hannes', 'CognTests']:
+    for survey in ['A', 'B', 'C', 'F', 'G', 'Hannes', 'CognTests', 'LEMON']:
     
         print '\n\n\n#### young cohort, %s ####\n' % survey  
         print 'N = ' + str(len(df[df['age_%s' % survey]<=40]))
@@ -165,7 +174,7 @@ def run_demographics(df):
 
 
 def run_studycourse(df):
-    for survey in ['A', 'B', 'F', 'G', 'Hannes', 'CognTests']:
+    for survey in ['A', 'B', 'F', 'G', 'Hannes', 'CognTests', 'LEMON']:
         print '\n\nSurvey %s' % survey
         print 'number of days between scanning and survey'
         print '\n\tmean: ' + str(df['day_ref_%s' % survey].dropna().abs().mean())
@@ -173,3 +182,22 @@ def run_studycourse(df):
         print '\tstand. dev.: ' + str(df['day_ref_%s' % survey].dropna().abs().std())
         sns.distplot(df['day_ref_%s' % survey].dropna(), bins=15, kde=False)
         plt.show()
+        
+        
+def run_physio(filePhysio, out_dir):
+    
+    df = pd.read_csv(filePhysio, converters={'DB-ID':str})
+    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
+    
+    cols_export = ['ids', 'systolic blood pressure', 'diastolic blood pressure',
+                   'pulse', 'arm length']
+    
+    df[cols_export].to_csv('%s/physio.csv' % out_dir)
+    return df
+    
+    for m in cols_export[1:]:
+        
+        print '\n%s' % m
+        sns.distplot(df[m].dropna())
+        plt.show()
+     
