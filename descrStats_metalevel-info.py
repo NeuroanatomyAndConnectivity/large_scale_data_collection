@@ -135,7 +135,7 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
                    'age_LEMON','day_ref_A', 'day_ref_B', 'day_ref_C', 'day_ref_F', 'day_ref_G', 'day_ref_Hannes', 
                    'day_ref_CognTests', 'day_ref_LEMON', 'education', 'SKID_Diagnoses', 'drug test']
     
-    df_meta[cols_export].to_csv('%s/meta_level_info.csv' % out_dir)   
+    df_meta[cols_export].to_csv('%s/meta_level_info.csv' % out_dir, decimal='.')   
     return df_meta[cols_export]
 
 
