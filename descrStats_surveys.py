@@ -3269,7 +3269,7 @@ def run_DS14(df, out_dir=None):
     if out_dir:
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
-        cols_export = ['ids'] + [x+1 for x in range(len(cols))] 
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['DS14 answer codes']
         df[cols_export].to_csv('%s/quest_DS_14.csv' % out_dir, decimal='.', index=False)  
 
 
