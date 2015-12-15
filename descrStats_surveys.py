@@ -1598,7 +1598,7 @@ def run_BPS(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))] + ['BPS_sum']                 
-        df[cols_export].to_csv('%s/quest_BP_28' % out_dir, decimal='.', index=False)
+        df[cols_export].to_csv('%s/quest_BP_28.csv' % out_dir, decimal='.', index=False)
   
 
 
