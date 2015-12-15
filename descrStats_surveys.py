@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import os, glob
 
 
 
@@ -3361,6 +3362,39 @@ def run_NYCQ_prescan(df, out_dir=None):
 
 
         
+###############################################################################
+####################### short NYC-Q during scanning ###########################
+###############################################################################
+
+def run_NYCQ_inscan(out_dir=None):
+
+    cols = ['positive', 'negative', 'future', 'past', 'myself', 'people', 'surrpundings', 
+            'vigilance', 'images', 'words', 'specific_vague', 'intrusive']
+    
+    df = pd.DataFrame(columns=['ids', 'scan'] + cols)
+    
+    for f in glob.glob('/scr/tantalum1/LSDDATEN/DATENOKTOBER15/inscannerNYCQshort/study/*.csv'):
+        
+        subject = os.path.basename(f)[:5]
+        df_sub = pd.read_csv(f)
+        
+        for scan in [1,2,3,4]:
+            try:
+                temp = [float(df_sub['slider_percent'][(df_sub['scan_n'] == scan) & (df_sub['question_id'] == col)]) for col in cols]
+            except:
+                temp = [None, None, None, None, None, None, None, None, None, None, None, None]
+            df.loc[len(df)] = [subject, scan] + temp
+    
+    df.to_csv('/scr/liberia1/data/lsd/behavioral/Surveys/NYCQ-short_inscanner.csv', decimal='.', index=False)
+       
+    if out_dir:
+        df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
+        cols_export = ['ids'] + [x+1 for x in range(len(cols))]
+        for scan in [1,2,3,4]:
+            df[df['scan']==scan][cols_export].to_csv('%s/quest_Short-NYC-Q_12_scan%s.csv' % (out_dir,scan), decimal='.', index=False)
+
+
+
 ##############################################################################
 ##################### short NYC-Q post emotional task switching ##############
 ##############################################################################                
