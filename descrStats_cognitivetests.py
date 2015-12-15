@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 ################################# TMT ########################################
 ##############################################################################
 
-def run_TMT(df, out_dir = None):
+def run_TMT(df):
     
      cols = ['TMT_A_numbers_seconds',
             'TMT_A_numbers_errors',
@@ -72,12 +72,6 @@ def run_TMT(df, out_dir = None):
          if err > 0:
              count = count + 1
      print 'at least one error: N = %s' %count       
-          
-     
-     if out_dir:
-         df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
-         cols_export = ['ID', 'gender', 'age'] + cols
-         df[cols_export].to_csv('%s/TMT.csv' % out_dir, index=False)       
      
      
 
@@ -85,7 +79,7 @@ def run_TMT(df, out_dir = None):
 ########################## Wortschatztest ####################################
 ############################################################################## 
 
-def run_WST(df, out_dir = None):
+def run_WST(df):
     
     cols = ['WST_RW',]
     
@@ -98,18 +92,13 @@ def run_WST(df, out_dir = None):
     WST_RW = list(WST_RW.dropna())
     sns.distplot(WST_RW, kde = True)
     
-    if out_dir:
-        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'gender', 'age'] + cols
-        df[cols_export].to_csv('%s/WST.csv' % out_dir, index=False)    
-    
     
 
 ##############################################################################     
 ##################### Leistungsprüfsystem Subtest 3 ########################## 
 ############################################################################## 
     
-def run_LPS(df, out_dir = None):
+def run_LPS(df):
     
     cols = ['LPS_RW']
     
@@ -122,18 +111,13 @@ def run_LPS(df, out_dir = None):
     LPS_RW = list(LPS_RW.dropna())
     sns.distplot(LPS_RW, kde = True)
     
-    if out_dir:
-        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'gender', 'age'] + cols
-        df[cols_export].to_csv('%s/LPS.csv' % out_dir, index=False) 
-    
 
 
 ##############################################################################     
 ################ Regensburger Wortflüssigkeitstest ########################### 
 ############################################################################## 
 
-def run_RWT(df, out_dir = None):
+def run_RWT(df):
     
     cols = ['S_Wörter_1.min',
             'Rep_S_Wörter_1.min',
@@ -237,12 +221,6 @@ def run_RWT(df, out_dir = None):
     print 'at least one rule book: N(subjects) = %s' %count 
     
  
-    if out_dir:
-        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'gender', 'age'] + cols
-        df[cols_export].to_csv('%s/RWT.csv' % out_dir, index=False)  
-    
- 
 
 ##############################################################################    
 #################################### TAP #####################################
@@ -250,7 +228,7 @@ def run_RWT(df, out_dir = None):
 
 ############################# TAP Alertness ##################################
 
-def run_TAP(df, out_dir = None):
+def run_TAP(df):
     
     cols = ['Alert_1_RT_MD',
             'Alert_2_RT_MD',
@@ -342,12 +320,3 @@ def run_TAP(df, out_dir = None):
     sns.distplot(WM_means_ms, kde = True)     
     plt.xlabel('Mean_RTs', fontsize = 14)
     plt.show()
-
-    if out_dir:
-        df['ID'] = df['db ID'].map(lambda x: str(x)[0:5])
-        cols_export = ['ID', 'gender', 'age'] + cols
-        df[cols_export].to_csv('%s/TAP.csv' % out_dir, index=False) 
-
-
-
-
