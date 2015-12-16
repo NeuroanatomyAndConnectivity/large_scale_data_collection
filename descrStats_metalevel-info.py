@@ -63,7 +63,6 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     
     df_lemon = pd.read_csv(fileLemon, parse_dates=['lemon1'], dayfirst=True)
     df_lemon['ids'] = df_lemon['ids'].map(lambda x: str(x)[0:5])    
-    #df_lemon['datestamp_lemon1'] = pd.to_datetime(df_lemon['lemon1'], format='%d.%m.%y')
     df_lemon['datestamp_lemon1'] = df_lemon['lemon1']
     df_meta = pd.merge(df_meta, df_lemon[['ids', 'datestamp_lemon1']], on=['ids'], how='left')
     
@@ -122,12 +121,14 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     # add SKID
     df_skid = pd.read_csv(fileSKID, skiprows=[0],converters={'DB_ID':str})
     df_skid['ids'] = df_skid['DB_ID'].map(lambda x: str(x)[0:5])
-    df_meta = pd.merge(df_meta, df_skid[['ids', 'SKID (0=none, 1=indications, 2=diagnosis)', 'SKID diagnoses']], on='ids', how='left') 
+    df_meta = pd.merge(df_meta, df_skid[['ids', 'SKID (0=none, 1=indications, 2=diagnosis)', 'SKID diagnoses']], on='ids', how='left')
+    df_meta.rename(columns={'SKID (0=none, 1=indications, 2=diagnosis)': 'SKID key', 'SKID diagnoses':'SKID description'}, inplace=True)
     
     # drug info & cogn task order
     df_drug = pd.read_csv(filePhysio,converters={'DB-ID':str})
     df_drug['ids'] = df_drug['DB-ID'].map(lambda x: str(x)[0:5])
-    df_meta = pd.merge(df_meta, df_drug[['ids', 'drug test', 'task order (1=CCPT-ETS, 2=ETS-CCPT)']], on='ids', how='left') 
+    df_meta = pd.merge(df_meta, df_drug[['ids', 'drug test', 'task order (1=CCPT-ETS, 2=ETS-CCPT)']], on='ids', how='left')
+    df_meta.rename(columns={'task order (1=CCPT-ETS, 2=ETS-CCPT)': 'task order'}, inplace=True)
     
     
     drops  = df_meta[(df_meta['age day 1'].isnull())
@@ -144,9 +145,8 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     cols_export = ['ids', 'gender', 'age day 1', 'age day 2', 'age day 3', 'age day 4',
                    'age day 5a', 'age day 5b', 'age day 6', 'age LEMON', 
                    'day 1', 'day 2', 'day 3', 'day 4', 'day 5a', 'day 5b', 'day 6', 
-                   'day LEMON 1', 'day LEMON 2', 'day LEMON 2',
-                   'education', 'SKID (0=none, 1=indications, 2=diagnosis)', 'SKID diagnoses', 
-                   'drug test', 'task order (1=CCPT-ETS, 2=ETS-CCPT)']
+                   'day LEMON 1', 'day LEMON 2', 'day LEMON 3',
+                   'education', 'SKID key', 'SKID description', 'drug test', 'task order']
     
     df_meta[cols_export].to_csv('%s/meta_info.csv' % out_dir, decimal='.', index=False)   
     return df_meta[cols_export]

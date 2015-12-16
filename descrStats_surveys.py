@@ -3391,7 +3391,7 @@ def run_NYCQ_inscan(out_dir=None):
         df.rename(columns=dict(zip(cols, [x+1 for x in range(len(cols))])), inplace=True)
         cols_export = ['ids'] + [x+1 for x in range(len(cols))]
         for scan in [1,2,3,4]:
-            df[df['scan']==scan][cols_export].to_csv('%s/quest_Short-NYC-Q_12_scan%s.csv' % (out_dir,scan), decimal='.', index=False)
+            df[df['scan']==scan][cols_export].to_csv('%s/quest_Short-NYC-Q_12_inscan%s.csv' % (out_dir,scan), decimal='.', index=False)
 
 
 
