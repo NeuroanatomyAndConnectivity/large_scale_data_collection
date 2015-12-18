@@ -1172,7 +1172,7 @@ def run_ASR(df, out_dir=None):
         df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
         df.rename(columns=d, inplace=True)
         cols_export = ['ids'] + item_order + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
-                                            'ASR_summary_adaptiveFunctioning_family_sum', 'ASR_summary_adaptiveFunctioning_family_sum',
+                                            'ASR_summary_adaptiveFunctioning_family_sum',
                                             'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
                                             'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
                                             'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
