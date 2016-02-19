@@ -121,8 +121,8 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
     # add SKID
     df_skid = pd.read_csv(fileSKID, skiprows=[0],converters={'DB_ID':str})
     df_skid['ids'] = df_skid['DB_ID'].map(lambda x: str(x)[0:5])
-    df_meta = pd.merge(df_meta, df_skid[['ids', 'SKID (0=none, 1=indications, 2=diagnosis)', 'SKID diagnoses']], on='ids', how='left')
-    df_meta.rename(columns={'SKID (0=none, 1=indications, 2=diagnosis)': 'SKID key', 'SKID diagnoses':'SKID description'}, inplace=True)
+    df_meta = pd.merge(df_meta, df_skid[['ids', 'SKID diagnose 1', 'SKID diagnose 2']], on='ids', how='left')
+    #df_meta.rename(columns={'SKID (0=none, 1=indications, 2=diagnosis)': 'SKID key', 'SKID diagnoses':'SKID description'}, inplace=True)
     
     # drug info & cogn task order
     df_drug = pd.read_csv(filePhysio,converters={'DB-ID':str})
@@ -146,7 +146,7 @@ def run_metainfo(fileA, fileB, fileC_act, fileC_inact, fileC_corrected, fileF, f
                    'age day 5a', 'age day 5b', 'age day 6', 'age LEMON', 
                    'day 1', 'day 2', 'day 3', 'day 4', 'day 5a', 'day 5b', 'day 6', 
                    'day LEMON 1', 'day LEMON 2', 'day LEMON 3',
-                   'education', 'SKID key', 'SKID description', 'drug test', 'task order']
+                   'education', 'SKID diagnose 1', 'SKID diagnose 2', 'drug test', 'task order']
     
     df_meta[cols_export].to_csv('%s/meta_info.csv' % out_dir, decimal='.', index=False)   
     return df_meta[cols_export]
