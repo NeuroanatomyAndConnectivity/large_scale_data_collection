@@ -19,11 +19,11 @@ sns.set_style('white')
 ##############################################################################
 
 #def comp_summary_CAQ(df, out_dir=None):
-    
+
     # Mark
 
-    
-    
+
+
 ##############################################################################
 #################### Meta Cognition Questionnaire 30 #########################
 ##############################################################################
@@ -33,61 +33,61 @@ def comp_summary_MCQ30(df, out_dir):
 
     df['MCQ_lack_of_cogn_conf_sum'] = df[['MCQ_8', 'MCQ_14', 'MCQ_17',
                                           'MCQ_24', 'MCQ_26', 'MCQ_29']].mean(axis=1)
-    
-    df['MCQ_pos_bel_about_HADS_5_sum'] = df[['MCQ_1', 'MCQ_7',  'MCQ_10',
-                                             'MCQ_19','MCQ_23','MCQ_28']].mean(axis=1)             
-    
-    df['MCQ_cogn_self-consc_sum'] = df[['MCQ_3', 'MCQ_5',  'MCQ_12',
-                                        'MCQ_16','MCQ_18','MCQ_30']].mean(axis=1)             
-   
-    df['MCQ_neg_bel_about_uncontr_danger_sum'] = df[['MCQ_2', 'MCQ_4', 'MCQ_9',
-                                                     'MCQ_11', 'MCQ_15', 'MCQ_21']].mean(axis=1)             
-    
-    df['MCQ_need_contr_thoughts_sum'] = df[['MCQ_6','MCQ_13', 'MCQ_20', 
-                                            'MCQ_22', 'MCQ_25', 'MCQ_27']].mean(axis=1)             
 
-    
+    df['MCQ_pos_bel_about_HADS_5_sum'] = df[['MCQ_1', 'MCQ_7',  'MCQ_10',
+                                             'MCQ_19','MCQ_23','MCQ_28']].mean(axis=1)
+
+    df['MCQ_cogn_self-consc_sum'] = df[['MCQ_3', 'MCQ_5',  'MCQ_12',
+                                        'MCQ_16','MCQ_18','MCQ_30']].mean(axis=1)
+
+    df['MCQ_neg_bel_about_uncontr_danger_sum'] = df[['MCQ_2', 'MCQ_4', 'MCQ_9',
+                                                     'MCQ_11', 'MCQ_15', 'MCQ_21']].mean(axis=1)
+
+    df['MCQ_need_contr_thoughts_sum'] = df[['MCQ_6','MCQ_13', 'MCQ_20',
+                                            'MCQ_22', 'MCQ_25', 'MCQ_27']].mean(axis=1)
+
+
     cols_export = ['ids'] + ['MCQ_lack_of_cogn_conf_sum',
                              'MCQ_pos_bel_about_HADS_5_sum',
                              'MCQ_cogn_self-consc_sum',
                              'MCQ_neg_bel_about_uncontr_danger_sum',
-                             'MCQ_need_contr_thoughts_sum']    
-                                     
-    df[cols_export].to_csv('%s/quest_summary_MCQ30.csv' % out_dir, decimal='.', index=False)    
-    
- 
+                             'MCQ_need_contr_thoughts_sum']
+
+    df[cols_export].to_csv('%s/quest_summary_MCQ30.csv' % out_dir, decimal='.', index=False)
+
+
 
 ##############################################################################
 #################### Body Consciousness Questionnaire ########################
 ##############################################################################
 
 def comp_summary_BCQ(df, out_dir):
-    
-    df['BCQ_private_body_sum'] = df[['BCQ_3', 'BCQ_4','BCQ_5', 
+
+    df['BCQ_private_body_sum'] = df[['BCQ_3', 'BCQ_4','BCQ_5',
                                      'BCQ_8', 'BCQ_12',]].mean(axis=1)
-   
+
     df['BCQ_public_body_sum'] = df[['BCQ_1', 'BCQ_7', 'BCQ_10',
-                                    'BCQ_11', 'BCQ_13','BCQ_15']].mean(axis=1)             
-    
-    df['BCQ_body_competence_sum'] = df[['BCQ_2', 'BCQ_6', 
-                                        'BCQ_9', 'BCQ_14']].mean(axis=1)             
-    
+                                    'BCQ_11', 'BCQ_13','BCQ_15']].mean(axis=1)
+
+    df['BCQ_body_competence_sum'] = df[['BCQ_2', 'BCQ_6',
+                                        'BCQ_9', 'BCQ_14']].mean(axis=1)
+
 
     cols_export = ['ids'] + ['BCQ_private_body_sum',
                              'BCQ_public_body_sum',
-                             'BCQ_body_competence_sum']    
-                             
-    df[cols_export].to_csv('%s/quest_summary_BCQ.csv' % out_dir, decimal='.', index=False)  
-    
-    
+                             'BCQ_body_competence_sum']
+
+    df[cols_export].to_csv('%s/quest_summary_BCQ.csv' % out_dir, decimal='.', index=False)
+
+
 
 ##############################################################################
 ################### Five Facet Mindfulness Questionnaire #####################
 ##############################################################################
 
 def comp_summary_FFMQ(df, out_dir):
-    
-    #items to be recoded                                
+
+    #items to be recoded
     items_recoded = ['FFMQ_12',
                      'FFMQ_16',
                      'FFMQ_22',
@@ -106,36 +106,36 @@ def comp_summary_FFMQ(df, out_dir):
                      'FFMQ_25',
                      'FFMQ_30',
                      'FFMQ_35',
-                     'FFMQ_39']    
-                             
-    #recode items                 
+                     'FFMQ_39']
+
+    #recode items
     recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
-        
-    
+        df[i] = df[i].map(recoder).astype('float64')
+
+
     df['FFMQ_observe_sum'] = df[['FFMQ_1', 'FFMQ_6','FFMQ_11', 'FFMQ_15',
                                  'FFMQ_20','FFMQ_26','FFMQ_31', 'FFMQ_36',]].sum(axis=1)
-    
+
     df['FFMQ_describe_sum'] = df[['FFMQ_2', 'FFMQ_7', 'FFMQ_12', 'FFMQ_16',
-                                  'FFMQ_22', 'FFMQ_27', 'FFMQ_32', 'FFMQ_37']].sum(axis=1)             
-    
+                                  'FFMQ_22', 'FFMQ_27', 'FFMQ_32', 'FFMQ_37']].sum(axis=1)
+
     df['FFMQ_act_awareness_sum'] = df[['FFMQ_5', 'FFMQ_8','FFMQ_13', 'FFMQ_18',
-                                       'FFMQ_23', 'FFMQ_28', 'FFMQ_34', 'FFMQ_38']].sum(axis=1)             
-   
-    df['FFMQ_nonjudge_sum'] = df[['FFMQ_3', 'FFMQ_10', 'FFMQ_14', 'FFMQ_17', 
-                                  'FFMQ_25', 'FFMQ_30','FFMQ_35', 'FFMQ_39']].sum(axis=1)             
-    
-    df['FFMQ_nonreact_sum'] = df[['FFMQ_4',  'FFMQ_9', 'FFMQ_19',  'FFMQ_21', 
-                                  'FFMQ_24', 'FFMQ_29', 'FFMQ_33']].sum(axis=1)             
-    
-    cols_export = ['ids'] + ['FFMQ_observe_sum', 
+                                       'FFMQ_23', 'FFMQ_28', 'FFMQ_34', 'FFMQ_38']].sum(axis=1)
+
+    df['FFMQ_nonjudge_sum'] = df[['FFMQ_3', 'FFMQ_10', 'FFMQ_14', 'FFMQ_17',
+                                  'FFMQ_25', 'FFMQ_30','FFMQ_35', 'FFMQ_39']].sum(axis=1)
+
+    df['FFMQ_nonreact_sum'] = df[['FFMQ_4',  'FFMQ_9', 'FFMQ_19',  'FFMQ_21',
+                                  'FFMQ_24', 'FFMQ_29', 'FFMQ_33']].sum(axis=1)
+
+    cols_export = ['ids'] + ['FFMQ_observe_sum',
                              'FFMQ_describe_sum',
                              'FFMQ_act_awareness_sum',
                              'FFMQ_nonjudge_sum',
-                             'FFMQ_nonreact_sum']    
-                                                               
-    df[cols_export].to_csv('%s/quest_summary_FFMQ.csv' % out_dir, decimal='.', index=False) 
+                             'FFMQ_nonreact_sum']
+
+    df[cols_export].to_csv('%s/quest_summary_FFMQ.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -147,7 +147,7 @@ def comp_summary_AMAS(df, out_dir):
 
 
     #Calculate total score as the sum of Item 1-9.
-    
+
     cols = ['AMAS_1',
             'AMAS_2',
             'AMAS_3',
@@ -156,14 +156,14 @@ def comp_summary_AMAS(df, out_dir):
             'AMAS_6',
             'AMAS_7',
             'AMAS_8',
-            'AMAS_9']    
-    
+            'AMAS_9']
+
     df['AMAS_sum'] = df[cols].sum(axis=1)
-                      
+
     cols_export = ['ids'] + ['AMAS_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_AMAS_9.csv' % out_dir, decimal='.', index=False)        
-    
+    df[cols_export].to_csv('%s/quest_summary_AMAS_9.csv' % out_dir, decimal='.', index=False)
+
 
 
 ##############################################################################
@@ -171,7 +171,7 @@ def comp_summary_AMAS(df, out_dir):
 ##############################################################################
 
 def comp_summary_SelfCtrl(df, out_dir):
-    #items to be recoded                                
+    #items to be recoded
     items_recoded = ['SCS_2',
                      'SCS_3',
                      'SCS_4',
@@ -181,15 +181,15 @@ def comp_summary_SelfCtrl(df, out_dir):
                      'SCS_8',
                      'SCS_9',
                      'SCS_10',
-                     'SCS_11' ]    
-                             
-    #recode items                 
+                     'SCS_11' ]
+
+    #recode items
     recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-13.
-    
+
     cols = ['SCS_1',
             'SCS_2',
             'SCS_3',
@@ -202,25 +202,25 @@ def comp_summary_SelfCtrl(df, out_dir):
             'SCS_10',
             'SCS_11',
             'SCS_12',
-            'SCS_13']    
-    
+            'SCS_13']
+
     df['SCS_SelfCtrl_sum'] = df[cols].sum(axis=1)
-                      
+
     cols_export = ['ids'] + ['SCS_SelfCtrl_sum']
 
     df[cols_export].to_csv('%s/quest_summary_SCS_13.csv' % out_dir, decimal='.', index=False)
-    
-    
 
-##############################################################################                      
+
+
+##############################################################################
 ################ Internet Addiction test #####################################
 ##############################################################################
 #note: Item 3 not included due to differerent scale format
 
 def comp_summary_IAT(df, out_dir):
-                              
+
     #Calculate total score as the sum of Item 1-19.
-    
+
     cols = ['IAT_1',
             'IAT_2',
             'IAT_3',
@@ -241,13 +241,13 @@ def comp_summary_IAT(df, out_dir):
             'IAT_18',
             'IAT_19',
             'IAT_20']
-                             
-    #recode items                 
+
+    #recode items
     recoder = {1:1, 2:2, 3:3, 4:4, 5:5, 6:0}
     for i in cols:
-        df[i] = df[i].map(recoder).astype('float64')              
-                        
-                
+        df[i] = df[i].map(recoder).astype('float64')
+
+
     df['IAT_sum'] = df[cols].sum(axis=1)
 
     cols_export = ['ids'] + ["IAT_sum"]
@@ -262,43 +262,43 @@ def comp_summary_IAT(df, out_dir):
 ##############################################################################
 
 def comp_summary_VIS(df, out_dir=None):
-    #items to be recoded                                
+    #items to be recoded
     items_recoded = ['VIS_7',
-                     'VIS_15']  
-    #recode items                 
+                     'VIS_15']
+    #recode items
     recoder = {1:6, 2:5, 3:4, 4:3, 5:2, 6:1}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
-           
+        df[i] = df[i].map(recoder).astype('float64')
+
     #Calculate subscales (Dialogic, Condensed, Otherpeople, Evaluative/Motivat.) - sumscores
-    #dialogic inner speech    
-                       
+    #dialogic inner speech
+
     df['VIS_dialog_sum'] = df[['VIS_2',
                                'VIS_6',
                                'VIS_10',
-                               'VIS_13']].sum(axis=1)   
-                           
+                               'VIS_13']].sum(axis=1)
+
     #condensed inner speech
     df['VIS_condensed_sum'] = df[['VIS_1',
                                   'VIS_7',
                                   'VIS_8',
-                                  'VIS_14', 
+                                  'VIS_14',
                                   'VIS_15']].sum(axis=1)
-    
+
     #other people in inner speech
     df['VIS_other_sum'] = df[['VIS_3',
                               'VIS_4',
                               'VIS_5',
-                              'VIS_12', 
+                              'VIS_12',
                               'VIS_16']].sum(axis=1)
- 
+
     #evaluative/motivational inner speech
     df['VIS_eval_sum'] = df[['VIS_9',
                              'VIS_11',
                              'VIS_17',
-                             'VIS_18']].sum(axis=1)  
-    
-    cols_export = ['ids'] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum'] 
+                             'VIS_18']].sum(axis=1)
+
+    cols_export = ['ids'] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum']
     df[cols_export].to_csv('%s/quest_summary_VISQ_18.csv' % out_dir, decimal='.', index=False)
 
 
@@ -308,17 +308,17 @@ def comp_summary_VIS(df, out_dir=None):
 ##############################################################################
 
 def comp_summary_MW_SD(df, out_dir):
-    
+
     df['S-D-MW_delib_mean'] = df[["S-D-MW_1",
                                   "S-D-MW_2",
                                   "S-D-MW_3",
                                   "S-D-MW_4"]].mean(axis=1).round(3)
-                                  
+
     df['S-D-MW_spont_mean'] = df[["S-D-MW_5",
                                   "S-D-MW_6",
                                   "S-D-MW_7",
                                   "S-D-MW_8"]].mean(axis=1).round(3)
-    
+
     cols_export = ['ids']  + ['S-D-MW_delib_mean', 'S-D-MW_spont_mean']
 
     df[cols_export].to_csv('%s/quest_summary_S-D-MW_8.csv' % out_dir, decimal='.', index=False)
@@ -330,18 +330,18 @@ def comp_summary_MW_SD(df, out_dir):
 ##############################################################################
 
 def comp_summary_SDT(df, out_dir):
-    
-    #items to be recoded                                
+
+    #items to be recoded
     items_recoded = ['SD3_11',
                      'SD3_15',
                      'SD3_17',
                      'SD3_20',
-                     'SD3_25']             
-                                                      
-    #recode items                 
+                     'SD3_25']
+
+    #recode items
     recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-9 for Machiavellism.
     df['SD3_Mach_sum'] = df[['SD3_1',
@@ -352,9 +352,9 @@ def comp_summary_SDT(df, out_dir):
                              'SD3_6',
                              'SD3_7',
                              'SD3_8',
-                             'SD3_9']].sum(axis=1)  
-   
-    #Calculate total score as the sum of Item 1-9 for Narcissism.               
+                             'SD3_9']].sum(axis=1)
+
+    #Calculate total score as the sum of Item 1-9 for Narcissism.
     df['SD3_Narc_sum'] = df[['SD3_10',
                               'SD3_11',
                               'SD3_12',
@@ -364,8 +364,8 @@ def comp_summary_SDT(df, out_dir):
                               'SD3_16',
                               'SD3_17',
                               'SD3_18']].sum(axis=1)
-     
-    #Calculate total score as the sum of Item 1-9 for Psychopathy.                      
+
+    #Calculate total score as the sum of Item 1-9 for Psychopathy.
     df['SD3_Psycho_sum'] = df[['SD3_19',
                                'SD3_20',
                                'SD3_21',
@@ -375,8 +375,8 @@ def comp_summary_SDT(df, out_dir):
                                'SD3_25',
                                'SD3_26',
                                'SD3_27']].sum(axis=1)
-                       
-    cols_export = ['ids'] + ['SD3_Mach_sum', 'SD3_Narc_sum', 'SD3_Psycho_sum']    
+
+    cols_export = ['ids'] + ['SD3_Mach_sum', 'SD3_Narc_sum', 'SD3_Psycho_sum']
 
     df[cols_export].to_csv('%s/quest_summary_SD3_27.csv' % out_dir, decimal='.', index=False)
 
@@ -388,8 +388,8 @@ def comp_summary_SDT(df, out_dir):
 # social desirability
 
 def comp_summary_SDS(df, out_dir):
-    #items to be recoded     
-    
+    #items to be recoded
+
     cols = ['SDS_1',
             'SDS_2',
             'SDS_3',
@@ -407,40 +407,40 @@ def comp_summary_SDS(df, out_dir):
             'SDS_15',
             'SDS_16',
             'SDS_17']
-                           
-    #recode items                 
+
+    #recode items
     recoder = {1:1, 2:0}
     for i in cols:
         df[i] = df[i].map(recoder).astype('float64')
-      
+
     items_reversed = ['SDS_1',
                      'SDS_4',
                      'SDS_6',
                      'SDS_7',
                      'SDS_11',
                      'SDS_15',
-                     'SDS_17']    
-                           
-    #recode items                 
+                     'SDS_17']
+
+    #recode items
     recoder = {1:0, 0:1}
     for i in items_reversed:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-17.
     df['SDS_sum'] = df[cols].sum(axis=1)
-                    
-    cols_export = ['ids'] + ['SDS_sum']      
+
+    cols_export = ['ids'] + ['SDS_sum']
 
     df[cols_export].to_csv('%s/quest_summary_SDS_17.csv' % out_dir, decimal='.', index=False)
-  
 
 
-##############################################################################            
+
+##############################################################################
 ##################### UPPSP - impulsivity ####################################
 ##############################################################################
 
 def comp_summary_UPPSP(df, out_dir):
-    
+
     #items that need to be recoded
     items_recoded = ['UPPS_2','UPPS_3','UPPS_5',
                      'UPPS_7','UPPS_8','UPPS_9',
@@ -455,11 +455,11 @@ def comp_summary_UPPSP(df, out_dir):
                      'UPPS_49','UPPS_50','UPPS_51',
                      'UPPS_52','UPPS_54','UPPS_56',
                      'UPPS_57','UPPS_58','UPPS_59']
-    #recode items                 
+    #recode items
     recoder = {1:4, 2:3, 3:2, 4:1}
     for i in items_recoded:
         df[i] = df[i].map(recoder).astype('float64')
-        
+
     #calculate subscales (averages)
     #Negative Urgency
     df['UPPS_Mean_NegUrg'] = df[['UPPS_2',
@@ -469,13 +469,13 @@ def comp_summary_UPPSP(df, out_dir):
                                  'UPPS_22',
                                  'UPPS_29',
                                  'UPPS_34',
-                                 'UPPS_39',  
+                                 'UPPS_39',
                                  'UPPS_44',
                                  'UPPS_50',
                                  'UPPS_53',
-                                 'UPPS_58']].mean(axis=1).round(3)                                     
-                          
-    #lack of premeditation                              
+                                 'UPPS_58']].mean(axis=1).round(3)
+
+    #lack of premeditation
     df['UPPS_Mean_Premed'] = df[['UPPS_1',
                                  'UPPS_6',
                                  'UPPS_11',
@@ -486,8 +486,8 @@ def comp_summary_UPPSP(df, out_dir):
                                  'UPPS_38',
                                  'UPPS_43',
                                  'UPPS_48',
-                                 'UPPS_55']].mean(axis=1).round(3)                                     
-                                                        
+                                 'UPPS_55']].mean(axis=1).round(3)
+
     #lack of perseverance
     df['UPPS_Mean_Persev'] = df[['UPPS_4',
                                  'UPPS_9',
@@ -498,8 +498,8 @@ def comp_summary_UPPSP(df, out_dir):
                                  'UPPS_32',
                                  'UPPS_37',
                                  'UPPS_42',
-                                 'UPPS_47']].mean(axis=1).round(3)                                                                                                
-              
+                                 'UPPS_47']].mean(axis=1).round(3)
+
     #sensation seeking
     df['UPPS_Mean_SS'] = df[['UPPS_3',
                              'UPPS_8',
@@ -512,8 +512,8 @@ def comp_summary_UPPSP(df, out_dir):
                              'UPPS_41',
                              'UPPS_46',
                              'UPPS_51',
-                             'UPPS_56']].mean(axis=1).round(3)                                 
-                       
+                             'UPPS_56']].mean(axis=1).round(3)
+
     #Positive Urgency
     df['UPPS_Mean_PosUrg'] = df[['UPPS_5',
                                  'UPPS_10',
@@ -529,11 +529,11 @@ def comp_summary_UPPSP(df, out_dir):
                                  'UPPS_54',
                                  'UPPS_57',
                                  'UPPS_59']].mean(axis=1).round(3)
-        
-    cols_export = ['ids'] + ['UPPS_Mean_NegUrg', 'UPPS_Mean_Premed', 'UPPS_Mean_Persev', 'UPPS_Mean_SS','UPPS_Mean_PosUrg']   
-    
+
+    cols_export = ['ids'] + ['UPPS_Mean_NegUrg', 'UPPS_Mean_Premed', 'UPPS_Mean_Persev', 'UPPS_Mean_SS','UPPS_Mean_PosUrg']
+
     df[cols_export].to_csv('%s/quest_summary_UPPS-P_59.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
@@ -542,17 +542,17 @@ def comp_summary_UPPSP(df, out_dir):
 ##############################################################################
 
 def comp_summary_TPS(df, out_dir):
-    
-    #items to be recoded                          
+
+    #items to be recoded
     items_recoded = ['TPS_7',
                      'TPS_12',
                      'TPS_14',
-                     'TPS_16']    
-                             
-    #recode items                 
+                     'TPS_16']
+
+    #recode items
     recoder = {1:5, 2:4, 3:3, 4:2, 5:1 }
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-16.
     cols = ['TPS_1',
@@ -571,13 +571,13 @@ def comp_summary_TPS(df, out_dir):
             'TPS_14',
             'TPS_15',
             'TPS_16']
-    
+
     df['TPS_D_sum'] = df[cols].sum(axis=1)
-                      
-    cols_export = ['ids'] + ['TPS_D_sum']       
- 
+
+    cols_export = ['ids'] + ['TPS_D_sum']
+
     df[cols_export].to_csv('%s/quest_summary_TPS_16.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
@@ -585,20 +585,20 @@ def comp_summary_TPS(df, out_dir):
 ##############################################################################
 
 def comp_summary_ASR(df, out_dir):
-    
+
     ######################## adaptive functioning #################################
-    
-    ##### friends #####     
+
+    ##### friends #####
     df['ASR_summary_adaptiveFunctioning_friends_sum' ] = df[['ASR_I_A',
                                                              'ASR_I_B',
                                                              'ASR_I_C',
                                                              'ASR_I_D']].sum(axis=1)
-    
+
     ##### spouse / partner #####
     recoded = ['ASR_II_B', 'ASR_II_E', 'ASR_II_F', 'ASR_II_H']
     for item in recoded:
         df[item] = -df[item]
-    df['ASR_summary_adaptiveFunctioning_spouse_sum'] = df[['ASR_II_A', 
+    df['ASR_summary_adaptiveFunctioning_spouse_sum'] = df[['ASR_II_A',
                                                           'ASR_II_B',
                                                           'ASR_II_C',
                                                           'ASR_II_D',
@@ -611,7 +611,7 @@ def comp_summary_ASR(df, out_dir):
     items = ['ASR_III_A', 'ASR_III_B', 'ASR_III_C',
             'ASR_III_D', 'ASR_III_E_1', 'ASR_III_E_2',
             'ASR_III_E_3', 'ASR_III_E_4', 'ASR_III_F']
-    
+
     df['ASR_summary_adaptiveFunctioning_family_sum'] = pd.Series('NaN', index=df.index)
     for sub in range(len(df)):
         score = 0
@@ -622,8 +622,8 @@ def comp_summary_ASR(df, out_dir):
             except:
                 pass
         df['ASR_summary_adaptiveFunctioning_family_sum'].iloc[[sub]] = float(score)
-    
-    
+
+
     ##### job #####
     #satisfied_job = df['ASR_IV_E'] is not scored
     recoded = ['ASR_IV_B', 'ASR_IV_D', 'ASR_IV_F',
@@ -638,7 +638,7 @@ def comp_summary_ASR(df, out_dir):
                                                         'ASR_IV_G',
                                                         'ASR_IV_H',
                                                         'ASR_IV_I']].sum(axis=1)
-    
+
     ##### education #####
     # careful with older ages
     # though we're using raw total scores, it's important to notice that normed scores only available for ages 18-29
@@ -650,22 +650,22 @@ def comp_summary_ASR(df, out_dir):
                                                               'ASR_V_C',
                                                               'ASR_V_D',
                                                               'ASR_V_E']].sum(axis=1)
-    
+
     scales = ['ASR_summary_adaptiveFunctioning_friends_sum',
-              'ASR_summary_adaptiveFunctioning_spouse_sum', 
+              'ASR_summary_adaptiveFunctioning_spouse_sum',
               'ASR_summary_adaptiveFunctioning_family_sum',
               'ASR_summary_adaptiveFunctioning_job_sum',
               'ASR_summary_adaptiveFunctioning_education_sum']
-    
-        
-    
+
+
+
     ######################## substance use #################################
-    
+
     df['ASR_scale_substanceUse_tabaco_perday'] = df['ASR_124']
     df['ASR_scale_substanceUse_alcohol_daysdrunk'] = df['ASR_125']
     df['ASR_scale_substanceUse_drugs_daysused'] = df['ASR_126']
 
-    
+
     ######################### items #############################################
     Q1 = df['ASR_1']
     Q2 = df['ASR_2']
@@ -796,87 +796,87 @@ def comp_summary_ASR(df, out_dir):
     Q121 = df['ASR_121']
     Q122 = df['ASR_122']
     Q123 = df['ASR_123']
-    
-    
+
+
     ######################## critical items #################################
-    
+
     df['ASR_summary_criticalItems_sum'] = Q6 + Q8 + Q9 + Q10 + Q14 + Q16 + Q18 + Q21 + Q40 + Q55 + Q57 + Q66 + Q70 + Q84 + Q90 + Q91 + Q92 + Q97 + Q103
 
-    
+
     ######################## syndrome profiles #################################
-    
-    df['ASR_summary_syndromeProfiles_anxiousdepressed_sum'] = Q12 + Q13 + Q14 + Q22 + Q31 + Q33 + Q34 + Q35 + Q45 + Q47 + Q50 + Q52 + Q71 + Q91 + Q103 + Q107 + Q112 + Q113 
+
+    df['ASR_summary_syndromeProfiles_anxiousdepressed_sum'] = Q12 + Q13 + Q14 + Q22 + Q31 + Q33 + Q34 + Q35 + Q45 + Q47 + Q50 + Q52 + Q71 + Q91 + Q103 + Q107 + Q112 + Q113
     df['ASR_summary_syndromeProfiles_withdrawn_sum'] = Q25 + Q30 + Q42 + Q48 + Q60 + Q65 + Q67 + Q69 + Q111
     df['ASR_summary_syndromeProfiles_somaticComplaints_sum'] = Q51 + Q54 + Q56a + Q56b + Q56c + Q56d + Q56e + Q56f + Q56g + Q100
-    df['ASR_summary_syndromeProfiles_thoughtProblems_sum'] = Q9 + Q18 + Q36 + Q40 + Q46 + Q63 + Q66 + Q70 + Q84 + Q85 
+    df['ASR_summary_syndromeProfiles_thoughtProblems_sum'] = Q9 + Q18 + Q36 + Q40 + Q46 + Q63 + Q66 + Q70 + Q84 + Q85
     df['ASR_summary_syndromeProfiles_attentionProblems_sum'] = Q1 + Q8 + Q11 + Q17 + Q53 + Q59 + Q61 + Q64 + Q78 + Q101 + Q102 + Q105 + Q108 + Q119 + Q121
     df['ASR_summary_syndromeProfiles_aggressiveBehavior_sum'] = Q3 + Q5 + Q16 + Q28 + Q37 + Q55 + Q57 + Q68 + Q81 + Q86 + Q87 + Q95 + Q97 + Q116 + Q118
-    df['ASR_summary_syndromeProfiles_rulebreakingBehavior_sum'] = Q6 + Q20 + Q23 + Q26 + Q39 + Q41 + Q43 + Q76 + Q82 + Q90 + Q92 + Q114 + Q117 + Q122 
+    df['ASR_summary_syndromeProfiles_rulebreakingBehavior_sum'] = Q6 + Q20 + Q23 + Q26 + Q39 + Q41 + Q43 + Q76 + Q82 + Q90 + Q92 + Q114 + Q117 + Q122
     df['ASR_summary_syndromeProfiles_intrusive_sum'] = Q7 + Q19 + Q74 + Q93 + Q94 + Q104
-    
+
     df['ASR_summary_syndromeProfiles_internalizing_sum'] = df[['ASR_summary_syndromeProfiles_anxiousdepressed_sum',
-                                                               'ASR_summary_syndromeProfiles_withdrawn_sum', 
+                                                               'ASR_summary_syndromeProfiles_withdrawn_sum',
                                                                'ASR_summary_syndromeProfiles_somaticComplaints_sum']].sum(axis=1)
-    
+
     df['ASR_summary_syndromeProfiles_externalizing_sum'] = df[['ASR_summary_syndromeProfiles_aggressiveBehavior_sum',
                                                                'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum',
                                                                'ASR_summary_syndromeProfiles_intrusive_sum']].sum(axis=1)
-    
-        
-        
-      
+
+
+
+
     cols_export = ['ids'] + ['ASR_summary_adaptiveFunctioning_friends_sum','ASR_summary_adaptiveFunctioning_spouse_sum',
                             'ASR_summary_adaptiveFunctioning_family_sum',
                             'ASR_summary_adaptiveFunctioning_job_sum', 'ASR_summary_adaptiveFunctioning_education_sum',
-                            'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk', 
-                            'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum', 
-                            'ASR_summary_syndromeProfiles_anxiousdepressed_sum', 
-                            'ASR_summary_syndromeProfiles_withdrawn_sum', 
+                            'ASR_scale_substanceUse_tabaco_perday','ASR_scale_substanceUse_alcohol_daysdrunk',
+                            'ASR_scale_substanceUse_drugs_daysused','ASR_summary_criticalItems_sum',
+                            'ASR_summary_syndromeProfiles_anxiousdepressed_sum',
+                            'ASR_summary_syndromeProfiles_withdrawn_sum',
                             'ASR_summary_syndromeProfiles_somaticComplaints_sum',
-                            'ASR_summary_syndromeProfiles_thoughtProblems_sum', 
-                            'ASR_summary_syndromeProfiles_attentionProblems_sum', 
-                            'ASR_summary_syndromeProfiles_aggressiveBehavior_sum', 
-                            'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum', 
-                            'ASR_summary_syndromeProfiles_intrusive_sum', 
-                            'ASR_summary_syndromeProfiles_internalizing_sum', 
-                            'ASR_summary_syndromeProfiles_externalizing_sum']    
-                            
+                            'ASR_summary_syndromeProfiles_thoughtProblems_sum',
+                            'ASR_summary_syndromeProfiles_attentionProblems_sum',
+                            'ASR_summary_syndromeProfiles_aggressiveBehavior_sum',
+                            'ASR_summary_syndromeProfiles_rulebreakingBehavior_sum',
+                            'ASR_summary_syndromeProfiles_intrusive_sum',
+                            'ASR_summary_syndromeProfiles_internalizing_sum',
+                            'ASR_summary_syndromeProfiles_externalizing_sum']
+
     df[cols_export].to_csv('%s/quest_summary_ASR-18-59.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
-########################## Self-Esteem Scale ################################# 
+########################## Self-Esteem Scale #################################
 ##############################################################################
 
 def comp_summary_SE(df, out_dir):
-    
+
     #items to be recoded
     items_recoded = ['SE_5',
                      'SE_6',
                      'SE_7',
-                     'SE_8'] 
-    
-    recoder = {1:5, 2:4, 3:3, 4:2, 5:1}     
+                     'SE_8']
+
+    recoder = {1:5, 2:4, 3:3, 4:2, 5:1}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64') 
-    
+        df[i] = df[i].map(recoder).astype('float64')
+
     #scale aggregation
     cols = ['SE_1',
             'SE_2',
             'SE_3',
             'SE_4',
-            'SE_5', 
+            'SE_5',
             'SE_6',
             'SE_7',
             'SE_8']
-    
-    df['SE_Mean_SelfEst'] = df[cols].mean(axis=1).round(3)                         
 
-    cols_export = ['ids'] + ['SE_Mean_SelfEst']  
-        
+    df['SE_Mean_SelfEst'] = df[cols].mean(axis=1).round(3)
+
+    cols_export = ['ids'] + ['SE_Mean_SelfEst']
+
     df[cols_export].to_csv('%s/quest_summary_SE_8.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
@@ -891,35 +891,35 @@ def comp_summary_IMIS(df, out_dir):
     df['IMIS_Movement_sum'] = df[['IMIS_9','IMIS_10','IMIS_11']].sum(axis=1)
     df['IMIS_PersRef_sum'] = df[['IMIS_12','IMIS_13','IMIS_14']].sum(axis=1)
 
-    cols_export = ['ids'] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]      
-    
+    cols_export = ['ids'] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]
+
     df[cols_export].to_csv('%s/quest_summary_IMIS_18.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
 ####### Goldsmiths Musical Sophistication Index (Gold-MSI) ###################
 ##############################################################################
- 
+
 def comp_summary_GoldMSI(df, out_dir):
-    
+
     #items to be recoded
     items_recoded = ['GoldMSI_5',
                      'GoldMSI_10',
-                     'GoldMSI_11'] 
-    recoder = {1:7, 2:6, 3:5, 4:4, 5:3, 6:2, 7:1} 
-     
+                     'GoldMSI_11']
+    recoder = {1:7, 2:6, 3:5, 4:4, 5:3, 6:2, 7:1}
+
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64') 
+        df[i] = df[i].map(recoder).astype('float64')
 
     df['GoldMSI_Active_sum'] = df[['GoldMSI_5','GoldMSI_1','GoldMSI_4','GoldMSI_6','GoldMSI_7','GoldMSI_2','GoldMSI_3','GoldMSI_8','GoldMSI_9']].sum(axis=1)
 
     df['GoldMSI_Training_sum'] = df[['GoldMSI_10','GoldMSI_11','GoldMSI_12','GoldMSI_13','GoldMSI_14','GoldMSI_15','GoldMSI_16']].sum(axis=1)
-    
-    cols_export = ['ids'] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']  
-        
+
+    cols_export = ['ids'] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']
+
     df[cols_export].to_csv('%s/quest_summary_Gold-MSI_16.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
@@ -927,39 +927,39 @@ def comp_summary_GoldMSI(df, out_dir):
 ##############################################################################
 
 def comp_summary_ESS(df, out_dir):
-    
-    cols = ['ESS_1', 'ESS_2', 'ESS_3', 'ESS_4',
-            'ESS_5', 'ESS_6', 'ESS_7', 'ESS_8']    
-    
-    df['ESS_summary_sum'] = df[cols].sum(axis=1)
-    
-    cols_export = ['ids'] + ['ESS_summary_sum']  
-    
-    df[cols_export].to_csv('%s/quest_summary_ESS_8.csv' % out_dir, decimal='.', index=False)
-  
 
-    
+    cols = ['ESS_1', 'ESS_2', 'ESS_3', 'ESS_4',
+            'ESS_5', 'ESS_6', 'ESS_7', 'ESS_8']
+
+    df['ESS_summary_sum'] = df[cols].sum(axis=1)
+
+    cols_export = ['ids'] + ['ESS_summary_sum']
+
+    df[cols_export].to_csv('%s/quest_summary_ESS_8.csv' % out_dir, decimal='.', index=False)
+
+
+
 ##############################################################################
 ############################## BDI ###########################################
 ##############################################################################
 
 def comp_summary_BDI(df, out_dir):
-    
+
     # recode items
     zero = ['BDI_1', 'BDI_5', 'BDI_9',
             'BDI_13', 'BDI_17', 'BDI_21',
-            'BDI_25', 'BDI_29', 'BDI_33', 
-            'BDI_37', 'BDI_41', 'BDI_45', 
+            'BDI_25', 'BDI_29', 'BDI_33',
+            'BDI_37', 'BDI_41', 'BDI_45',
             'BDI_49', 'BDI_53', 'BDI_57',
             'BDI_61', 'BDI_65', 'BDI_69',
             'BDI_73', 'BDI_78', 'BDI_82']
     for item in zero:
         df[item].replace(to_replace=1, value=0, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)
-            
+
     one = ['BDI_2', 'BDI_6', 'BDI_10',
            'BDI_14', 'BDI_18', 'BDI_22',
-           'BDI_26', 'BDI_30', 'BDI_34', 
+           'BDI_26', 'BDI_30', 'BDI_34',
            'BDI_38', 'BDI_42', 'BDI_46',
            'BDI_50', 'BDI_54', 'BDI_58',
            'BDI_62', 'BDI_66', 'BDI_70',
@@ -967,29 +967,29 @@ def comp_summary_BDI(df, out_dir):
     for item in one:
         df[item].replace(to_replace=1, value=1, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)
-            
+
     two = ['BDI_3', 'BDI_7', 'BDI_11',
            'BDI_15', 'BDI_19', 'BDI_23',
-           'BDI_27', 'BDI_31', 'BDI_35', 
-           'BDI_39', 'BDI_43', 'BDI_47', 
+           'BDI_27', 'BDI_31', 'BDI_35',
+           'BDI_39', 'BDI_43', 'BDI_47',
            'BDI_51', 'BDI_55', 'BDI_59',
            'BDI_63', 'BDI_67', 'BDI_71',
            'BDI_75', 'BDI_80', 'BDI_84']
     for item in two:
         df[item].replace(to_replace=1, value=2, inplace=True)
         df[item].replace(to_replace='NaN', value=0, inplace=True)
-            
+
     three = ['BDI_4', 'BDI_8', 'BDI_12',
-             'BDI_16', 'BDI_20', 'BDI_24', 
-             'BDI_28', 'BDI_32', 'BDI_36', 
+             'BDI_16', 'BDI_20', 'BDI_24',
+             'BDI_28', 'BDI_32', 'BDI_36',
              'BDI_40', 'BDI_44', 'BDI_48',
              'BDI_52', 'BDI_56', 'BDI_60',
              'BDI_64', 'BDI_68', 'BDI_72',
              'BDI_76', 'BDI_81', 'BDI_85']
     for item in three:
         df[item].replace(to_replace=1, value=3, inplace=True)
-        df[item].replace(to_replace='NaN', value=0, inplace=True)         
-    
+        df[item].replace(to_replace='NaN', value=0, inplace=True)
+
     df['BDI_sum_1'] = df[['BDI_1', 'BDI_2', 'BDI_3', 'BDI_4']].sum(axis=1)
     df['BDI_sum_2'] = df[['BDI_5', 'BDI_6', 'BDI_7', 'BDI_8']].sum(axis=1)
     df['BDI_sum_3'] = df[['BDI_9', 'BDI_10', 'BDI_11', 'BDI_12']].sum(axis=1)
@@ -1010,35 +1010,35 @@ def comp_summary_BDI(df, out_dir):
     df['BDI_sum_18'] = df[['BDI_69', 'BDI_70', 'BDI_71', 'BDI_72']].sum(axis=1)
     df['BDI_sum_19'] = df[['BDI_73', 'BDI_74', 'BDI_75', 'BDI_76']].sum(axis=1)
     df['BDI_sum_20'] = df[['BDI_77']]
-    df['BDI_sum_21'] = df[['BDI_78', 'BDI_79', 'BDI_80', 'BDI_81']].sum(axis=1) 
+    df['BDI_sum_21'] = df[['BDI_78', 'BDI_79', 'BDI_80', 'BDI_81']].sum(axis=1)
     df['BDI_sum_22'] = df[['BDI_82', 'BDI_83', 'BDI_84', 'BDI_85']].sum(axis=1)
- 
+
 
     cols_sum = ['BDI_sum_%s' % str(x+1) for x in range(22)]
 
     # output
-    df['BDI_summary_sum'] = df[[x for x in cols_sum]].sum(axis=1)                
-      
-    cols_export = ['ids'] + cols_sum + ['BDI_summary_sum']   
-    
+    df['BDI_summary_sum'] = df[[x for x in cols_sum]].sum(axis=1)
+
+    cols_export = ['ids'] + cols_sum + ['BDI_summary_sum']
+
     df[cols_export].to_csv('%s/quest_summary_BDI_22.csv' % out_dir, decimal='.', index=False)
 
 
-    
+
 ##############################################################################
 ############################## HADS ##########################################
 ##############################################################################
 
 def comp_summary_HADS(df, out_dir):
-    
-    df['HADS-A_summary_sum'] = df[['HADS_1', 'HADS_3', 'HADS_5', 'HADS_7', 
-                                   'HADS_9', 'HADS_11', 'HADS_13']].sum(axis=1)   
-    
-    df['HADS-D_summary_sum'] = df[['HADS_2', 'HADS_4', 'HADS_6', 'HADS_8', 
+
+    df['HADS-A_summary_sum'] = df[['HADS_1', 'HADS_3', 'HADS_5', 'HADS_7',
+                                   'HADS_9', 'HADS_11', 'HADS_13']].sum(axis=1)
+
+    df['HADS-D_summary_sum'] = df[['HADS_2', 'HADS_4', 'HADS_6', 'HADS_8',
                                    'HADS_10', 'HADS_12', 'HADS_14']].sum(axis=1)
-    
-    cols_export = ['ids'] + ['HADS-A_summary_sum', 'HADS-D_summary_sum']    
-           
+
+    cols_export = ['ids'] + ['HADS-A_summary_sum', 'HADS-D_summary_sum']
+
     df[cols_export].to_csv('%s/quest_summary_HADS_14.csv' % out_dir, decimal='.', index=False)
 
 
@@ -1048,8 +1048,8 @@ def comp_summary_HADS(df, out_dir):
 ##############################################################################
 
 def comp_summary_BPS(df, out_dir):
-    
-    #items to be recoded                                
+
+    #items to be recoded
     items_recoded = ['BPS_1',
                      'BPS_7',
                      'BPS_8',
@@ -1059,12 +1059,12 @@ def comp_summary_BPS(df, out_dir):
                      'BPS_18',
                      'BPS_22',
                      'BPS_23',
-                     'BPS_24']                       
-                             
-    #recode items                 
+                     'BPS_24']
+
+    #recode items
     recoder = {1:7 , 2:6, 3:5, 4:4, 5:3, 6:2, 7:1 }
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-28.
     cols = ['BPS_1','BPS_2','BPS_3',
@@ -1077,13 +1077,13 @@ def comp_summary_BPS(df, out_dir):
             'BPS_22','BPS_23','BPS_24',
             'BPS_25','BPS_26','BPS_27',
             'BPS_28']
-    
+
     df['BPS_sum'] = df[cols].sum(axis=1)
-                    
-    cols_export = ['ids'] + ['BPS_sum']       
-          
+
+    cols_export = ['ids'] + ['BPS_sum']
+
     df[cols_export].to_csv('%s/quest_summary_BP_28.csv' % out_dir, decimal='.', index=False)
-  
+
 
 
 ##############################################################################
@@ -1091,8 +1091,8 @@ def comp_summary_BPS(df, out_dir):
 ##############################################################################
 
 def comp_summary_ACS(df, out_dir):
-    
-    #items to be recoded                                
+
+    #items to be recoded
     items_recoded = ['ACS_1',
                     'ACS_2',
                     'ACS_3',
@@ -1100,16 +1100,16 @@ def comp_summary_ACS(df, out_dir):
                     'ACS_7',
                     'ACS_8',
                     'ACS_11',
-                    'ACS_12',     
+                    'ACS_12',
                     'ACS_15',
                     'ACS_16',
                     'ACS_18',
                     'ACS_20']
-    
-    #recode items                 
+
+    #recode items
     recoder = {1:4 , 2:3, 3:2, 4:1}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-20.
     cols = ['ACS_1','ACS_2','ACS_3',
@@ -1118,15 +1118,15 @@ def comp_summary_ACS(df, out_dir):
             'ACS_10','ACS_11','ACS_12',
             'ACS_13','ACS_14','ACS_15',
             'ACS_16','ACS_17','ACS_18',
-            'ACS_19','ACS_20']     
-    
+            'ACS_19','ACS_20']
+
     df['ACS_sum'] = df[cols].sum(axis=1)
-   
-    cols_export = ['ids'] + ['ACS_sum']    
-              
+
+    cols_export = ['ids'] + ['ACS_sum']
+
     df[cols_export].to_csv('%s/quest_summary_ACS_20.csv' % out_dir, decimal='.', index=False)
-  
-  
+
+
 
 ##############################################################################
 ############################## NEO-PI-R ######################################
@@ -1141,20 +1141,20 @@ def comp_summary_NEOPIR(df, out_dir):
                      'NEO_127','NEO_187','NEO_42','NEO_102','NEO_162','NEO_222','NEO_17','NEO_77','NEO_137',
                      'NEO_52','NEO_112','NEO_27', 'NEO_87','NEO_147','NEO_207','NEO_33','NEO_93','NEO_153',
                      'NEO_183', 'NEO_213', 'NEO_8','NEO_68','NEO_128','NEO_43','NEO_103','NEO_163','NEO_18',
-                     'NEO_78','NEO_138','NEO_198','NEO_228','NEO_53','NEO_113','NEO_173', 'NEO_28', 
+                     'NEO_78','NEO_138','NEO_198','NEO_228','NEO_53','NEO_113','NEO_173', 'NEO_28',
                      'NEO_88', 'NEO_148', 'NEO_208','NEO_238' ,'NEO_4' ,'NEO_64','NEO_124','NEO_39',
                      'NEO_99','NEO_159','NEO_189','NEO_219', 'NEO_14','NEO_74','NEO_134','NEO_49',
                      'NEO_109','NEO_169','NEO_199','NEO_229','NEO_24','NEO_84','NEO_144','NEO_234',
                      'NEO_59','NEO_119','NEO_35','NEO_95','NEO_155','NEO_10','NEO_70','NEO_130',
                      'NEO_190','NEO_220','NEO_45','NEO_105','NEO_20', 'NEO_80','NEO_140','NEO_55',
                      'NEO_115','NEO_175','NEO_205','NEO_30','NEO_90','NEO_150']
-                 
-                  
-                     
-    recoder = {0:4, 1:3, 2:2, 3:1, 4:0}    
+
+
+
+    recoder = {0:4, 1:3, 2:2, 3:1, 4:0}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')  
-    
+        df[i] = df[i].map(recoder).astype('float64')
+
     # calculate subscales as means for all 30 facets
 
     #Neuroticism
@@ -1163,27 +1163,27 @@ def comp_summary_NEOPIR(df, out_dir):
                       'NEO_71','NEO_101','NEO_131','NEO_161','NEO_191','NEO_221','NEO_16','NEO_76','NEO_106',
                       'NEO_136','NEO_166','NEO_196','NEO_226','NEO_21','NEO_51','NEO_81','NEO_111','NEO_141',
                       'NEO_171','NEO_201','NEO_231','NEO_26','NEO_56','NEO_86','NEO_116','NEO_146','NEO_176',
-                      'NEO_206','NEO_236']].mean(axis=1) # false item 46 excluded
-            
+                      'NEO_206','NEO_236']].sum(axis=1) # false item 46 excluded
+
     #N1 anxiety
     df['NEO_N1_anx'] = df[['NEO_1','NEO_31','NEO_61','NEO_91',
-                           'NEO_121','NEO_151','NEO_181','NEO_211']].mean(axis=1)
+                           'NEO_121','NEO_151','NEO_181','NEO_211']].sum(axis=1)
     #N2 angry hostility
     df['NEO_N2_host'] = df[['NEO_6','NEO_36','NEO_66','NEO_96',
-                            'NEO_126','NEO_156','NEO_186','NEO_216']].mean(axis=1)
+                            'NEO_126','NEO_156','NEO_186','NEO_216']].sum(axis=1)
     #N3 Depression
     df['NEO_N3_depr'] = df[['NEO_11','NEO_41','NEO_71','NEO_101',
-                            'NEO_131','NEO_161','NEO_191','NEO_221']].mean(axis=1)
+                            'NEO_131','NEO_161','NEO_191','NEO_221']].sum(axis=1)
     #N4 Self Consciousness
     df['NEO_N4_selfcon'] = df[['NEO_16','NEO_76','NEO_106','NEO_136',
-                               'NEO_166','NEO_196','NEO_226']].mean(axis=1) # false item 46 excluded
+                               'NEO_166','NEO_196','NEO_226']].sum(axis=1) # false item 46 excluded
     #N5 Impulsiveness
     df['NEO_N5_imp'] = df[['NEO_21','NEO_51','NEO_81','NEO_111',
-                           'NEO_141','NEO_171','NEO_201','NEO_231']].mean(axis=1)
+                           'NEO_141','NEO_171','NEO_201','NEO_231']].sum(axis=1)
     #N6 Vulnerability
     df['NEO_N6_vuln'] = df[['NEO_26','NEO_56','NEO_86','NEO_116',
-                            'NEO_146','NEO_176','NEO_206','NEO_236']].mean(axis=1)
-    
+                            'NEO_146','NEO_176','NEO_206','NEO_236']].sum(axis=1)
+
 
     #Extraversion
     df['NEO_E'] = df[['NEO_2','NEO_32','NEO_62','NEO_92','NEO_122','NEO_152','NEO_182','NEO_212',
@@ -1191,28 +1191,28 @@ def comp_summary_NEOPIR(df, out_dir):
                       'NEO_12','NEO_42','NEO_72','NEO_102','NEO_132','NEO_162','NEO_192','NEO_222',
                       'NEO_17','NEO_47','NEO_77','NEO_107','NEO_137','NEO_167','NEO_197','NEO_227',
                       'NEO_22','NEO_52','NEO_82','NEO_112','NEO_142','NEO_172','NEO_202','NEO_232',
-                      'NEO_27','NEO_57','NEO_87','NEO_117','NEO_147','NEO_177','NEO_207','NEO_237']].mean(axis=1)
+                      'NEO_27','NEO_57','NEO_87','NEO_117','NEO_147','NEO_177','NEO_207','NEO_237']].sum(axis=1)
 
     #E1 warmth
     df['NEO_E1_warm'] = df[['NEO_2','NEO_32','NEO_62',
-                            'NEO_92','NEO_122','NEO_152','NEO_182','NEO_212']].mean(axis=1)
+                            'NEO_92','NEO_122','NEO_152','NEO_182','NEO_212']].sum(axis=1)
     #E2 Gregariousness
     df['NEO_E2_greg'] = df[['NEO_7','NEO_37','NEO_67',
-                            'NEO_97','NEO_127','NEO_157','NEO_187','NEO_217']].mean(axis=1)
+                            'NEO_97','NEO_127','NEO_157','NEO_187','NEO_217']].sum(axis=1)
     #N3 Assertiveness
     df['NEO_E3_ass'] = df[['NEO_12','NEO_42','NEO_72',
-                           'NEO_102','NEO_132','NEO_162','NEO_192','NEO_222']].mean(axis=1)
+                           'NEO_102','NEO_132','NEO_162','NEO_192','NEO_222']].sum(axis=1)
     #N4 Activity
     df['NEO_E4_act'] = df[['NEO_17','NEO_47','NEO_77',
-                           'NEO_107','NEO_137','NEO_167','NEO_197','NEO_227']].mean(axis=1)
+                           'NEO_107','NEO_137','NEO_167','NEO_197','NEO_227']].sum(axis=1)
     #N5 Excitement Seeking
     df['NEO_E5_excseek'] = df[['NEO_22','NEO_52','NEO_82',
-                               'NEO_112','NEO_142','NEO_172','NEO_202','NEO_232']].mean(axis=1)
+                               'NEO_112','NEO_142','NEO_172','NEO_202','NEO_232']].sum(axis=1)
     #N6 Positive Emotions
     df['NEO_E6_PosEmo'] = df[['NEO_27','NEO_57','NEO_87',
-                              'NEO_117','NEO_147','NEO_177','NEO_207','NEO_237']].mean(axis=1)
+                              'NEO_117','NEO_147','NEO_177','NEO_207','NEO_237']].sum(axis=1)
 
-    
+
     #Openness
     #item 83 missing
     df['NEO_O'] = df[['NEO_3','NEO_33','NEO_63','NEO_93','NEO_123','NEO_153','NEO_183','NEO_213',
@@ -1220,110 +1220,107 @@ def comp_summary_NEOPIR(df, out_dir):
                       'NEO_13','NEO_43','NEO_73','NEO_103','NEO_133','NEO_163','NEO_193','NEO_223',
                       'NEO_18','NEO_48','NEO_78','NEO_108','NEO_138','NEO_168','NEO_198','NEO_228',
                       'NEO_23','NEO_53','NEO_113','NEO_143','NEO_173','NEO_203','NEO_233',
-                      'NEO_28','NEO_58','NEO_88','NEO_118','NEO_148','NEO_178','NEO_208','NEO_238']].mean(axis=1)
-    
+                      'NEO_28','NEO_58','NEO_88','NEO_118','NEO_148','NEO_178','NEO_208','NEO_238']].sum(axis=1)
+
     #O1 fantasy
     df['NEO_O1_fan'] = df[['NEO_3','NEO_33','NEO_63',
-                           'NEO_93','NEO_123','NEO_153','NEO_183','NEO_213']].mean(axis=1)
+                           'NEO_93','NEO_123','NEO_153','NEO_183','NEO_213']].sum(axis=1)
     #O2 aesthetics
     df['NEO_O2_aest'] = df[['NEO_8','NEO_38','NEO_68',
-                            'NEO_98','NEO_128','NEO_158','NEO_188','NEO_218']].mean(axis=1)
+                            'NEO_98','NEO_128','NEO_158','NEO_188','NEO_218']].sum(axis=1)
     #O3 feelings
     df['NEO_O3_feel'] = df[['NEO_13','NEO_43','NEO_73',
-                            'NEO_103','NEO_133','NEO_163','NEO_193','NEO_223']].mean(axis=1)
+                            'NEO_103','NEO_133','NEO_163','NEO_193','NEO_223']].sum(axis=1)
     #04 actions
     df['NEO_O4_act'] = df[['NEO_18','NEO_48','NEO_78',
-                           'NEO_108','NEO_138','NEO_168','NEO_198','NEO_228']].mean(axis=1)
+                           'NEO_108','NEO_138','NEO_168','NEO_198','NEO_228']].sum(axis=1)
     #05 ideas
     #item 83 missing
     df['NEO_O5_idea'] = df[['NEO_23','NEO_53','NEO_113',
-                            'NEO_143','NEO_173','NEO_203','NEO_233']].mean(axis=1)
+                            'NEO_143','NEO_173','NEO_203','NEO_233']].sum(axis=1)
     #06 values
     df['NEO_O6_value'] = df[['NEO_28','NEO_58','NEO_88',
-                             'NEO_118','NEO_148','NEO_178','NEO_208','NEO_238']].mean(axis=1)
-        
-    
-    
+                             'NEO_118','NEO_148','NEO_178','NEO_208','NEO_238']].sum(axis=1)
+
+
+
     #Agreeableness
     df['NEO_A'] = df[['NEO_4','NEO_34','NEO_64','NEO_94','NEO_124','NEO_154','NEO_184','NEO_214',
                       'NEO_9','NEO_39','NEO_69','NEO_99','NEO_129','NEO_159','NEO_189','NEO_219',
                       'NEO_14','NEO_44','NEO_74','NEO_104','NEO_134','NEO_164','NEO_194','NEO_224',
                       'NEO_19','NEO_49','NEO_79','NEO_109','NEO_139','NEO_169','NEO_199','NEO_229',
                       'NEO_24','NEO_54','NEO_84','NEO_114','NEO_144','NEO_174','NEO_204','NEO_234',
-                      'NEO_29','NEO_59','NEO_89','NEO_119','NEO_149','NEO_179','NEO_209','NEO_239']].mean(axis=1)
-    
+                      'NEO_29','NEO_59','NEO_89','NEO_119','NEO_149','NEO_179','NEO_209','NEO_239']].sum(axis=1)
+
     #A1 trust
     df['NEO_A1_trust'] = df[['NEO_4','NEO_34','NEO_64',
-                             'NEO_94','NEO_124','NEO_154','NEO_184','NEO_214']].mean(axis=1)
+                             'NEO_94','NEO_124','NEO_154','NEO_184','NEO_214']].sum(axis=1)
     #A2 straightforwardedness
     df['NEO_A2_sf'] = df[['NEO_9','NEO_39','NEO_69',
-                          'NEO_99','NEO_129','NEO_159','NEO_189','NEO_219']].mean(axis=1)
+                          'NEO_99','NEO_129','NEO_159','NEO_189','NEO_219']].sum(axis=1)
     #A3 altruism
     df['NEO_A3_altr'] = df[['NEO_14','NEO_44','NEO_74',
-                            'NEO_104','NEO_134','NEO_164','NEO_194','NEO_224']].mean(axis=1)
+                            'NEO_104','NEO_134','NEO_164','NEO_194','NEO_224']].sum(axis=1)
     #A4 compliance
     df['NEO_A4_compl'] = df[['NEO_19','NEO_49','NEO_79',
-                             'NEO_109','NEO_139','NEO_169','NEO_199','NEO_229']].mean(axis=1)
+                             'NEO_109','NEO_139','NEO_169','NEO_199','NEO_229']].sum(axis=1)
     #A5 modesty
     df['NEO_A5_modes'] = df[['NEO_24','NEO_54','NEO_84',
-                             'NEO_114','NEO_144','NEO_174','NEO_204','NEO_234']].mean(axis=1)
+                             'NEO_114','NEO_144','NEO_174','NEO_204','NEO_234']].sum(axis=1)
     #A6 tender_mindedness
     df['NEO_A6_tenmind'] = df[['NEO_29','NEO_59','NEO_89',
-                               'NEO_119','NEO_149','NEO_179','NEO_209','NEO_239']].mean(axis=1)
-    
+                               'NEO_119','NEO_149','NEO_179','NEO_209','NEO_239']].sum(axis=1)
 
-    
+
+
     #Conscientiousness
     df['NEO_C'] = df[['NEO_5','NEO_35','NEO_65','NEO_95','NEO_125','NEO_155','NEO_185','NEO_215',
                      'NEO_10','NEO_40','NEO_70','NEO_100','NEO_130','NEO_160','NEO_190','NEO_220',
                      'NEO_15','NEO_45','NEO_75','NEO_105','NEO_135','NEO_165','NEO_195','NEO_225',
                      'NEO_20','NEO_50','NEO_80','NEO_110','NEO_140','NEO_170','NEO_200','NEO_230',
                      'NEO_25','NEO_55','NEO_85','NEO_115','NEO_145','NEO_175','NEO_205','NEO_235',
-                     'NEO_30','NEO_60','NEO_90','NEO_120','NEO_150','NEO_180','NEO_210','NEO_240']].mean(axis=1)
-    
-    #C1 compentence 
+                     'NEO_30','NEO_60','NEO_90','NEO_120','NEO_150','NEO_180','NEO_210','NEO_240']].sum(axis=1)
+
+    #C1 compentence
     df['NEO_C1_comp'] = df[['NEO_5','NEO_35','NEO_65',
-                            'NEO_95','NEO_125','NEO_155','NEO_185','NEO_215']].mean(axis=1)
+                            'NEO_95','NEO_125','NEO_155','NEO_185','NEO_215']].sum(axis=1)
     #C2 order
     df['NEO_C2_order'] = df[['NEO_10','NEO_40','NEO_70',
-                             'NEO_100','NEO_130','NEO_160','NEO_190','NEO_220']].mean(axis=1)
+                             'NEO_100','NEO_130','NEO_160','NEO_190','NEO_220']].sum(axis=1)
     #C3 dutifulness
     df['NEO_C3_dutif'] = df[['NEO_15','NEO_45','NEO_75',
-                             'NEO_105','NEO_135','NEO_165','NEO_195','NEO_225']].mean(axis=1)
-    #C4 achievement striving 
+                             'NEO_105','NEO_135','NEO_165','NEO_195','NEO_225']].sum(axis=1)
+    #C4 achievement striving
     df['NEO_C4_achstr'] = df[['NEO_20','NEO_50','NEO_80',
-                              'NEO_110','NEO_140','NEO_170','NEO_200','NEO_230']].mean(axis=1)
+                              'NEO_110','NEO_140','NEO_170','NEO_200','NEO_230']].sum(axis=1)
     #C5 self discipline
     df['NEO_C5_selfdis'] = df[['NEO_25','NEO_55','NEO_85',
-                               'NEO_115','NEO_145','NEO_175','NEO_205','NEO_235']].mean(axis=1)
+                               'NEO_115','NEO_145','NEO_175','NEO_205','NEO_235']].sum(axis=1)
     #C6 deliberation
     df['NEO_C6_deli'] = df[['NEO_30','NEO_60','NEO_90',
-                            'NEO_120','NEO_150','NEO_180','NEO_210','NEO_240']].mean(axis=1)
-  
-  
-   
-    summary_cols = ['NEO_N', 'NEO_N1_anx', 'NEO_N2_host', 
-                    'NEO_N3_depr', 'NEO_N4_selfcon', 'NEO_N5_imp', 'NEO_N6_vuln', 
-                    'NEO_E', 'NEO_E1_warm', 'NEO_E2_greg', 
-                    'NEO_E3_ass', 'NEO_E4_act', 'NEO_E5_excseek', 'NEO_E6_PosEmo', 
-                    'NEO_O', 'NEO_O1_fan', 'NEO_O2_aest', 
-                    'NEO_O3_feel', 'NEO_O4_act', 'NEO_O5_idea', 'NEO_O6_value', 
-                    'NEO_A', 'NEO_A1_trust', 'NEO_A2_sf', 
-                    'NEO_A3_altr', 'NEO_A4_compl', 'NEO_A5_modes', 'NEO_A6_tenmind', 
-                    'NEO_C', 'NEO_C1_comp', 'NEO_C2_order', 
+                            'NEO_120','NEO_150','NEO_180','NEO_210','NEO_240']].sum(axis=1)
+
+
+
+    summary_cols = ['NEO_N', 'NEO_N1_anx', 'NEO_N2_host',
+                    'NEO_N3_depr', 'NEO_N4_selfcon', 'NEO_N5_imp', 'NEO_N6_vuln',
+                    'NEO_E', 'NEO_E1_warm', 'NEO_E2_greg',
+                    'NEO_E3_ass', 'NEO_E4_act', 'NEO_E5_excseek', 'NEO_E6_PosEmo',
+                    'NEO_O', 'NEO_O1_fan', 'NEO_O2_aest',
+                    'NEO_O3_feel', 'NEO_O4_act', 'NEO_O5_idea', 'NEO_O6_value',
+                    'NEO_A', 'NEO_A1_trust', 'NEO_A2_sf',
+                    'NEO_A3_altr', 'NEO_A4_compl', 'NEO_A5_modes', 'NEO_A6_tenmind',
+                    'NEO_C', 'NEO_C1_comp', 'NEO_C2_order',
                     'NEO_C3_dutif', 'NEO_C4_achstr', 'NEO_C5_selfdis', 'NEO_C6_deli']
-    
+
     df[['ids'] + summary_cols].to_csv('%s/quest_summary_NEO-PI-R_241.csv' % out_dir, decimal='.', index=False)
-    
-    
-  
 
 ##############################################################################
 ############# PSSI - Persönlichkeitsstil- und Störungsinventar################
 ##############################################################################
 
 def comp_summary_PSSI(df, out_dir):
-    
+
     cols = ['PSSI_1','PSSI_2','PSSI_3','PSSI_4','PSSI_5','PSSI_6','PSSI_7','PSSI_8','PSSI_9',
              'PSSI_10','PSSI_11','PSSI_12','PSSI_13','PSSI_14','PSSI_15','PSSI_16','PSSI_17',
              'PSSI_18','PSSI_19','PSSI_20','PSSI_21','PSSI_22','PSSI_23','PSSI_24','PSSI_25',
@@ -1345,55 +1342,55 @@ def comp_summary_PSSI(df, out_dir):
     #recode all items to original format (limesurvey: 1234, original = 0123)
     recoder = {1:0, 2:1, 3:2, 4:3 }
     for i in cols:
-        df[i] = df[i].map(recoder).astype('float64') 
-        
+        df[i] = df[i].map(recoder).astype('float64')
+
     #recode reversed items
     items_recoded = ['PSSI_15',
                      'PSSI_43',
                      'PSSI_71',
                      'PSSI_99',
-                     'PSSI_44', 
+                     'PSSI_44',
                      'PSSI_72',
                      'PSSI_86',
                      'PSSI_104',
                      'PSSI_49',
-                     'PSSI_91', 
+                     'PSSI_91',
                      'PSSI_105',
                      'PSSI_39',
                      'PSSI_67',
                      'PSSI_109',
-                     'PSSI_137']    
-                     
-    recoder = {0:3, 1:2, 2:1, 3:0}     
+                     'PSSI_137']
+
+    recoder = {0:3, 1:2, 2:1, 3:0}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')  
-    
-    # calculate subscales as sumscores   
-    
-    #PN = eigenwillig_paranoid     
+        df[i] = df[i].map(recoder).astype('float64')
+
+    # calculate subscales as sumscores
+
+    #PN = eigenwillig_paranoid
     df['PSSI_PN'] = df[['PSSI_1',
                         'PSSI_15',
                         'PSSI_29',
-                        'PSSI_43', 
+                        'PSSI_43',
                         'PSSI_57',
                         'PSSI_71',
                         'PSSI_85',
                         'PSSI_99',
                         'PSSI_113',
                         'PSSI_127']].sum(axis=1)
-    
-    #SZ = zurückhaltend-schizoid                    
+
+    #SZ = zurückhaltend-schizoid
     df['PSSI_SZ'] = df[['PSSI_2',
                         'PSSI_16',
                         'PSSI_30',
-                        'PSSI_44', 
+                        'PSSI_44',
                         'PSSI_58',
                         'PSSI_72',
                         'PSSI_86',
                         'PSSI_100',
-                        'PSSI_114', 
+                        'PSSI_114',
                         'PSSI_128']].sum(axis=1)
-    
+
     #ST = ahnungsvoll-schizotypisch
     df['PSSI_ST'] = df[['PSSI_3',
                         'PSSI_17',
@@ -1403,156 +1400,156 @@ def comp_summary_PSSI(df, out_dir):
                         'PSSI_73',
                         'PSSI_87',
                         'PSSI_101',
-                        'PSSI_115', 
-                        'PSSI_129']].sum(axis=1)     
-    
+                        'PSSI_115',
+                        'PSSI_129']].sum(axis=1)
+
     #BL = spontan-borderline
     df['PSSI_BL'] = df[['PSSI_4',
                         'PSSI_18',
                         'PSSI_32',
-                        'PSSI_46', 
+                        'PSSI_46',
                         'PSSI_60',
                         'PSSI_74',
                         'PSSI_88',
                         'PSSI_102',
-                        'PSSI_116', 
-                        'PSSI_130']].sum(axis=1)                      
-                                                
+                        'PSSI_116',
+                        'PSSI_130']].sum(axis=1)
+
     #HI = liebenswürdig-hisrtionisch
     df['PSSI_HI'] = df[['PSSI_5',
                         'PSSI_19',
                         'PSSI_33',
-                        'PSSI_47', 
+                        'PSSI_47',
                         'PSSI_61',
                         'PSSI_75',
                         'PSSI_89',
                         'PSSI_103',
-                        'PSSI_117', 
-                        'PSSI_131']].sum(axis=1)                 
-                                      
-    # NA = ehrgeizig_narzisstisch                   
+                        'PSSI_117',
+                        'PSSI_131']].sum(axis=1)
+
+    # NA = ehrgeizig_narzisstisch
     df['PSSI_NA'] = df[['PSSI_6',
                         'PSSI_20',
                         'PSSI_34',
-                        'PSSI_48', 
+                        'PSSI_48',
                         'PSSI_62',
                         'PSSI_76',
                         'PSSI_90',
                         'PSSI_104',
-                        'PSSI_118', 
-                        'PSSI_132']].sum(axis=1)  
-    
-    #SU = selbstkritisch-selbstunsicher                    
+                        'PSSI_118',
+                        'PSSI_132']].sum(axis=1)
+
+    #SU = selbstkritisch-selbstunsicher
     df['PSSI_SU'] = df[['PSSI_7',
                         'PSSI_21',
                         'PSSI_35',
-                        'PSSI_49', 
+                        'PSSI_49',
                         'PSSI_63',
                         'PSSI_77',
                         'PSSI_91',
                         'PSSI_105',
-                        'PSSI_119', 
+                        'PSSI_119',
                         'PSSI_133']].sum(axis=1)
-                                   
-    # AB = loyal-abhängig  
+
+    # AB = loyal-abhängig
     df['PSSI_AB'] = df[['PSSI_8',
                         'PSSI_22',
                         'PSSI_36',
-                        'PSSI_50', 
+                        'PSSI_50',
                         'PSSI_64',
                         'PSSI_78',
                         'PSSI_92',
                         'PSSI_106',
-                        'PSSI_120', 
-                        'PSSI_134']].sum(axis=1)    
-                             
+                        'PSSI_120',
+                        'PSSI_134']].sum(axis=1)
+
     # ZW = sorgfältig - zwanghaft
     df['PSSI_ZW'] = df[['PSSI_9',
                         'PSSI_23',
                         'PSSI_37',
-                        'PSSI_51', 
+                        'PSSI_51',
                         'PSSI_65',
                         'PSSI_79',
                         'PSSI_93',
                         'PSSI_107',
-                        'PSSI_121', 
-                        'PSSI_135']].sum(axis=1)   
-                               
-    #NT = kritisch-negativistisch    
+                        'PSSI_121',
+                        'PSSI_135']].sum(axis=1)
+
+    #NT = kritisch-negativistisch
     df['PSSI_NT'] = df[['PSSI_10',
                         'PSSI_24',
                         'PSSI_38',
-                        'PSSI_52', 
+                        'PSSI_52',
                         'PSSI_66',
                         'PSSI_80',
                         'PSSI_94',
                         'PSSI_108',
-                        'PSSI_122', 
+                        'PSSI_122',
                         'PSSI_136']].sum(axis=1)
-                                               
+
     # DP = still depressiv
     df['PSSI_DP'] = df[['PSSI_11',
                         'PSSI_25',
                         'PSSI_39',
-                        'PSSI_53', 
-                        'PSSI_67', 
+                        'PSSI_53',
+                        'PSSI_67',
                         'PSSI_81',
                         'PSSI_95',
                         'PSSI_109',
-                        'PSSI_123', 
+                        'PSSI_123',
                         'PSSI_137']].sum(axis=1)
-                           
+
     #SL = hilfsbereit-selbstlos
     df['PSSI_SL'] = df[['PSSI_12',
                         'PSSI_26',
                         'PSSI_40',
-                        'PSSI_54', 
-                        'PSSI_68', 
-                        'PSSI_82', 
+                        'PSSI_54',
+                        'PSSI_68',
+                        'PSSI_82',
                         'PSSI_96',
                         'PSSI_110',
-                        'PSSI_124', 
+                        'PSSI_124',
                         'PSSI_138']].sum(axis=1)
-                             
+
     #RH = optimistisch-rhapsodisch
     df['PSSI_RH'] = df[['PSSI_13',
                         'PSSI_27',
                         'PSSI_41',
-                        'PSSI_55', 
+                        'PSSI_55',
                         'PSSI_69',
                         'PSSI_83',
                         'PSSI_97',
                         'PSSI_111',
-                        'PSSI_125', 
+                        'PSSI_125',
                         'PSSI_139']].sum(axis=1)
-                           
+
     #AS = selbstbehauptend-antisozial
     df['PSSI_AS'] = df[['PSSI_14',
                         'PSSI_28',
                         'PSSI_42',
-                        'PSSI_56', 
+                        'PSSI_56',
                         'PSSI_70',
                         'PSSI_84',
                         'PSSI_98',
                         'PSSI_112',
-                        'PSSI_126', 
+                        'PSSI_126',
                         'PSSI_140']].sum(axis=1)
 
-    cols_export = ['ids'] + ["PSSI_PN", 'PSSI_SZ', 'PSSI_ST', 'PSSI_BL', 
-                            'PSSI_HI', 'PSSI_NA', 'PSSI_SU', 'PSSI_AB', 
-                            'PSSI_ZW', 'PSSI_NT', 'PSSI_DP', 'PSSI_SL', 
-                            'PSSI_RH', 'PSSI_AS']  
-                            
+    cols_export = ['ids'] + ["PSSI_PN", 'PSSI_SZ', 'PSSI_ST', 'PSSI_BL',
+                            'PSSI_HI', 'PSSI_NA', 'PSSI_SU', 'PSSI_AB',
+                            'PSSI_ZW', 'PSSI_NT', 'PSSI_DP', 'PSSI_SL',
+                            'PSSI_RH', 'PSSI_AS']
+
     df[cols_export].to_csv('%s/quest_summary_PSSI_140.csv' % out_dir, decimal='.', index=False)
-  
+
 
 ##############################################################################
 ################################## MMI #######################################
 ##############################################################################
 
 def comp_summary_MMI(df, out_dir):
-    
-#items to be recoded                                
+
+#items to be recoded
     cols= ['MMI_1_4_A' ,'MMI_1_4_B' ,'MMI_1_4_C' ,'MMI_1_4_D' ,'MMI_1_4_E' ,'MMI_1_4_F' ,
            'MMI_1_4_G' ,'MMI_1_4_H' ,'MMI_1_4_I' ,'MMI_1_4_J' ,'MMI_1_4_K' ,'MMI_1_4_L' ,
            'MMI_2_4_A' ,'MMI_2_4_B' ,'MMI_2_4_C' ,'MMI_2_4_D' ,'MMI_2_4_E' ,'MMI_2_4_F' ,
@@ -1576,13 +1573,13 @@ def comp_summary_MMI(df, out_dir):
            'MMI_11_4_A' ,'MMI_11_4_B' ,'MMI_11_4_C' ,'MMI_11_4_D' ,'MMI_11_4_E' ,'MMI_11_4_F' ,
            'MMI_11_4_G' ,'MMI_11_4_H' ,'MMI_11_4_I' ,'MMI_11_4_J' ,'MMI_11_4_K' ,'MMI_11_4_L' ,
            'MMI_12_4_A' ,'MMI_12_4_B' ,'MMI_12_4_C' ,'MMI_12_4_D' ,'MMI_12_4_E' ,'MMI_12_4_F' ,
-           'MMI_12_4_G' ,'MMI_12_4_H'] 
+           'MMI_12_4_G' ,'MMI_12_4_H']
 
-    #recode items                 
+    #recode items
     recoder = {5 :'NaN', 4 :1, 3:0.66, 2:0.33, 1:0}
     for i in cols:
-        df[i] = df[i].map(recoder).astype('float64')   
-    
+        df[i] = df[i].map(recoder).astype('float64')
+
     #Calculate total score as the sum for media types
     df['MMI1'] = df[['MMI_1_4_A',
                      'MMI_1_4_B',
@@ -1596,7 +1593,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_1_4_J',
                      'MMI_1_4_K',
                      'MMI_1_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI2'] = df[['MMI_2_4_A' ,
                      'MMI_2_4_B' ,
                      'MMI_2_4_C' ,
@@ -1609,7 +1606,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_2_4_J' ,
                      'MMI_2_4_K' ,
                      'MMI_2_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI3'] = df[['MMI_3_4_A',
                      'MMI_3_4_B',
                      'MMI_3_4_C',
@@ -1622,7 +1619,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_3_4_J',
                      'MMI_3_4_K',
                      'MMI_3_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI4'] = df[['MMI_4_4_A',
                      'MMI_4_4_B',
                      'MMI_4_4_C',
@@ -1635,7 +1632,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_4_4_J',
                      'MMI_4_4_K',
                      'MMI_4_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI5'] = df[['MMI_5_4_A',
                      'MMI_5_4_B',
                      'MMI_5_4_C',
@@ -1648,7 +1645,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_5_4_J',
                      'MMI_5_4_K',
                      'MMI_5_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI6'] = df[['MMI_6_4_A',
                      'MMI_6_4_B',
                      'MMI_6_4_C',
@@ -1661,7 +1658,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_6_4_J',
                      'MMI_6_4_K',
                      'MMI_6_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI7'] = df[['MMI_7_4_A',
                      'MMI_7_4_B',
                      'MMI_7_4_C',
@@ -1674,7 +1671,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_7_4_J',
                      'MMI_7_4_K',
                      'MMI_7_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI8'] = df[['MMI_8_4_A',
                      'MMI_8_4_B',
                      'MMI_8_4_C',
@@ -1687,7 +1684,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_8_4_J',
                      'MMI_8_4_K',
                      'MMI_8_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI9'] = df[['MMI_9_6_A',
                      'MMI_9_6_B',
                      'MMI_9_6_C',
@@ -1700,7 +1697,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_9_6_J',
                      'MMI_9_6_K',
                      'MMI_9_6_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI10'] = df[['MMI_10_4_A',
                      'MMI_10_4_B',
                      'MMI_10_4_C',
@@ -1713,7 +1710,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_10_4_J',
                      'MMI_10_4_K',
                      'MMI_10_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI11'] = df[['MMI_11_4_A',
                      'MMI_11_4_B',
                      'MMI_11_4_C',
@@ -1726,7 +1723,7 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_11_4_J',
                      'MMI_11_4_K',
                      'MMI_11_4_L']].sum(axis=1).astype('float64')
-    
+
     df['MMI12'] = df[['MMI_12_4_A',
                      'MMI_12_4_B',
                      'MMI_12_4_C',
@@ -1739,12 +1736,12 @@ def comp_summary_MMI(df, out_dir):
                      'MMI_12_4_J',
                      'MMI_12_4_K',
                      'MMI_12_4_L']].sum(axis=1).astype('float64')
-    
+
     df['TotalHours'] = df[['MMI_1_1','MMI_2_1', 'MMI_3_1', 'MMI_4_1', 'MMI_5_1', 'MMI_6_1', 'MMI_7_1', 'MMI_8_1',
                            'MMI_9_1', 'MMI_10_1', 'MMI_11_1', 'MMI_12_1']].sum(axis=1).astype('float64')
-    
+
     #mediatypes weighted by hours of primary medium divided by hours spent with all media
-    
+
     df['MMI1xhours‎dividedbytotalhours'] = df['MMI1']*df['MMI_1_1'].astype('float64')/df['TotalHours']
     df['MMI2xhours‎dividedbytotalhours'] = df['MMI2']*df['MMI_2_1'].astype('float64')/df['TotalHours']
     df['MMI3xhours‎dividedbytotalhours'] = df['MMI3']*df['MMI_3_1'].astype('float64')/df['TotalHours']
@@ -1758,59 +1755,59 @@ def comp_summary_MMI(df, out_dir):
     df['MMI11xhours‎dividedbytotalhours'] = df['MMI11']*df['MMI_11_1'].astype('float64')/df['TotalHours']
     df['MMI12xhours‎dividedbytotalhours'] = df['MMI12']*df['MMI_12_1'].astype('float64')/df['TotalHours']
 
-    
+
     #Index by summing the weighted scales
-    
+
     df['MMI_score'] = df[['MMI1xhours‎dividedbytotalhours',
                         'MMI2xhours‎dividedbytotalhours',
                         'MMI3xhours‎dividedbytotalhours',
                         'MMI4xhours‎dividedbytotalhours',
                         'MMI5xhours‎dividedbytotalhours',
                         'MMI6xhours‎dividedbytotalhours',
-                        'MMI7xhours‎dividedbytotalhours', 
+                        'MMI7xhours‎dividedbytotalhours',
                         'MMI8xhours‎dividedbytotalhours',
                         'MMI9xhours‎dividedbytotalhours',
                         'MMI10xhours‎dividedbytotalhours',
                         'MMI11xhours‎dividedbytotalhours',
                         'MMI12xhours‎dividedbytotalhours']].sum(axis=1)
-    
-    cols_export = ['ids'] + ['MMI_score']         
-         
+
+    cols_export = ['ids'] + ['MMI_score']
+
     df[cols_export].to_csv('%s/quest_summary_MMI_12x4.csv' % out_dir, decimal='.', index=False)
-  
-  
+
+
 
 ##############################################################################
 ############################## BIS/BAS #######################################
 ##############################################################################
 
 def comp_summary_BISBAS(df, out_dir):
-    
-    #items to be recoded                                
+
+    #items to be recoded
     items_recoded = ['BISBAS_2',
-                     'BISBAS_22']    
-                             
-    #recode items                 
+                     'BISBAS_22']
+
+    #recode items
     recoder = {1:4, 2:3, 3:2, 4:1}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
+        df[i] = df[i].map(recoder).astype('float64')
 
     #Calculate total score as the sum of Item 1-22.
-    df['BISBAS_BIS_sum'] = df[['BISBAS_2', 'BISBAS_8', 'BISBAS_13', 'BISBAS_16', 
+    df['BISBAS_BIS_sum'] = df[['BISBAS_2', 'BISBAS_8', 'BISBAS_13', 'BISBAS_16',
                        'BISBAS_19', 'BISBAS_22', 'BISBAS_24']].sum(axis=1)
-    
-    
+
+
     df['BISBAS_BAS_sum'] = df[['BISBAS_3', 'BISBAS_9', 'BISBAS_12', 'BISBAS_21',
                        'BISBAS_5', 'BISBAS_10', 'BISBAS_15', 'BISBAS_20',
-                       'BISBAS_4', 'BISBAS_7', 'BISBAS_14', 'BISBAS_18', 
+                       'BISBAS_4', 'BISBAS_7', 'BISBAS_14', 'BISBAS_18',
                        'BISBAS_23']].sum(axis=1)
-                       
-    cols_export = ['ids'] + ['BISBAS_BIS_sum', 'BISBAS_BAS_sum']    
-          
+
+    cols_export = ['ids'] + ['BISBAS_BIS_sum', 'BISBAS_BAS_sum']
+
     df[cols_export].to_csv('%s/quest_summary_BISBAS_24.csv' % out_dir, decimal='.', index=False)
-      
-    
-      
+
+
+
 ##############################################################################
 ################################# STAI #######################################
 ##############################################################################
@@ -1820,43 +1817,43 @@ def comp_summary_STAI(df, out_dir):
     cols = ['STAI_1','STAI_2','STAI_3','STAI_4','STAI_5','STAI_6','STAI_7','STAI_8',
                  'STAI_9','STAI_10','STAI_11','STAI_12','STAI_13','STAI_14','STAI_15','STAI_16',
                  'STAI_17','STAI_18','STAI_19','STAI_20']
-    
-    items_recoded = ['STAI_1', 'STAI_6', 'STAI_7', 'STAI_10', 
+
+    items_recoded = ['STAI_1', 'STAI_6', 'STAI_7', 'STAI_10',
                      'STAI_13', 'STAI_16', 'STAI_19']
-                    
+
     recoder = {1:4, 2:3, 3:2, 4:1}
     for i in items_recoded:
-        df[i] = df[i].map(recoder).astype('float64')   
-    
+        df[i] = df[i].map(recoder).astype('float64')
+
     df['STAI_A-Trait_summary_sum'] = df[cols].sum(axis=1)
-    
-    cols_export = ['ids'] + ['STAI_A-Trait_summary_sum']        
-          
+
+    cols_export = ['ids'] + ['STAI_A-Trait_summary_sum']
+
     df[cols_export].to_csv('%s/quest_summary_STAI-G-X2_20.csv' % out_dir, decimal='.', index=False)
-      
 
 
-##############################################################################    
+
+##############################################################################
 ############################### STAXI ########################################
 ##############################################################################
 
 def comp_summary_STAXI(df, out_dir):
 
-              
+
     cols_trait2 = ['STAXI_11','STAXI_12','STAXI_13','STAXI_14','STAXI_15',
                   'STAXI_16','STAXI_17','STAXI_18','STAXI_19','STAXI_20']
     cols_trait3_inward = ['STAXI_22', 'STAXI_24','STAXI_25', 'STAXI_28',
                           'STAXI_30', 'STAXI_41','STAXI_42', 'STAXI_44']
-    cols_trait3_outward = ['STAXI_26','STAXI_27', 'STAXI_31', 'STAXI_35', 
+    cols_trait3_outward = ['STAXI_26','STAXI_27', 'STAXI_31', 'STAXI_35',
                            'STAXI_37','STAXI_38','STAXI_39', 'STAXI_43']
     cols_trait3_control = ['STAXI_21', 'STAXI_23', 'STAXI_29', 'STAXI_32',
                            'STAXI_33','STAXI_34', 'STAXI_36', 'STAXI_40']
-    
+
     df["STAXI_anger_trait"] = df[cols_trait2].sum(axis=1)
     df["STAXI_anger_inward"] = df[cols_trait3_inward].sum(axis=1)
     df["STAXI_anger_outward"] = df[cols_trait3_outward].sum(axis=1)
     df["STAXI_anger_control"] = df[cols_trait3_control].sum(axis=1)
-    
-    cols_export = ['ids'] + ["STAXI_anger_trait", "STAXI_anger_inward", "STAXI_anger_outward", "STAXI_anger_control"] 
-          
+
+    cols_export = ['ids'] + ["STAXI_anger_trait", "STAXI_anger_inward", "STAXI_anger_outward", "STAXI_anger_control"]
+
     df[cols_export].to_csv('%s/quest_summary_STAXI_44.csv' % out_dir, decimal='.', index=False)
