@@ -10,17 +10,64 @@ sns.set_style('white')
 #################### Creative Achievement Questionnaire ######################
 ##############################################################################
 
-#def convert_raw_QAC(df, out_dir):
+def run_CAQ(df, out_dir, public):
     
-    # Mark
+    cols = ["QACa_QACa1","QACa_QACa2","QACa_QACa3","QACa_QACa4","QACa_QACa5","QACa_QACa6","QACa_QACa7",
+           "QACa_QACa8","QACa_QACa9","QACa_QACa10","QACa_QACa11","QACa_QACa12","QACa_QACa13","QACb_QACb1",
+           "QACb_QACb2","QACb_QACb3","QACb_QACb4","QACb_QACb5","QACb_QACb6","QACb_QACb7","QACb1","QACc_QACc1",
+           "QACc_QACc2","QACc_QACc3","QACc_QACc4","QACc_QACc5","QACc_QACc6","QACc_QACc7","QACc_QACc9","QACc1",
+           "QACd_QACd1","QACd_QACd2","QACd_QACd3","QACd_QACd4","QACd_QACd5","QACd_QACd6","QACd_QACd7",
+           "QACd_QACd8","QACd1","QACz_QACz1","QACz_QACz2","QACz_QACz3","QACz_QACz4","QACz_QACz5","QACz_QACz6",
+           "QACz_QACz7","QACz_QACz8","QACz1","QACe_QACe1","QACe_QACe2","QACe_QACe3","QACe_QACe4","QACe_QACe5",
+           "QACe_QACe6","QACe_QACe7","QACe_QACe8","QACe1","QACf_QACf1","QACf_QACf2","QACf_QACf3","QACf_QACf4",
+           "QACf_QACf5","QACf_QACf6","QACf_QACf7","QACf_QACf8","QACg_QACg1","QACg_QACg2","QACg_QACg3",
+           "QACg_QACg4","QACg_QACg5","QACg_QACg6","QACg_QACg7","QACg1","QACh_QACg8","QACh1","QACi_QACi1",
+           "QACi_QACi2","QACi_QACi3","QACi_QACi4","QACi_QACi5","QACi_QACi6","QACi1","QACj_QACj1","QACj1",
+           "QACk_QACk1","QACl_QACl1","QACl_QACl2","QACl_QACl3","QACl_QACl4","QACl_QACl5","QACl_QACl6",
+           "QACl_QACl7","QACl_QACl8","QACl1","QACm_QACm1","QACm_QACm2","QACm_QACm3","QACm_QACm4","QACm_QACm5",
+           "QACm_QACm6","QACm_QACm7","QACm_QACm8","QACm1"]
+
+    cols_export = ['CAQ_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
+    
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/CAQ.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+    
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/CAQ.csv' % out_dir, decimal='.', index=False)    
+
 
     
-    
 ##############################################################################
-#################### Meta Cognition Questionnaire 30 #########################
+#################### Metacognition Questionnaire 30 #########################
 ##############################################################################
 
-def convert_raw_MCQ30(df, out_dir):
+def run_MCQ30(df, out_dir, public):
     
     cols = ['MCQ1_MCQ1', 'MCQ1_MCQ2', 'MCQ1_MCQ3', 'MCQ1_MCQ4', 'MCQ1_MCQ5', 
             'MCQ1_MCQ6', 'MCQ1_MCQ7', 'MCQ1_MCQ8', 'MCQ1_MCQ9', 'MCQ1_MCQ10', 
@@ -30,12 +77,39 @@ def convert_raw_MCQ30(df, out_dir):
             'MCQ3_MCQ23', 'MCQ3_MCQ24', 'MCQ3_MCQ25', 'MCQ3_MCQ26', 
             'MCQ3_MCQ27', 'MCQ3_MCQ28', 'MCQ3_MCQ29', 'MCQ3_MCQ30']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['MCQ_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['MCQ_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['MCQ_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/MCQ30.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                                                                             
-    df[cols_export].to_csv('%s/quest_raw_MCQ30.csv' % out_dir, decimal='.', index=False)    
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/MCQ30.csv' % out_dir, decimal='.', index=False)    
     
  
 
@@ -43,19 +117,46 @@ def convert_raw_MCQ30(df, out_dir):
 #################### Body Consciousness Questionnaire ########################
 ##############################################################################
 
-def convert_raw_BCQ(df, out_dir):  
+def run_BCQ(df, out_dir, public):  
         
     cols = ['BCQ1_BCQ1', 'BCQ1_BCQ2', 'BCQ1_BCQ3', 'BCQ1_BCQ4',
             'BCQ1_BCQ5', 'BCQ1_BCQ6', 'BCQ1_BCQ7', 'BCQ1_BCQ8', 'BCQ1_BCQ9',
             'BCQ1_BCQ10', 'BCQ2_BCQ11', 'BCQ2_BCQ12', 'BCQ2_BCQ13',
             'BCQ2_BCQ14', 'BCQ2_BCQ15']
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['BCQ_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['BCQ_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['BCQ_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/BCQ.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                                                                             
-    df[cols_export].to_csv('%s/quest_raw_BCQ.csv' % out_dir, decimal='.', index=False)  
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/BCQ.csv' % out_dir, decimal='.', index=False)  
     
     
 
@@ -63,7 +164,7 @@ def convert_raw_BCQ(df, out_dir):
 ################### Five Facet Mindfulness Questionnaire #####################
 ##############################################################################
    
-def convert_raw_FFMQ(df, out_dir):
+def run_FFMQ(df, out_dir, public):
         
     cols = ['FFMQ1_FFMQ1', 'FFMQ1_FFMQ2',
             'FFMQ1_FFMQ3', 'FFMQ1_FFMQ4', 'FFMQ1_FFMQ5', 'FFMQ1_FFMQ6',
@@ -76,13 +177,40 @@ def convert_raw_FFMQ(df, out_dir):
             'FFMQ4_FFMQ31', 'FFMQ4_FFMQ32', 'FFMQ4_FFMQ33', 'FFMQ4_FFMQ34',
             'FFMQ4_FFMQ35', 'FFMQ4_FFMQ36', 'FFMQ4_FFMQ37', 'FFMQ4_FFMQ38',
             'FFMQ4_FFMQ39']
-                 
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['FFMQ_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+                     
+    cols_export = ['FFMQ_%s' % (x+1) for x in range(len(cols))] 
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['FFMQ_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/FFMQ.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                                                                
-    df[cols_export].to_csv('%s/quest_raw_FFMQ.csv' % out_dir, decimal='.', index=False) 
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/FFMQ.csv' % out_dir, decimal='.', index=False) 
 
 
 
@@ -90,7 +218,7 @@ def convert_raw_FFMQ(df, out_dir):
 #################### Abbreviated Math Anxiety Scale ##########################
 ##############################################################################
 
-def convert_raw_AMAS(df, out_dir):
+def run_AMAS(df, out_dir, public):
 
     cols = ['AMAS[1]',
             'AMAS[2]',
@@ -102,12 +230,39 @@ def convert_raw_AMAS(df, out_dir):
             'AMAS[8]',
             'AMAS[9]']           
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['AMAS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['AMAS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['AMAS_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_AMAS_9.csv' % out_dir, decimal='.', index=False)        
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/AMAS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/AMAS.csv' % out_dir, decimal='.', index=False)        
     
 
 
@@ -115,7 +270,7 @@ def convert_raw_AMAS(df, out_dir):
 ########################## self control scale ################################
 ##############################################################################
 
-def convert_raw_SelfCtrl(df, out_dir):
+def run_SelfCtrl(df, out_dir, public):
     
     cols = ['SCSaBASEQ[SCS1]',
             'SCSaBASEQ[SCS2r]',
@@ -129,14 +284,41 @@ def convert_raw_SelfCtrl(df, out_dir):
             'SCSbBASEQ[SCS10r]',
             'SCSbBASEQ[SCS11r]',
             'SCSbBASEQ[SCS12]',
-            'SCSbBASEQ[SCS13]']
-                 
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['SCS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+            'SCSbBASEQ[SCS13]']                
     
-    cols_export = ['ids'] + ['SCS_%s' % (x+1) for x in range(len(cols))]
+    cols_export = ['SCS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
+    
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_SCS_13.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/SCS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/SCS.csv' % out_dir, decimal='.', index=False)
         
     
 
@@ -144,7 +326,7 @@ def convert_raw_SelfCtrl(df, out_dir):
 ################ Internet Addiction test #####################################
 ##############################################################################
 
-def convert_raw_IAT(df, out_dir):     
+def run_IAT(df, out_dir, public):     
     
     cols = ['IATaBASEQ[IAT1]',
             'IATaBASEQ[IAT2]',
@@ -167,12 +349,39 @@ def convert_raw_IAT(df, out_dir):
             'IATdBASEQ[IAT19]',
             'IATdBASEQ[IAT20]']          
                      
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['IAT_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['IAT_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['IAT_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_IAT_20.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/IAT.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/IAT.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -181,7 +390,7 @@ def convert_raw_IAT(df, out_dir):
 #################### varieties of inner speech (VIS) #########################
 ##############################################################################
 
-def convert_raw_VIS(df, out_dir):
+def run_VIS(df, out_dir, public):
         
     cols = ['AISaBASEQ[AIS1]', 'AISaBASEQ[AIS2]', 'AISaBASEQ[AIS3]', 'AISaBASEQ[AIS4]',
             'AISaBASEQ[AIS5]', 'AISaBASEQ[AIS6]', 'AISaBASEQ[AIS7]', 'AISaBASEQ[AIS8]',
@@ -189,12 +398,39 @@ def convert_raw_VIS(df, out_dir):
             'AISbBASEQ[AIS13]', 'AISbBASEQ[AIS14]', 'AISbBASEQ[AIS15]', 'AISbBASEQ[AIS16]',
             'AISbBASEQ[AIS17]', 'AISbBASEQ[AIS18]']        
                  
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['VIS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['VIS_%s' % (x+1) for x in range(len(cols))] 
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['VIS_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_VISQ_18.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/VISQ.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/VISQ.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -202,17 +438,44 @@ def convert_raw_VIS(df, out_dir):
 ############# Spontaneous and Deliberate Mind Wandering ######################
 ##############################################################################
 
-def convert_raw_MW_SD(df, out_dir):
+def run_MW_SD(df, out_dir, public):
         
     cols = ["MWBASEQ[MWD1]", "MWBASEQ[MWD2]", "MWBASEQ[MWD3]", "MWBASEQ[MWD4]",
             "MWBASEQ[MWS1]", "MWBASEQ[MWS2]", "MWBASEQ[MWS3]", "MWBASEQ[MWS4]"]
                  
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['S-D-MW_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['S-D-MW_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['S-D-MW_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_S-D-MW_8.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/S-D-MW.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/S-D-MW.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -220,7 +483,7 @@ def convert_raw_MW_SD(df, out_dir):
 ############################# short dark triad  ##############################
 ##############################################################################
 
-def convert_raw_SDT(df, out_dir):
+def run_SDT(df, out_dir, public):
     
     cols = ['SDTmBASEQ[SDTM1]', 'SDTmBASEQ[SDTM2]', 'SDTmBASEQ[SDTM3]', 'SDTmBASEQ[SDTM4]',
             'SDTmBASEQ[SDTM5]', 'SDTmBASEQ[SDTM6]', 'SDTmBASEQ[SDTM7]', 'SDTmBASEQ[SDTM8]',
@@ -230,12 +493,39 @@ def convert_raw_SDT(df, out_dir):
             'SDTpBASEQ[SDTP3]', 'SDTpBASEQ[SDTP4]', 'SDTpBASEQ[SDTP5]', 'SDTpBASEQ[SDTP6]',
             'SDTpBASEQ[SDTP7r]', 'SDTpBASEQ[SDTP8]', 'SDTpBASEQ[SDTP9]']
  
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['SD3_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['SD3_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['SD3_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/SD3.csv' % out_dir, decimal='.', index=False)
+        
+    else:
   
-    df[cols_export].to_csv('%s/quest_raw_SD3_27.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/SD3.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -244,7 +534,7 @@ def convert_raw_SDT(df, out_dir):
 ##############################################################################
 # social desirability
 
-def convert_raw_SDS(df, out_dir):
+def run_SDS(df, out_dir, public):
     
     cols = ['SESaBASEQ[SES1r]',
             'SESaBASEQ[SES2]',
@@ -264,12 +554,39 @@ def convert_raw_SDS(df, out_dir):
             'SESbBASEQ[SES16]',
             'SESbBASEQ[SES17r]']  
 
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['SDS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['SDS_%s' % (x+1) for x in range(len(cols))]  
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['SDS_%s' % (x+1) for x in range(len(cols))]     
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5]) 
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_SDS_17.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/SDS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/SDS.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -277,7 +594,7 @@ def convert_raw_SDS(df, out_dir):
 ##################### UPPSP - impulsivity ####################################
 ##############################################################################
 
-def convert_raw_UPPSP(df, out_dir):
+def run_UPPSP(df, out_dir, public):
     
     cols = ['UPPSaBASEQ[UPP1]', 'UPPSaBASEQ[UPP2r]', 'UPPSaBASEQ[UPP3r]', 'UPPSaBASEQ[UPP4]',
             'UPPSaBASEQ[UPP5r]', 'UPPSaBASEQ[UPP6]', 'UPPSaBASEQ[UPP7r]', 'UPPSaBASEQ[UPP8r]',
@@ -294,13 +611,40 @@ def convert_raw_UPPSP(df, out_dir):
             'UPPSeBASEQ[UPP49]', 'UPPSeBASEQ[UPP50r]', 'UPPSfBASEQ[UPP51r]', 'UPPSfBASEQ[UPP52r]',
             'UPPSfBASEQ[UPP53r]', 'UPPSfBASEQ[UPP54]', 'UPPSfBASEQ[UPP55r]', 'UPPSfBASEQ[UPP56r]',
             'UPPSfBASEQ[UPP57r]', 'UPPSfBASEQ[UPP58r]','UPPSfBASEQ[UPP59r]']        
+     
+    cols_export = ['UPPS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['UPPS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
     
-    cols_export = ['ids'] + ['UPPS_%s' % (x+1) for x in range(len(cols))]      
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/UPPS-P.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                                                                              
-    df[cols_export].to_csv('%s/quest_raw_UPPS-P_59.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/UPPS-P.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -309,7 +653,7 @@ def convert_raw_UPPSP(df, out_dir):
 ################ Tuckmann Procrastination Scale (TPS_D)#######################
 ##############################################################################
 
-def convert_raw_TPS(df, out_dir):
+def run_TPS(df, out_dir, public):
     
     cols = ['TPSBASEQ[TPS1]',
             'TPSBASEQ[TPS2]',
@@ -328,12 +672,39 @@ def convert_raw_TPS(df, out_dir):
             'TPSBASEQ[TPS15]',
             'TPSBASEQ[TPS16]']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['TPS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['TPS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['TPS_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/TPS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
  
-    df[cols_export].to_csv('%s/quest_raw_TPS_16.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/TPS.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -341,7 +712,7 @@ def convert_raw_TPS(df, out_dir):
 ############################ ASR 18-59 #######################################
 ##############################################################################
 
-def convert_raw_ASR(df, out_dir):
+def run_ASR(df, out_dir, public):
     
     d = {'ASQQ79Freitext': 'ASR_79_comment',
          'ASR100Freitext': 'ASR_100_comment',
@@ -371,7 +742,7 @@ def convert_raw_ASR(df, out_dir):
          'ASRIIIEbBASEQ[ASRIIIE3]': 'ASR_III_E_3',
          'ASRIIIEbBASEQ[ASRIIIE4]': 'ASR_III_E_4',
          'ASRIIIFBASEQ[ASRIIIF]': 'ASR_III_F',
-         'ASRIVaBASEQ[ASRIV]': 'ASR_IV_1comment',
+         'ASRIVaBASEQ[ASRIV]': 'ASR_IV_1_comment',
          'ASRIVbBASEQ[ASRIVA]': 'ASR_IV_A',
          'ASRIVbBASEQ[ASRIVBr]': 'ASR_IV_B',
          'ASRIVbBASEQ[ASRIVC]': 'ASR_IV_C',
@@ -569,7 +940,7 @@ def convert_raw_ASR(df, out_dir):
                   'ASR_III_E_3',
                   'ASR_III_E_4',
                   'ASR_III_F',
-                  'ASR_IV_1comment',
+                  'ASR_IV_1_comment',
                   'ASR_IV_A',
                   'ASR_IV_B',
                   'ASR_IV_C',
@@ -748,17 +1119,58 @@ def convert_raw_ASR(df, out_dir):
     df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
     df.rename(columns=d, inplace=True)
     
-    cols_export = ['ids'] + item_order
-                                        
-    df[cols_export].to_csv('%s/quest_raw_ASR-18-59.csv' % out_dir, decimal='.', index=False)
-  
+    if public:
+        # excluding pp comments
+        # ASR_IV_1_comment is coded as binary variable and can stay
+        remove = ['ASR_II_1_comment', 'ASR_V_1_comment', 'ASR_V_2_comment', 'ASR_V_3_comment',
+                  'ASR_V_4_comment', 'ASR_VI_comment', 'ASR_VII_comment', 'ASR_VIII', 'ASR_6_comment',
+                  'ASR_9_comment', 'ASR_29_comment', 'ASR_40_comment', 'ASR_46_comment', 'ASR_56_d_comment',
+                  'ASR_58_comment', 'ASR_66_comment', 'ASR_70_comment', 'ASR_77_comment', 'ASR_79_comment',
+                  'ASR_84_comment', 'ASR_85_comment', 'ASR_92_comment', 'ASR_100_comment']
+
+        cols_export = [item for item in item_order if item not in remove]
+        
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/ASR.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+        
+        # including pp comments
+        cols_export = item_order
+        
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+    
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/ASR.csv' % out_dir, decimal='.', index=False)
 
 
+        
 ##############################################################################
 ########################## Self-Esteem Scale ################################# 
 ##############################################################################
 
-def convert_raw_SE(df, out_dir):
+def run_SE(df, out_dir, public):
     
     cols = ['SEBASEQ[SE1]',
             'SEBASEQ[SE2]',
@@ -769,12 +1181,39 @@ def convert_raw_SE(df, out_dir):
             'SEBASEQ[SE7r]',
             'SEBASEQ[SE8r]']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['SE_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['SE_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['SE_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/SE.csv' % out_dir, decimal='.', index=False)
+        
+    else:
          
-    df[cols_export].to_csv('%s/quest_raw_SE_8.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/SE.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -782,18 +1221,45 @@ def convert_raw_SE(df, out_dir):
 ####### Involuntary Musical Imagery Scale (Earworm Scale) ####################
 ##############################################################################
 
-def convert_raw_IMIS(df, out_dir):
+def run_IMIS(df, out_dir, public):
 
     cols = ['EWSaBASEQ[AQ_1]','EWSbBASEQ[NV1]','EWSbBASEQ[NV2]','EWSbBASEQ[NV3]','EWSbBASEQ[NV4]','EWSbBASEQ[NV5]',
             'EWSbBASEQ[NV6]','EWSbBASEQ[NV7]','EWScBASEQ[M1]','EWScBASEQ[M2]','EWScBASEQ[M3]','EWScBASEQ[PR1]',
             'EWScBASEQ[PR2]','EWScBASEQ[PR3]','EWScBASEQ[H1]','EWScBASEQ[H2]','EWSdBASEQ[AQ2]','EWSeBASEQ[AQ3]']
             
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['IMIS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['IMIS_%s' % (x+1) for x in range(len(cols))] 
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['IMIS_%s' % (x+1) for x in range(len(cols))]     
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
     
-    df[cols_export].to_csv('%s/quest_raw_IMIS_18.csv' % out_dir, decimal='.', index=False)
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/IMIS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+    
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/IMIS.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -801,18 +1267,45 @@ def convert_raw_IMIS(df, out_dir):
 ####### Goldsmiths Musical Sophistication Index (Gold-MSI) ###################
 ##############################################################################
 
-def convert_raw_GoldMSI(df, out_dir):
+def run_GoldMSI(df, out_dir, public):
     
     cols = ['MUSaBASEQ[MUS_1]','MUSaBASEQ[MUS_3]','MUSaBASEQ[MUS_8]','MUSaBASEQ[MUS_15]','MUSaBASEQ[MUS_21]','MUSaBASEQ[MUS_24]',
             'MUSaBASEQ[MUS_28]','MUSbBASEQ[MUS_34]','MUScBASEQ[MUS_38]','MUSdBASEQ[MUS_14]','MUSdBASEQ[MUS_27]','MUSeBASEQ[MUS_32]',
             'MUSfBASEQ[MUS_33]','MUSgBASEQ[MUS_35]','MUShBASEQ[MUS_36]','MUSiBASEQ[MUS_37]']
 
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['GoldMSI_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['GoldMSI_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['GoldMSI_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
         
-    df[cols_export].to_csv('%s/quest_raw_Gold-MSI_16.csv' % out_dir, decimal='.', index=False)
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/Gold-MSI.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+        
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/Gold-MSI.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -820,17 +1313,44 @@ def convert_raw_GoldMSI(df, out_dir):
 ####################### Epsworth Sleepiness Scale ############################
 ##############################################################################
 
-def convert_raw_ESS(df, out_dir):
+def run_ESS(df, out_dir, public):
     
     cols = ['ESSBASEQ[ESS1]', 'ESSBASEQ[ESS2]', 'ESSBASEQ[ESS3]', 'ESSBASEQ[ESS4]',
             'ESSBASEQ[ESS5]', 'ESSBASEQ[ESS6]', 'ESSBASEQ[ESS7]', 'ESSBASEQ[ESS8]']    
+       
+    cols_export = ['ESS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['ESS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
     
-    cols_export = ['ids'] + ['ESS_%s' % (x+1) for x in range(len(cols))]    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/ESS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
   
-    df[cols_export].to_csv('%s/quest_raw_ESS_8.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/ESS.csv' % out_dir, decimal='.', index=False)
   
     
 
@@ -838,7 +1358,7 @@ def convert_raw_ESS(df, out_dir):
 ############################## BDI ###########################################
 ##############################################################################
 
-def convert_raw_BDI(df, out_dir):
+def run_BDI(df, out_dir, public):
 
     cols_raw = ['BDIABASEQ[BDIA0]', 'BDIABASEQ[BDIA1]', 'BDIABASEQ[BDIA2]', 'BDIABASEQ[BDIA3]',
                'BDIBBASEQ[BDIB0]', 'BDIBBASEQ[BDIB1]', 'BDIBBASEQ[BDIB2]',
@@ -869,12 +1389,39 @@ def convert_raw_BDI(df, out_dir):
                'BDITBASEQ[BDIT3]', 'BDIUBASEQ[BDIU0]', 'BDIUBASEQ[BDIU1]',
                'BDIUBASEQ[BDIU2]', 'BDIUBASEQ[BDIU3]']
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
-    df.rename(columns=dict(zip(cols_raw, ['BDI_%s' % (x+1) for x in range(len(cols_raw))])), inplace=True)
+    cols_export = ['BDI_%s' % (x+1) for x in range(len(cols_raw))]
+    df.rename(columns=dict(zip(cols_raw, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['BDI_%s' % (x+1) for x in range(len(cols_raw))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_BDI_22.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/BDI.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/BDI.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -882,7 +1429,7 @@ def convert_raw_BDI(df, out_dir):
 ############################## HADS ##########################################
 ##############################################################################
 
-def convert_raw_HADS(df, out_dir):
+def run_HADS(df, out_dir, public):
     
     # anxiety / HADS-A
     df['tense'] = df['HADS1BASEQ[HADS1]'].subtract(1).multiply(-1).add(3)
@@ -905,12 +1452,39 @@ def convert_raw_HADS(df, out_dir):
     cols = ['tense','enjoy','frightened','laugh','worry','cheerful','relaxed','slowed',
             'butterflies','appearance','restless','lookforward','panic','entertain']
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['HADS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['HADS_%s' % (x+1) for x in range(len(cols))] 
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['HADS_%s' % (x+1) for x in range(len(cols))]    
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/HADS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
            
-    df[cols_export].to_csv('%s/quest_raw_HADS_14.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/HADS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -918,7 +1492,7 @@ def convert_raw_HADS(df, out_dir):
 ##################### Boredom Proness Scale ##################################
 ##############################################################################
 
-def convert_raw_BPS(df, out_dir):
+def run_BPS(df, out_dir, public):
 
     cols = ['BPSaBASEQ[BPS1]','BPSaBASEQ[BPS2]','BPSaBASEQ[BPS3]',
             'BPSaBASEQ[BPS4]','BPSaBASEQ[BPS5]','BPSaBASEQ[BPS6]',
@@ -931,12 +1505,39 @@ def convert_raw_BPS(df, out_dir):
             'BPScBASEQ[BPS25]','BPScBASEQ[BPS26]','BPScBASEQ[BPS27]',
             'BPScBASEQ[BPS28]']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['BPS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['BPS_%s' % (x+1) for x in range(len(cols))]  
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['BPS_%s' % (x+1) for x in range(len(cols))]  
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/BP.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                
-    df[cols_export].to_csv('%s/quest_raw_BP_28.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/BP.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -944,7 +1545,7 @@ def convert_raw_BPS(df, out_dir):
 ################# Derryberry Attention Control Scale #########################
 ##############################################################################
 
-def convert_raw_ACS(df, out_dir):
+def run_ACS(df, out_dir, public):
     
     cols = ['DACaBASEQ[DAC1]','DACaBASEQ[DAC2]','DACaBASEQ[DAC3]',
             'DACaBASEQ[DAC4]','DACaBASEQ[DAC5]','DACaBASEQ[DAC6]',
@@ -954,12 +1555,39 @@ def convert_raw_ACS(df, out_dir):
             'DACcBASEQ[DAC16]','DACcBASEQ[DAC17]','DACcBASEQ[DAC18]',
             'DACcBASEQ[DAC19]','DACcBASEQ[DAC20]']     
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['ACS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['ACS_%s' % (x+1) for x in range(len(cols))]  
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['ACS_%s' % (x+1) for x in range(len(cols))]        
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/ACS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
          
-    df[cols_export].to_csv('%s/quest_raw_ACS_20.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/ACS.csv' % out_dir, decimal='.', index=False)
   
   
 
@@ -967,7 +1595,7 @@ def convert_raw_ACS(df, out_dir):
 ############################## NEO-PI-R ######################################
 ##############################################################################
 
-def convert_raw_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
+def run_NEOPIR(pir_f, ffi_lsd_f, out_dir, public):
     
 #####  create combined dataframe from FFI (lemon, lsd) and PIR items ####    
 
@@ -1043,7 +1671,7 @@ def convert_raw_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
     df_ffi_lsd.rename(columns=dictionary2, inplace=True)
     
     # recode ffi item numbers into pir item numbers
-    ffi2pir = pd.read_excel('/nobackup/liberia1/data/lsd/behavioral/NEO/NEO KEY.xlsx', converters={0:str, 1:str})
+    ffi2pir = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Raw/Questionnaires/NEO/NEO KEY.xlsx', converters={0:str, 1:str})
     dictionary3 = dict(zip(ffi2pir['Neo FFI'],ffi2pir['NEO PI R']))
     df_ffi_lsd.rename(columns=dictionary3, inplace=True)
     df_ffi_lsd.dropna(inplace=True)
@@ -1054,13 +1682,13 @@ def convert_raw_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
     ##### NEO FFI lemon #####
     
     # read in lemon ffi
-    df_ffi_lemon = pd.read_csv('/nobackup/liberia1/data/lsd/behavioral/NEO/NEO-FFI_60.csv').ix[:, 0:61]
+    df_ffi_lemon = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Raw/Questionnaires/NEO/NEO-FFI_60.csv').ix[:, 0:61]
     # recode ffi item numbers into pir item numbers
     df_ffi_lemon.rename(columns=dictionary3, inplace=True)
     # change lemon ID to db ID
     df_ffi_lemon.rename(columns={'ID':'Lemon_ID'}, inplace=True)
     df_ffi_lemon.dropna(inplace=True)
-    IDentifier = pd.read_excel('/nobackup/liberia1/data/lsd/behavioral/NEO/LEMONidentifier.xlsx', 
+    IDentifier = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Raw/Questionnaires/NEO/LEMONidentifier.xlsx', 
                                sheetname='Overview', converters={1:str}).ix[:193, :2]
     for n in range(len(IDentifier)):
         try:
@@ -1101,7 +1729,37 @@ def convert_raw_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
     df.drop(['project', 'NEO_46', 'NEO_241'], axis=1, inplace = True) # removed because: item 46 was wrong and
                                                                       # item 241 not included in original neo
     df.drop('ID', axis=1, inplace = True)
-    df[['ids'] + list(df.columns.values[:len(df.columns.values)-1])].to_csv('%s/quest_raw_NEO-PI-R_241.csv' % out_dir, decimal='.', index=False)   
+    
+    cols_export = list(df.columns.values[:len(df.columns.values)-1])
+    
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/NEO-PI-R.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+        
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/NEO-PI-R.csv' % out_dir, decimal='.', index=False)   
     
     
   
@@ -1110,7 +1768,7 @@ def convert_raw_NEOPIR(pir_f, ffi_lsd_f, out_dir=None):
 ############# PSSI - Persönlichkeitsstil- und Störungsinventar################
 ##############################################################################
 
-def convert_raw_PSSI(df, out_dir):
+def run_PSSI(df, out_dir, public):
     
     cols = ['PSSaBASEQ[PSS1]','PSSaBASEQ[PSS2]','PSSaBASEQ[PSS3]','PSSaBASEQ[PSS4]','PSSaBASEQ[PSS5]','PSSaBASEQ[PSS6]','PSSaBASEQ[PSS7]','PSSaBASEQ[PSS8]','PSSaBASEQ[PSS9]',
              'PSSaBASEQ[PSS10]','PSSbBASEQ[PSS11]','PSSbBASEQ[PSS12]','PSSbBASEQ[PSS13]','PSSbBASEQ[PSS14]','PSSbBASEQ[PSS15r]','PSSbBASEQ[PSS16]','PSSbBASEQ[PSS17]',
@@ -1131,19 +1789,46 @@ def convert_raw_PSSI(df, out_dir):
              'PSSmBASEQ[PSS130]','PSSnBASEQ[PSS131]','PSSnBASEQ[PSS132]','PSSnBASEQ[PSS133]','PSSnBASEQ[PSS134]','PSSnBASEQ[PSS135]','PSSnBASEQ[PSS136]','PSSnBASEQ[PSS137r]',
              'PSSnBASEQ[PSS138]','PSSnBASEQ[PSS139]','PSSnBASEQ[PSS140]']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['PSSI_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['PSSI_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['PSSI_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/PSSI.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                                                                 
-    df[cols_export].to_csv('%s/quest_raw_PSSI_140.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/PSSI.csv' % out_dir, decimal='.', index=False)
   
 
 ##############################################################################
 ################################## MMI #######################################
 ##############################################################################
 
-def convert_raw_MMI(df, out_dir):
+def run_MMI(df, out_dir, public):
     
     d = {'MMIaa': 'MMI_1_1',
          'MMIab': 'MMI_1_2',
@@ -1611,9 +2296,46 @@ def convert_raw_MMI(df, out_dir):
     df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
     df.rename(columns=d, inplace=True)
     
-    cols_export = ['ids'] + item_order          
-       
-    df[cols_export].to_csv('%s/quest_raw_MMI_12x4.csv' % out_dir, decimal='.', index=False)
+    if public:
+        
+        # excluding pp comments
+        remove = ['MMI_9_3']
+
+        cols_export = [item for item in item_order if item not in remove]
+        
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/MMI.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+        
+        # including pp comments
+        cols_export = item_order
+        
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+        
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/MMI.csv' % out_dir, decimal='.', index=False)
   
   
 
@@ -1621,18 +2343,46 @@ def convert_raw_MMI(df, out_dir):
 ############################## BIS/BAS #######################################
 ##############################################################################
 
-def convert_raw_BISBAS(df, out_dir):
+def run_BISBAS(df, out_dir, public):
 
     cols = ['BISBAS01[SQ001]','BISBAS02[SQ001]','BISBAS03[SQ001]','BISBAS04[SQ001]','BISBAS05[SQ001]','BISBAS06[SQ001]','BISBAS07[SQ001]','BISBAS08[SQ001]',
            'BISBAS09[SQ001]','BISBAS10[SQ001]','BISBAS11[SQ001]','BISBAS12[SQ001]','BISBAS13[SQ001]','BISBAS14[SQ001]','BISBAS15[SQ001]','BISBAS16[SQ001]',
            'BISBAS17[SQ001]','BISBAS18[SQ001]','BISBAS19[SQ001]','BISBAS20[SQ001]','BISBAS21[SQ001]','BISBAS22[SQ001]','BISBAS23[SQ001]','BISBAS24[SQ001]']
  
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['BISBAS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+   
+    cols_export = ['BISBAS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['BISBAS_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/BISBAS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                 
-    df[cols_export].to_csv('%s/quest_raw_BISBAS_24.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/BISBAS.csv' % out_dir, decimal='.', index=False)
   
 
       
@@ -1640,19 +2390,46 @@ def convert_raw_BISBAS(df, out_dir):
 ################################# STAI #######################################
 ##############################################################################
 
-def convert_raw_STAI(df, out_dir):
+def run_STAI(df, out_dir, public):
 
     cols = ['STAI01[STAI01]','STAI01[STAI02]','STAI01[STAI03]','STAI01[STAI04]','STAI01[STAI05]','STAI01[STAI06]','STAI01[STAI07]','STAI01[STAI08]',
              'STAI01[STAI09]','STAI01[STAI10]','STAI11[STAI11]','STAI11[STAI12]','STAI11[STAI13]','STAI11[STAI14]','STAI11[STAI15]','STAI11[STAI16]',
              'STAI11[STAI17]','STAI11[STAI18]','STAI11[STAI19]','STAI11[STAI20]']
 
 
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['STAI_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['STAI_%s' % (x+1) for x in range(len(cols))] 
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['STAI_%s' % (x+1) for x in range(len(cols))]  
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/STAI-G-X2.csv' % out_dir, decimal='.', index=False)
+        
+    else:
                
-    df[cols_export].to_csv('%s/quest_raw_STAI-G-X2_20.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/STAI-G-X2.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1660,7 +2437,7 @@ def convert_raw_STAI(df, out_dir):
 ############################### STAXI ########################################
 ##############################################################################
 
-def convert_raw_STAXI(df, out_dir):
+def run_STAXI(df, out_dir, public):
         
     cols = ['STAXI01[STAXI01]','STAXI01[STAXI02]','STAXI01[STAXI03]','STAXI01[STAXI04]','STAXI01[STAXI05]','STAXI01[STAXI06]','STAXI01[STAXI07]',
           'STAXI01[STAXI08]','STAXI01[STAXI09]','STAXI01[STAXI10]','STAXI11[STAXI11]','STAXI11[STAXI12]','STAXI11[STAXI13]','STAXI11[STAXI14]','STAXI11[STAXI15]',
@@ -1669,12 +2446,40 @@ def convert_raw_STAXI(df, out_dir):
           'STAXI21[STAXI32]','STAXI21[STAXI33]','STAXI34[STAXI34]','STAXI34[STAXI35]','STAXI34[STAXI36]','STAXI34[STAXI37]','STAXI34[STAXI38]','STAXI34[STAXI39]',
           'STAXI34[STAXI40]','STAXI34[STAXI41]','STAXI34[STAXI42]','STAXI34[STAXI43]','STAXI34[STAXI44]']
     
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['STAXI_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['STAXI_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['STAXI_%s' % (x+1) for x in range(len(cols))]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/STAXI.csv' % out_dir, decimal='.', index=False)
+        
+    else:
             
-    df[cols_export].to_csv('%s/quest_raw_STAXI_44.csv' % out_dir, decimal='.', index=False)
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/STAXI.csv' % out_dir, decimal='.', index=False)
   
 
 
@@ -1682,7 +2487,7 @@ def convert_raw_STAXI(df, out_dir):
 #################### Gender Identitiy Questionnaire ##########################
 ##############################################################################
 
-def convert_raw_GIQ(df, out_dir):
+def run_MGIQ(df, out_dir, public):
     
     d = {'MGQ11BASEQ[MGQ11]': 'MGIQ_11',
          'MGQ11BASEQ[MGQ12]': 'MGIQ_12',
@@ -1944,30 +2749,46 @@ def convert_raw_GIQ(df, out_dir):
 
     df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
     df.rename(columns=d, inplace=True)
-    
-    cols_export = ['ids'] + item_order 
+       
+    if public:
+        # excluding pp comments
+        remove = ['MGIQ_33_B', 'MGIQ_34_B', 'MGIQ_35_B', 'MGIQ_40',
+                  'MGIQ_41_J', 'MGIQ_44_B', 'MGIQ_46_B', 'MGIQ_47_M']
 
-    df[cols_export].to_csv('%s/quest_raw_MGIQ_100.csv' % out_dir, decimal='.', index=False)  
+        cols_export = [item for item in item_order if item not in remove]
+        
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
 
-
-##############################################################################
-############################## Type D Scale-14 ###############################
-##############################################################################
-
-def convert_raw_DS14(df, out_dir):
-    
-    cols = ['DS14BASEQ[1]', 'DS14BASEQ[2]', 'DS14BASEQ[3]', 'DS14BASEQ[4]',
-            'DS14BASEQ[5]', 'DS14BASEQ[6]', 'DS14BASEQ[7]', 'DS14BASEQ[8]',
-            'DS14BASEQ[9]', 'DS14BASEQ[10]', 'DS14BASEQ[11]', 'DS14BASEQ[12]',
-            'DS14BASEQ[13]', 'DS14BASEQ[14]']
-
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['DS14_%s' % (x+1) for x in range(len(cols))])), inplace=True)
-    
-    cols_export = ['ids'] + ['DS14_%s' % (x+1) for x in range(len(cols))]
-
-    df[cols_export].to_csv('%s/quest_raw_DS_14.csv' % out_dir, decimal='.', index=False)  
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/MGIQ.csv' % out_dir, decimal='.', index=False)     
+        
+    else:
+        # including pp comments
+        cols_export = item_order
+        
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+        
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/MGIQ.csv' % out_dir, decimal='.', index=False) 
 
 
 
@@ -1975,7 +2796,7 @@ def convert_raw_DS14(df, out_dir):
 #################### childhood trauma questionnaire ##########################
 ##############################################################################
 
-def convert_raw_CTQ(df, out_dir):
+def run_CTQ(df, out_dir, public):
     
     cols = ['ChildTraum1BASE[1]', 'ChildTraum1BASE[2]', 'ChildTraum1BASE[3]',
            'ChildTraum1BASE[4]', 'ChildTraum1BASE[5]', 'ChildTraum1BASE[6]',
@@ -1988,19 +2809,46 @@ def convert_raw_CTQ(df, out_dir):
            'ChildTraum3BASE[25]', 'ChildTraum3BASE[26]', 'ChildTraum3BASE[27]',
            'ChildTraum3BASE[28]']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['CTQ_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['CTQ_%s' % (x+1) for x in range(len(cols))] 
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['CTQ_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_CTQ_28.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/CTQ.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/CTQ.csv' % out_dir, decimal='.', index=False)
         
         
 ##############################################################################
 ########################### short NYC-Q pre-scan #############################
 ############################################################################## 
 
-def convert_raw_NYCQ_prescan(df, out_dir):
+def run_NYCQ_prescan(df, out_dir, public):
         
     cols = ['1', '2', '3', '4', '5', '6', 
             '7', '8', '9','10', '11', '12']
@@ -2008,13 +2856,40 @@ def convert_raw_NYCQ_prescan(df, out_dir):
     for col in cols:
         df[col] = 100 * df[col] / 15.2
 
-   
-    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
-    df.rename(columns=dict(zip(cols, ['NYCQ_prescan_%s' % x for x in cols])), inplace=True)
+        
+    cols_export = ['NYCQ_prescan_%s' % x for x in cols]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['NYCQ_prescan_%s' % x for x in cols]  
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_Short-NYC-Q_12_prescan.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/Short-NYC-Q_prescan.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/Short-NYC-Q_prescan.csv' % out_dir, decimal='.', index=False)
     
         
 
@@ -2022,17 +2897,47 @@ def convert_raw_NYCQ_prescan(df, out_dir):
 ####################### short NYC-Q during scanning ###########################
 ###############################################################################
 
-def convert_raw_NYCQ_inscan(df, out_dir):
+def run_NYCQ_inscan(df, scan, out_dir, public):
 
+    df = df[df.scan == scan]
+    
     cols = ['positive', 'negative', 'future', 'past', 'myself', 'people', 'surrpundings', 
             'vigilance', 'images', 'words', 'specific_vague', 'intrusive']
 
-    df.rename(columns=dict(zip(cols, ['NYCQ_inscan_%s' % x for x in cols])), inplace=True)
+    cols_export = ['NYCQ_inscan%s_%s' % (scan,x) for x in cols]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['NYCQ_inscan_%s' % x for x in cols]
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ids'].map(lambda x: str(x)[0:5])
+    
+    if public:
+    
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                               header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    for scan in [1,2,3,4]:
-        df[df['scan']==scan][cols_export].to_csv('%s/quest_raw_Short-NYC-Q_12_inscan%s.csv' % (out_dir,scan), decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+
+        df[['ids'] + cols_export].to_csv('%s/Short-NYC-Q_inscan%s.csv' % (out_dir,scan), 
+                                                           decimal='.', index=False)
+
+    else:
+
+         df[['ids'] + cols_export].ix[idx].to_csv('%s/Short-NYC-Q_inscan%s.csv' % (out_dir,scan), 
+                                                                         decimal='.', index=False)
 
 
 
@@ -2040,19 +2945,46 @@ def convert_raw_NYCQ_inscan(df, out_dir):
 ######################## LIMIT - NYC-Q post scan #############################
 ##############################################################################
         
-def convert_raw_NYCQ_postscan(df, out_dir):
+def run_NYCQ_postscan(df, out_dir, public):
     
     cols = ['Q01', 'Q02', 'Q03', 'Q04', 'Q05', 'Q06', 'Q07', 'Q08', 
             'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16',
             'Q17', 'Q18', 'Q19', 'Q20', 'Q21', 'Q22', 'Q23', 'Q24', 
             'Q25', 'Q26', 'Q27', 'Q28', 'Q29', 'Q30', 'Q31']
             
-    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['NYCQ_postscan_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['NYCQ_postscan_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['NYCQ_postscan_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_NYC-Q_31_postscan.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/NYC-Q_postscan.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/NYC-Q_postscan.csv' % out_dir, decimal='.', index=False)
         
         
 
@@ -2060,27 +2992,54 @@ def convert_raw_NYCQ_postscan(df, out_dir):
 ##################### short NYC-Q post emotional task switching ##############
 ##############################################################################                
     
-def convert_raw_NYCQ_postemoswitch(df, out_dir):
+def run_NYCQ_postETS(df, out_dir, public):
     
     cols = ['1', '2', '3', '4','5', '6', '7', '8', '9', '10', '11', '12']
     
     for col in cols:
         df[col] = 100 * df[col] / 15.2
     
-    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
-    df.rename(columns=dict(zip(cols, ['NYCQ_postETS_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['NYCQ_postETS_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['NYCQ_postETS_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['DB-ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_Short-NYC-Q_12_postETS.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/Short-NYC-Q_postETS.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/Short-NYC-Q_postETS.csv' % out_dir, decimal='.', index=False)
 
         
 
 ##############################################################################
-############################## Facebook Intensity#############################
+############################## Facebook Intensity ############################
 ##############################################################################
 
-def convert_raw_FIS(df, out_dir):
+def run_FIS(df, out_dir, public):
     
     
     
@@ -2097,15 +3056,57 @@ def convert_raw_FIS(df, out_dir):
     df['FBI_2'] = pd.to_datetime(df['FBI_2'], format='%Y-%m-%d %H:%M:%S')
     df['FBI_2'] = pd.Series(df['datestamp'] - df['FBI_2']).dt.days / 365
     
-    # remove subjects with missing indication of FB membership and unplausible date
-    df.set_index([range(len(df.index))], inplace=True)
-    remove = df.index[(df["FBI_1"].isnull()) & ((df["FBI_2"].isnull()) | (df["FBI_2"] < 0))]
-    df.drop(df.index[remove], inplace=True)
+    cols_export = ['FBI_%s' % (x+1) for x in range(len(cols))]
     
+    if public:
+        
+        # remove subjects with missing indication of FB membership and unplausible date
+        df.set_index([range(len(df.index))], inplace=True)
+        remove = df.index[(df["FBI_1"].isnull()) & ((df["FBI_2"].isnull()) | (df["FBI_2"] < 0))]
+        df.drop(df.index[remove], inplace=True)
+    
+        # bin years of membership
+        age_bins = [0, 4, 8, 12]
+        age_labels = ['0-4', '4-8', '8-12']
+        df['FBI_2'] = pd.cut(df['FBI_2'], age_bins, labels=age_labels)
 
-    cols_export = ['ids'] + ['FBI_%s' % (x+1) for x in range(len(cols))] 
+        # bin number of friends
+        friends_bins = [0, 200, 400, 600, 800, 1000]
+        friends_labels = ['0-199', '200-399', '400-599', '600-799', '800-1000']
+        df['FBI_4'] = pd.cut(df['FBI_4'], friends_bins, labels=friends_labels)
 
-    df[cols_export].to_csv('%s/quest_raw_FBI_12.csv' % out_dir, decimal='.', index=False)  
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
+
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/FBI.csv' % out_dir, decimal='.', index=False) 
+        
+    else:
+        
+        cols_export = ['FBI_%s' % (x+1) for x in range(len(cols))]
+
+        # subjects with at least one data entry
+        df.set_index([range(len(df.index))], inplace=True)
+        idx = df[cols_export].dropna(how='all').index
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/FBI.csv' % out_dir, decimal='.', index=False)        
 
 
 
@@ -2113,18 +3114,45 @@ def convert_raw_FIS(df, out_dir):
 ############################ mobile phone usage ###############################
 ##############################################################################
 
-def convert_raw_mobile(df, out_dir):
+def run_mobile(df, out_dir, public):
     
     cols = ['HND1', 'HND2', 'HND3', 'HND4', 'HND5', 'HND6', 'HND7', 'HND8', 
             'HND9', 'HND10', 'HND11', 'HND12', 'HND13', 'HND14', 'HND15', 
             'HND16', 'HND17', 'HND18', 'HND19']        
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['MPU_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['MPU_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['MPU_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_MPU_19.csv' % out_dir, decimal='.', index=False)
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/MPU.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/MPU.csv' % out_dir, decimal='.', index=False)
         
         
         
@@ -2132,7 +3160,7 @@ def convert_raw_mobile(df, out_dir):
 ######################## LIMIT - NYC-Q  in Survey C ##########################
 ##############################################################################
       
-def convert_raw_NYCQ_posttasks(df, out_dir):
+def run_NYCQ_posttasks(df, out_dir, public):
     
     cols = ['LMTaBASEQ[LMT1]', 'LMTaBASEQ[LMT2]', 'LMTaBASEQ[LMT3]',
            'LMTaBASEQ[LMT4]', 'LMTaBASEQ[LMT5]', 'LMTaBASEQ[LMT6]',
@@ -2143,12 +3171,39 @@ def convert_raw_NYCQ_posttasks(df, out_dir):
            'LMTcBASEQ[LMT19]', 'LMTcBASEQ[LMT20]', 'LMTcBASEQ[LMT21]',
            'LMTcBASEQ[LMT22]', 'LMTcBASEQ[LMT23]']
         
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['NYCQ_posttasks_%s' % (x+1) for x in range(len(cols))])), inplace=True)
+    cols_export = ['NYCQ_posttasks_%s' % (x+1) for x in range(len(cols))]
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids'] + ['NYCQ_posttasks_%s' % (x+1) for x in range(len(cols))] 
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+    
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_NYC-Q_23_posttasks.csv' % out_dir, decimal='.', index=False) 
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/NYC-Q_posttasks.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/NYC-Q_posttasks.csv' % out_dir, decimal='.', index=False) 
         
         
         
@@ -2156,15 +3211,42 @@ def convert_raw_NYCQ_posttasks(df, out_dir):
 ###################### Synesthesia color picker test #########################
 ##############################################################################        
       
-def convert_raw_syn(df, out_dir):
+def run_syn(df, out_dir, public):
     
     df['consistency'] = df['consistency'].astype('float')
     df = df[~ pd.isnull(df.consistency)]
  
     cols = ['consistency', 'notes']
-    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])        
-    df.rename(columns=dict(zip(cols, ['SYN_%s' % x for x in cols])), inplace=True)
+    cols_export = ['SYN_consistency', 'SYN_notes']
+    df.rename(columns=dict(zip(cols, cols_export)), inplace=True)
     
-    cols_export = ['ids', 'SYN_consistency', 'SYN_notes']    
+    # subjects with at least one data entry
+    df.set_index([range(len(df.index))], inplace=True)
+    idx = df[cols_export].dropna(how='all').index
+     
+    df['ids'] = df['ID'].map(lambda x: str(x)[0:5])
+    
+    if public:
+        
+        # subjects with MRI data
+        subjects_mri = pd.read_csv('/nobackup/adenauer2/LSD/Originals/Documentation/subjects_mri', 
+                                   header=None, dtype=str)[0]
+        idx_mri = df.index[df.ids.isin(subjects_mri)]
 
-    df[cols_export].to_csv('%s/quest_raw_SYN.csv' % out_dir, decimal='.', index=False)    
+        # subjects with both data for questionnaire and MRI
+        idx = list(set(idx).intersection(idx_mri))
+        df = df.iloc[idx]
+        df.set_index([range(len(df.index))], inplace=True)
+        
+        # anonymize IDs
+        converter = pd.read_excel('/nobackup/adenauer2/LSD/Originals/Documentation/lookup_table.xlsx',
+                                  converters={'ids_probanden_db' : str, 'ids_xnat_publicp' : str})
+        converter_dict = dict(zip(converter['ids_probanden_db'], converter['ids_xnat_publicp']))
+
+        df.replace({'ids': converter_dict}, inplace=True)
+        
+        df[['ids'] + cols_export].to_csv('%s/SYN.csv' % out_dir, decimal='.', index=False)
+        
+    else:
+
+        df[['ids'] + cols_export].ix[idx].to_csv('%s/SYN.csv' % out_dir, decimal='.', index=False)    

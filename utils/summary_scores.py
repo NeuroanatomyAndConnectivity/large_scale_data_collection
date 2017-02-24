@@ -18,42 +18,75 @@ sns.set_style('white')
 #################### Creative Achievement Questionnaire ######################
 ##############################################################################
 
-#def comp_summary_CAQ(df, out_dir=None):
+def run_CAQ(df, out_dir=None):
 
-    # Mark
+    zero = ['CAQ_14','CAQ_22','CAQ_31','CAQ_40','CAQ_49','CAQ_58','CAQ_66','CAQ_76','CAQ_86','CAQ_95']
+    one = ['CAQ_15','CAQ_23','CAQ_32','CAQ_41','CAQ_50','CAQ_59','CAQ_67','CAQ_77','CAQ_87','CAQ_96']
+    two = ['CAQ_16','CAQ_24','CAQ_33','CAQ_42','CAQ_51','CAQ_60','CAQ_68','CAQ_78','CAQ_88','CAQ_97']
+    three = ['CAQ_17','CAQ_25','CAQ_34','CAQ_43','CAQ_52','CAQ_61','CAQ_69','CAQ_79','CAQ_89','CAQ_98']
+    four = ['CAQ_18','CAQ_26','CAQ_35','CAQ_44','CAQ_53','CAQ_62','CAQ_70','CAQ_80','CAQ_90','CAQ_99']
+    five = ['CAQ_19', 'CAQ_27', 'CAQ_36', 'CAQ_45', 'CAQ_54', 'CAQ_63', 'CAQ_71', 'CAQ_81', 'CAQ_91', 'CAQ_100']
+    six = ['CAQ_20', 'CAQ_28', 'CAQ_37', 'CAQ_46', 'CAQ_55', 'CAQ_64', 'CAQ_72', 'CAQ_83', 'CAQ_92', 'CAQ_101']
+    seven = ['CAQ_29', 'CAQ_38', 'CAQ_47', 'CAQ_56', 'CAQ_65', 'CAQ_74', 'CAQ_85', 'CAQ_93', 'CAQ_102']
 
+    df[one] = df[one] * 1
+    df[two] = df[two] * 2
+    df[three] = df[three] * 3
+    df[four] = df[four] * 4
+    df[five] = df[five] * 5
+    df[six] = df[six] * 6
+    df[seven] =df[seven] * 7
+
+    #only the questions for patents, scientific achievements and movies have scores and are used!
+    for col in ['CAQ_73', 'CAQ_94', 'CAQ_84']:
+
+        for i in df.index:
+
+            try:
+                df[col].iloc[i] = int(df[col].iloc[i]) * 7
+            except:
+                df[col].iloc[i] = 0
+
+
+    df['seven_sum'] = df[['CAQ_73', 'CAQ_94', 'CAQ_84']].sum(axis=1)
+
+    df['CAQ_score'] = np.log(df[one + two + three + four + five + six + ['seven_sum']].sum(axis=1))
+
+    cols_export = ['ids'] + ['CAQ_score']
+
+    df[cols_export].to_csv('%s/CAQ.csv' % out_dir, decimal='.', index=False)
 
 
 ##############################################################################
 #################### Meta Cognition Questionnaire 30 #########################
 ##############################################################################
 
-def comp_summary_MCQ30(df, out_dir):
+def run_MCQ30(df, out_dir):
 
 
-    df['MCQ_lack_of_cogn_conf_sum'] = df[['MCQ_8', 'MCQ_14', 'MCQ_17',
+    df['MCQ_lack_of_cogn_conf_mean'] = df[['MCQ_8', 'MCQ_14', 'MCQ_17',
                                           'MCQ_24', 'MCQ_26', 'MCQ_29']].mean(axis=1)
 
-    df['MCQ_pos_bel_about_HADS_5_sum'] = df[['MCQ_1', 'MCQ_7',  'MCQ_10',
+    df['MCQ_pos_bel_about_HADS_5_mean'] = df[['MCQ_1', 'MCQ_7',  'MCQ_10',
                                              'MCQ_19','MCQ_23','MCQ_28']].mean(axis=1)
 
-    df['MCQ_cogn_self-consc_sum'] = df[['MCQ_3', 'MCQ_5',  'MCQ_12',
+    df['MCQ_cogn_self-consc_mean'] = df[['MCQ_3', 'MCQ_5',  'MCQ_12',
                                         'MCQ_16','MCQ_18','MCQ_30']].mean(axis=1)
 
-    df['MCQ_neg_bel_about_uncontr_danger_sum'] = df[['MCQ_2', 'MCQ_4', 'MCQ_9',
+    df['MCQ_neg_bel_about_uncontr_danger_mean'] = df[['MCQ_2', 'MCQ_4', 'MCQ_9',
                                                      'MCQ_11', 'MCQ_15', 'MCQ_21']].mean(axis=1)
 
-    df['MCQ_need_contr_thoughts_sum'] = df[['MCQ_6','MCQ_13', 'MCQ_20',
+    df['MCQ_need_contr_thoughts_mean'] = df[['MCQ_6','MCQ_13', 'MCQ_20',
                                             'MCQ_22', 'MCQ_25', 'MCQ_27']].mean(axis=1)
 
 
-    cols_export = ['ids'] + ['MCQ_lack_of_cogn_conf_sum',
-                             'MCQ_pos_bel_about_HADS_5_sum',
-                             'MCQ_cogn_self-consc_sum',
-                             'MCQ_neg_bel_about_uncontr_danger_sum',
-                             'MCQ_need_contr_thoughts_sum']
+    cols_export = ['ids'] + ['MCQ_lack_of_cogn_conf_mean',
+                             'MCQ_pos_bel_about_HADS_5_mean',
+                             'MCQ_cogn_self-consc_mean',
+                             'MCQ_neg_bel_about_uncontr_danger_mean',
+                             'MCQ_need_contr_thoughts_mean']
 
-    df[cols_export].to_csv('%s/quest_summary_MCQ30.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/MCQ30.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -61,23 +94,23 @@ def comp_summary_MCQ30(df, out_dir):
 #################### Body Consciousness Questionnaire ########################
 ##############################################################################
 
-def comp_summary_BCQ(df, out_dir):
+def run_BCQ(df, out_dir):
 
-    df['BCQ_private_body_sum'] = df[['BCQ_3', 'BCQ_4','BCQ_5',
+    df['BCQ_private_body_mean'] = df[['BCQ_3', 'BCQ_4','BCQ_5',
                                      'BCQ_8', 'BCQ_12',]].mean(axis=1)
 
-    df['BCQ_public_body_sum'] = df[['BCQ_1', 'BCQ_7', 'BCQ_10',
+    df['BCQ_public_body_mean'] = df[['BCQ_1', 'BCQ_7', 'BCQ_10',
                                     'BCQ_11', 'BCQ_13','BCQ_15']].mean(axis=1)
 
-    df['BCQ_body_competence_sum'] = df[['BCQ_2', 'BCQ_6',
+    df['BCQ_body_competence_mean'] = df[['BCQ_2', 'BCQ_6',
                                         'BCQ_9', 'BCQ_14']].mean(axis=1)
 
 
-    cols_export = ['ids'] + ['BCQ_private_body_sum',
-                             'BCQ_public_body_sum',
-                             'BCQ_body_competence_sum']
+    cols_export = ['ids'] + ['BCQ_private_body_mean',
+                             'BCQ_public_body_mean',
+                             'BCQ_body_competence_mean']
 
-    df[cols_export].to_csv('%s/quest_summary_BCQ.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/BCQ.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -85,7 +118,7 @@ def comp_summary_BCQ(df, out_dir):
 ################### Five Facet Mindfulness Questionnaire #####################
 ##############################################################################
 
-def comp_summary_FFMQ(df, out_dir):
+def run_FFMQ(df, out_dir):
 
     #items to be recoded
     items_recoded = ['FFMQ_12',
@@ -135,7 +168,7 @@ def comp_summary_FFMQ(df, out_dir):
                              'FFMQ_nonjudge_sum',
                              'FFMQ_nonreact_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_FFMQ.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/FFMQ.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -143,7 +176,7 @@ def comp_summary_FFMQ(df, out_dir):
 #################### Abbreviated Math Anxiety Scale ##########################
 ##############################################################################
 
-def comp_summary_AMAS(df, out_dir):
+def run_AMAS(df, out_dir):
 
 
     #Calculate total score as the sum of Item 1-9.
@@ -162,7 +195,7 @@ def comp_summary_AMAS(df, out_dir):
 
     cols_export = ['ids'] + ['AMAS_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_AMAS_9.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/AMAS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -170,7 +203,7 @@ def comp_summary_AMAS(df, out_dir):
 ########################## self control scale ################################
 ##############################################################################
 
-def comp_summary_SelfCtrl(df, out_dir):
+def run_SelfCtrl(df, out_dir):
     #items to be recoded
     items_recoded = ['SCS_2',
                      'SCS_3',
@@ -208,7 +241,7 @@ def comp_summary_SelfCtrl(df, out_dir):
 
     cols_export = ['ids'] + ['SCS_SelfCtrl_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_SCS_13.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/SCS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -217,7 +250,7 @@ def comp_summary_SelfCtrl(df, out_dir):
 ##############################################################################
 #note: Item 3 not included due to differerent scale format
 
-def comp_summary_IAT(df, out_dir):
+def run_IAT(df, out_dir):
 
     #Calculate total score as the sum of Item 1-19.
 
@@ -252,7 +285,7 @@ def comp_summary_IAT(df, out_dir):
 
     cols_export = ['ids'] + ["IAT_sum"]
 
-    df[cols_export].to_csv('%s/quest_summary_IAT_20.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/IAT.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -261,7 +294,7 @@ def comp_summary_IAT(df, out_dir):
 #################### varieties of inner speech (VIS) #########################
 ##############################################################################
 
-def comp_summary_VIS(df, out_dir=None):
+def run_VIS(df, out_dir=None):
     #items to be recoded
     items_recoded = ['VIS_7',
                      'VIS_15']
@@ -299,7 +332,7 @@ def comp_summary_VIS(df, out_dir=None):
                              'VIS_18']].sum(axis=1)
 
     cols_export = ['ids'] + ['VIS_dialog_sum', 'VIS_condensed_sum', 'VIS_other_sum', 'VIS_eval_sum']
-    df[cols_export].to_csv('%s/quest_summary_VISQ_18.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/VISQ.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -307,7 +340,7 @@ def comp_summary_VIS(df, out_dir=None):
 ############# Spontaneous and Deliberate Mind Wandering ######################
 ##############################################################################
 
-def comp_summary_MW_SD(df, out_dir):
+def run_MW_SD(df, out_dir):
 
     df['S-D-MW_delib_mean'] = df[["S-D-MW_1",
                                   "S-D-MW_2",
@@ -321,7 +354,7 @@ def comp_summary_MW_SD(df, out_dir):
 
     cols_export = ['ids']  + ['S-D-MW_delib_mean', 'S-D-MW_spont_mean']
 
-    df[cols_export].to_csv('%s/quest_summary_S-D-MW_8.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/S-D-MW.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -329,7 +362,7 @@ def comp_summary_MW_SD(df, out_dir):
 ############################# short dark triad  ##############################
 ##############################################################################
 
-def comp_summary_SDT(df, out_dir):
+def run_SDT(df, out_dir):
 
     #items to be recoded
     items_recoded = ['SD3_11',
@@ -378,7 +411,7 @@ def comp_summary_SDT(df, out_dir):
 
     cols_export = ['ids'] + ['SD3_Mach_sum', 'SD3_Narc_sum', 'SD3_Psycho_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_SD3_27.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/SD3.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -387,7 +420,7 @@ def comp_summary_SDT(df, out_dir):
 ##############################################################################
 # social desirability
 
-def comp_summary_SDS(df, out_dir):
+def run_SDS(df, out_dir):
     #items to be recoded
 
     cols = ['SDS_1',
@@ -431,7 +464,7 @@ def comp_summary_SDS(df, out_dir):
 
     cols_export = ['ids'] + ['SDS_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_SDS_17.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/SDS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -439,7 +472,7 @@ def comp_summary_SDS(df, out_dir):
 ##################### UPPSP - impulsivity ####################################
 ##############################################################################
 
-def comp_summary_UPPSP(df, out_dir):
+def run_UPPSP(df, out_dir):
 
     #items that need to be recoded
     items_recoded = ['UPPS_2','UPPS_3','UPPS_5',
@@ -532,7 +565,7 @@ def comp_summary_UPPSP(df, out_dir):
 
     cols_export = ['ids'] + ['UPPS_Mean_NegUrg', 'UPPS_Mean_Premed', 'UPPS_Mean_Persev', 'UPPS_Mean_SS','UPPS_Mean_PosUrg']
 
-    df[cols_export].to_csv('%s/quest_summary_UPPS-P_59.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/UPPS-P.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -541,7 +574,7 @@ def comp_summary_UPPSP(df, out_dir):
 ################ Tuckmann Procrastination Scale (TPS_D)#######################
 ##############################################################################
 
-def comp_summary_TPS(df, out_dir):
+def run_TPS(df, out_dir):
 
     #items to be recoded
     items_recoded = ['TPS_7',
@@ -576,7 +609,7 @@ def comp_summary_TPS(df, out_dir):
 
     cols_export = ['ids'] + ['TPS_D_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_TPS_16.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/TPS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -584,7 +617,7 @@ def comp_summary_TPS(df, out_dir):
 ############################ ASR 18-59 #######################################
 ##############################################################################
 
-def comp_summary_ASR(df, out_dir):
+def run_ASR(df, out_dir):
 
     ######################## adaptive functioning #################################
 
@@ -841,7 +874,7 @@ def comp_summary_ASR(df, out_dir):
                             'ASR_summary_syndromeProfiles_internalizing_sum',
                             'ASR_summary_syndromeProfiles_externalizing_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_ASR-18-59.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/ASR.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -849,7 +882,7 @@ def comp_summary_ASR(df, out_dir):
 ########################## Self-Esteem Scale #################################
 ##############################################################################
 
-def comp_summary_SE(df, out_dir):
+def run_SE(df, out_dir):
 
     #items to be recoded
     items_recoded = ['SE_5',
@@ -875,7 +908,7 @@ def comp_summary_SE(df, out_dir):
 
     cols_export = ['ids'] + ['SE_Mean_SelfEst']
 
-    df[cols_export].to_csv('%s/quest_summary_SE_8.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/SE.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -883,7 +916,7 @@ def comp_summary_SE(df, out_dir):
 ####### Involuntary Musical Imagery Scale (Earworm Scale) ####################
 ##############################################################################
 
-def comp_summary_IMIS(df, out_dir):
+def run_IMIS(df, out_dir):
 
     #Calculate factors
     df['IMIS_NegVal_sum'] = df[['IMIS_2','IMIS_3','IMIS_4','IMIS_5','IMIS_6','IMIS_7','IMIS_8']].sum(axis=1)
@@ -893,7 +926,7 @@ def comp_summary_IMIS(df, out_dir):
 
     cols_export = ['ids'] + ["IMIS_NegVal_sum", "IMIS_Help_sum", "IMIS_Movement_sum", "IMIS_PersRef_sum"]
 
-    df[cols_export].to_csv('%s/quest_summary_IMIS_18.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/IMIS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -901,7 +934,7 @@ def comp_summary_IMIS(df, out_dir):
 ####### Goldsmiths Musical Sophistication Index (Gold-MSI) ###################
 ##############################################################################
 
-def comp_summary_GoldMSI(df, out_dir):
+def run_GoldMSI(df, out_dir):
 
     #items to be recoded
     items_recoded = ['GoldMSI_5',
@@ -918,7 +951,7 @@ def comp_summary_GoldMSI(df, out_dir):
 
     cols_export = ['ids'] + ["GoldMSI_Active_sum", 'GoldMSI_Training_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_Gold-MSI_16.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/Gold-MSI.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -926,7 +959,7 @@ def comp_summary_GoldMSI(df, out_dir):
 ####################### Epsworth Sleepiness Scale ############################
 ##############################################################################
 
-def comp_summary_ESS(df, out_dir):
+def run_ESS(df, out_dir):
 
     cols = ['ESS_1', 'ESS_2', 'ESS_3', 'ESS_4',
             'ESS_5', 'ESS_6', 'ESS_7', 'ESS_8']
@@ -935,7 +968,7 @@ def comp_summary_ESS(df, out_dir):
 
     cols_export = ['ids'] + ['ESS_summary_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_ESS_8.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/ESS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -943,7 +976,7 @@ def comp_summary_ESS(df, out_dir):
 ############################## BDI ###########################################
 ##############################################################################
 
-def comp_summary_BDI(df, out_dir):
+def run_BDI(df, out_dir):
 
     # recode items
     zero = ['BDI_1', 'BDI_5', 'BDI_9',
@@ -1021,7 +1054,7 @@ def comp_summary_BDI(df, out_dir):
 
     cols_export = ['ids'] + cols_sum + ['BDI_summary_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_BDI_22.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/BDI.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1029,7 +1062,7 @@ def comp_summary_BDI(df, out_dir):
 ############################## HADS ##########################################
 ##############################################################################
 
-def comp_summary_HADS(df, out_dir):
+def run_HADS(df, out_dir):
 
     df['HADS-A_summary_sum'] = df[['HADS_1', 'HADS_3', 'HADS_5', 'HADS_7',
                                    'HADS_9', 'HADS_11', 'HADS_13']].sum(axis=1)
@@ -1039,7 +1072,7 @@ def comp_summary_HADS(df, out_dir):
 
     cols_export = ['ids'] + ['HADS-A_summary_sum', 'HADS-D_summary_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_HADS_14.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/HADS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1047,7 +1080,7 @@ def comp_summary_HADS(df, out_dir):
 ##################### Boredom Proness Scale ##################################
 ##############################################################################
 
-def comp_summary_BPS(df, out_dir):
+def run_BPS(df, out_dir):
 
     #items to be recoded
     items_recoded = ['BPS_1',
@@ -1082,7 +1115,7 @@ def comp_summary_BPS(df, out_dir):
 
     cols_export = ['ids'] + ['BPS_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_BP_28.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/BP.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1090,7 +1123,7 @@ def comp_summary_BPS(df, out_dir):
 ################# Derryberry Attention Control Scale #########################
 ##############################################################################
 
-def comp_summary_ACS(df, out_dir):
+def run_ACS(df, out_dir):
 
     #items to be recoded
     items_recoded = ['ACS_1',
@@ -1124,7 +1157,7 @@ def comp_summary_ACS(df, out_dir):
 
     cols_export = ['ids'] + ['ACS_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_ACS_20.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/ACS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1132,7 +1165,7 @@ def comp_summary_ACS(df, out_dir):
 ############################## NEO-PI-R ######################################
 ##############################################################################
 
-def comp_summary_NEOPIR(df, out_dir):
+def run_NEOPIR(df, out_dir):
 
     #recode reversed items
     items_recoded = ['NEO_61','NEO_1','NEO_121','NEO_181','NEO_36','NEO_96','NEO_156','NEO_11',
@@ -1313,13 +1346,13 @@ def comp_summary_NEOPIR(df, out_dir):
                     'NEO_C', 'NEO_C1_comp', 'NEO_C2_order',
                     'NEO_C3_dutif', 'NEO_C4_achstr', 'NEO_C5_selfdis', 'NEO_C6_deli']
 
-    df[['ids'] + summary_cols].to_csv('%s/quest_summary_NEO-PI-R_241.csv' % out_dir, decimal='.', index=False)
+    df[['ids'] + summary_cols].to_csv('%s/NEO-PI-R.csv' % out_dir, decimal='.', index=False)
 
 ##############################################################################
 ############# PSSI - Persönlichkeitsstil- und Störungsinventar################
 ##############################################################################
 
-def comp_summary_PSSI(df, out_dir):
+def run_PSSI(df, out_dir):
 
     cols = ['PSSI_1','PSSI_2','PSSI_3','PSSI_4','PSSI_5','PSSI_6','PSSI_7','PSSI_8','PSSI_9',
              'PSSI_10','PSSI_11','PSSI_12','PSSI_13','PSSI_14','PSSI_15','PSSI_16','PSSI_17',
@@ -1540,14 +1573,14 @@ def comp_summary_PSSI(df, out_dir):
                             'PSSI_ZW', 'PSSI_NT', 'PSSI_DP', 'PSSI_SL',
                             'PSSI_RH', 'PSSI_AS']
 
-    df[cols_export].to_csv('%s/quest_summary_PSSI_140.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/PSSI.csv' % out_dir, decimal='.', index=False)
 
 
 ##############################################################################
 ################################## MMI #######################################
 ##############################################################################
 
-def comp_summary_MMI(df, out_dir):
+def run_MMI(df, out_dir):
 
 #items to be recoded
     cols= ['MMI_1_4_A' ,'MMI_1_4_B' ,'MMI_1_4_C' ,'MMI_1_4_D' ,'MMI_1_4_E' ,'MMI_1_4_F' ,
@@ -1773,7 +1806,7 @@ def comp_summary_MMI(df, out_dir):
 
     cols_export = ['ids'] + ['MMI_score']
 
-    df[cols_export].to_csv('%s/quest_summary_MMI_12x4.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/MMI.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1781,7 +1814,7 @@ def comp_summary_MMI(df, out_dir):
 ############################## BIS/BAS #######################################
 ##############################################################################
 
-def comp_summary_BISBAS(df, out_dir):
+def run_BISBAS(df, out_dir):
 
     #items to be recoded
     items_recoded = ['BISBAS_2',
@@ -1804,7 +1837,7 @@ def comp_summary_BISBAS(df, out_dir):
 
     cols_export = ['ids'] + ['BISBAS_BIS_sum', 'BISBAS_BAS_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_BISBAS_24.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/BISBAS.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1812,7 +1845,7 @@ def comp_summary_BISBAS(df, out_dir):
 ################################# STAI #######################################
 ##############################################################################
 
-def comp_summary_STAI(df, out_dir):
+def run_STAI(df, out_dir):
 
     cols = ['STAI_1','STAI_2','STAI_3','STAI_4','STAI_5','STAI_6','STAI_7','STAI_8',
                  'STAI_9','STAI_10','STAI_11','STAI_12','STAI_13','STAI_14','STAI_15','STAI_16',
@@ -1829,7 +1862,7 @@ def comp_summary_STAI(df, out_dir):
 
     cols_export = ['ids'] + ['STAI_A-Trait_summary_sum']
 
-    df[cols_export].to_csv('%s/quest_summary_STAI-G-X2_20.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/STAI-G-X2.csv' % out_dir, decimal='.', index=False)
 
 
 
@@ -1837,7 +1870,7 @@ def comp_summary_STAI(df, out_dir):
 ############################### STAXI ########################################
 ##############################################################################
 
-def comp_summary_STAXI(df, out_dir):
+def run_STAXI(df, out_dir):
 
 
     cols_trait2 = ['STAXI_11','STAXI_12','STAXI_13','STAXI_14','STAXI_15',
@@ -1856,4 +1889,4 @@ def comp_summary_STAXI(df, out_dir):
 
     cols_export = ['ids'] + ["STAXI_anger_trait", "STAXI_anger_inward", "STAXI_anger_outward", "STAXI_anger_control"]
 
-    df[cols_export].to_csv('%s/quest_summary_STAXI_44.csv' % out_dir, decimal='.', index=False)
+    df[cols_export].to_csv('%s/STAXI.csv' % out_dir, decimal='.', index=False)
